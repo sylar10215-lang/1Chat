@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>My App</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#007bff">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #ffffff; }
+    iframe { width: 100%; height: 100%; border: none; display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- 🎯 เอา URL Web App ของ Apps Script มาวางแทนที่ตรงนี้ค่ะ -->
+  <iframe src="https://script.google.com/macros/s/AKfycbxS9XGutY_UqM2Z7rP_n5_O8bL1yUhAjshsJPPeHehtokgIvBzYdHVZX-IZiesU8QMh/exec"></iframe>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+</body>
+</html>
