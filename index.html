@@ -1447,10 +1447,8 @@
         const isNotiEnabled = localStorage.getItem('mj_chat_noti_enabled') === 'true';
         if (!isFirstLoad && lastMsg && lastMsg.sender === activeFriend && isNotiEnabled) {
           playNotificationSound();
-          if ("Notification" in window && Notification.permission === "granted") {
-            const notiText = lastMsg.type === 'image' ? 'ได้ส่งรูปภาพถึงคุณ' : (lastMsg.type === 'sticker' ? 'ส่งสติกเกอร์' : lastMsg.msg);
-            new Notification(activeFriendData ? activeFriendData.name : activeFriend, { body: notiText, icon: friendAv });
-          }
+          triggerVibrate();
+          // เอาการสร้าง Notification ซ้ำในหน้านี้ออก เพื่อไม่ให้เด้งซ้อนกับ Service Worker
         }
 
         markMessagesAsRead(roomId);
