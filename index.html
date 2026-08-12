@@ -517,20 +517,21 @@
     </div>
   </div>
 
-  <!-- MODAL : ขยายรูป + เครื่องมือแต่งรูป -->
+  <!-- MODAL : ดูรูป ขยายรูป และเครื่องมือแต่งรูป -->
   <div id="image-editor-modal" class="modal">
     <div class="modal-content image-editor-content">
       <div style="display: flex; justify-content: space-between; align-items:center; margin-bottom: 10px;">
         <h3 style="margin:0;">ดูรูปและแก้ไขรูปภาพ</h3>
         <button onclick="closeImageEditor()" style="width:auto; padding: 4px 10px; background:#888;">X</button>
       </div>
-      <div class="canvas-wrapper">
+      <div class="canvas-wrapper" id="canvas-container">
         <canvas id="editor-canvas"></canvas>
       </div>
       <div class="editor-toolbar">
         <div class="toolbar-row">
-          <button class="editor-btn" id="btn-mode-draw" onclick="setEditMode('draw')">วาด</button>
-          <button class="editor-btn" id="btn-mode-blur" onclick="setEditMode('blur')">เบลอจุด</button>
+          <!-- ปุ่มเปิด/ปิด เครื่องมือ -->
+          <button class="editor-btn" id="btn-mode-draw" onclick="toggleEditMode('draw')">✏️ วาด</button>
+          <button class="editor-btn" id="btn-mode-blur" onclick="toggleEditMode('blur')">💧 เบลอจุด</button>
           <input type="color" id="editor-color" value="#ff0000" title="เลือกสีแปรง">
           <label style="font-size: 12px;">ขนาดแปรง:
             <input type="range" id="editor-brush-size" min="2" max="50" value="10" style="width: 70px; vertical-align:middle;">
@@ -543,13 +544,17 @@
           <label style="font-size:12px;">เบลอทั้งรูป:
             <input type="range" id="global-blur-slider" min="0" max="20" value="0" oninput="applyGlobalBlur(this.value)" style="width:80px; vertical-align:middle;">
           </label>
-          <button class="editor-btn" onclick="rotateCanvas()">หมุน</button>
-          <button class="editor-btn" onclick="flipCanvas()">กลับด้าน</button>
-          <button class="editor-btn" onclick="undoEditorStep()">ย้อนกลับ</button>
-          <button class="editor-btn" style="background:#e74c3c;" onclick="resetEditorCanvas()">รีเซ็ต</button>
+          <!-- เครื่องมือขยายรูป / หมุน / ย้อนกลับ -->
+          <button class="editor-btn" onclick="zoomImage(0.2)" title="ขยายรูป">🔍+</button>
+          <button class="editor-btn" onclick="zoomImage(-0.2)" title="ย่อรูป">🔍-</button>
+          <button class="editor-btn" onclick="rotateCanvas()">🔄 หมุน</button>
+          <button class="editor-btn" onclick="flipCanvas()">↔️ กลับด้าน</button>
+          <button class="editor-btn" onclick="undoEditorStep()">↩️ ย้อนกลับ</button>
         </div>
         <div class="toolbar-row" style="margin-top:8px;">
           <button class="editor-btn" style="background: #28a745; flex:1;" onclick="copyEditorImage()">คัดลอกรูป</button>
+          <!-- ปุ่มยกเลิกแก้ไข เพิ่มไว้ข้างๆ ปุ่มเซฟ -->
+          <button class="editor-btn" style="background: #e74c3c; flex:1;" onclick="resetEditorCanvas()">ยกเลิกแก้ไข</button>
           <button class="editor-btn" style="background: #0084ff; flex:1;" onclick="downloadEditorImage()">เซฟลงเครื่อง</button>
         </div>
       </div>
@@ -1570,11 +1575,12 @@
     /* CANVAS IMAGE EDITOR */
     let editorCanvas, editorCtx;
     let originalImage = new Image();
-    let currentEditMode = 'draw';
+    let currentEditMode = null; // null = ไม่ได้เลือกเครื่องมือใดๆ
     let isDrawing = false;
     let canvasHistory = [];
     let currentRotation = 0;
     let isFlipped = false;
+    let currentScale = 1; // ระบบขยายรูป
 
     function initImageEditorEvents() {
       editorCanvas = document.getElementById('editor-canvas');
@@ -1585,9 +1591,28 @@
       editorCanvas.addEventListener('mouseup', stopDrawing);
       editorCanvas.addEventListener('mouseleave', stopDrawing);
 
-      editorCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e.touches[0]); });
-      editorCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); });
+      // รองรับการใช้นิ้ววาด / เลื่อนบนมือถือ
+      editorCanvas.addEventListener('touchstart', (e) => { 
+        if (currentEditMode) e.preventDefault(); 
+        startDrawing(e.touches[0]); 
+      }, { passive: false });
+      
+      editorCanvas.addEventListener('touchmove', (e) => { 
+        if (currentEditMode) e.preventDefault(); 
+        draw(e.touches[0]); 
+      }, { passive: false });
+      
       editorCanvas.addEventListener('touchend', stopDrawing);
+
+      // รองรับการใช้ Scroll ลูกกลิ้งเมาส์ขยายรูป
+      const container = document.getElementById('canvas-container');
+      if (container) {
+        container.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          const zoomFactor = e.deltaY < 0 ? 0.1 : -0.1;
+          zoomImage(zoomFactor);
+        }, { passive: false });
+      }
     }
 
     function openImageEditor(src) {
@@ -1600,6 +1625,9 @@
       originalImage.onload = function() {
         currentRotation = 0;
         isFlipped = false;
+        currentScale = 1;
+        currentEditMode = null;
+        updateToolButtonsUI();
         canvasHistory = [];
         document.getElementById('global-blur-slider').value = 0;
         resetCanvasDimensions();
@@ -1640,15 +1668,44 @@
       editorCtx.save();
       editorCtx.translate(editorCanvas.width / 2, editorCanvas.height / 2);
       editorCtx.rotate((currentRotation * Math.PI) / 180);
-      editorCtx.scale(isFlipped ? -1 : 1, 1);
+      editorCtx.scale((isFlipped ? -1 : 1) * currentScale, currentScale);
       editorCtx.drawImage(originalImage, -editorCanvas.width / 2, -editorCanvas.height / 2, editorCanvas.width, editorCanvas.height);
       editorCtx.restore();
     }
 
-    function setEditMode(mode) {
-      currentEditMode = mode;
-      document.getElementById('btn-mode-draw').style.background = mode === 'draw' ? '#0084ff' : '#666';
-      document.getElementById('btn-mode-blur').style.background = mode === 'blur' ? '#0084ff' : '#666';
+    // ฟังก์ชัน ซูมขยาย / ย่อ รูปภาพ
+    function zoomImage(amount) {
+      currentScale += amount;
+      if (currentScale < 0.5) currentScale = 0.5; // ไม่ให้ย่อเล็กเกินไป
+      if (currentScale > 4) currentScale = 4;     // ไม่ให้ขยายใหญ่เกินไป
+      redrawCanvas();
+    }
+
+    // ฟังก์ชัน เปิด/ปิด เครื่องมือ (Toggle Mode)
+    function toggleEditMode(mode) {
+      if (currentEditMode === mode) {
+        currentEditMode = null; // ปิดเครื่องมือถ้ากดซ้ำ
+      } else {
+        currentEditMode = mode; // เปิดใช้เครื่องมือ
+      }
+      updateToolButtonsUI();
+    }
+
+    function updateToolButtonsUI() {
+      const drawBtn = document.getElementById('btn-mode-draw');
+      const blurBtn = document.getElementById('btn-mode-blur');
+      
+      if (drawBtn) drawBtn.style.background = currentEditMode === 'draw' ? '#0084ff' : '#666';
+      if (blurBtn) blurBtn.style.background = currentEditMode === 'blur' ? '#0084ff' : '#666';
+      
+      // เปลี่ยนเคอร์เซอร์เมาส์ตามโหมดที่เลือก
+      if (editorCanvas) {
+        if (currentEditMode) {
+          editorCanvas.style.cursor = 'crosshair';
+        } else {
+          editorCanvas.style.cursor = 'default';
+        }
+      }
     }
 
     function getCanvasCoords(e) {
@@ -1660,6 +1717,7 @@
     }
 
     function startDrawing(e) {
+      if (!currentEditMode) return; // ถ้าไม่ได้เปิดเครื่องมือ จะวาดไม่ได้
       isDrawing = true;
       const coords = getCanvasCoords(e);
       editorCtx.beginPath();
@@ -1667,7 +1725,7 @@
     }
 
     function draw(e) {
-      if (!isDrawing) return;
+      if (!isDrawing || !currentEditMode) return;
       const coords = getCanvasCoords(e);
       const size = document.getElementById('editor-brush-size').value;
 
@@ -1739,9 +1797,13 @@
       saveCanvasState();
     }
 
+    // ฟังก์ชัน ยกเลิกแก้ไข (Reset ปรับเป็นรูปตั้งต้น)
     function resetEditorCanvas() {
       currentRotation = 0;
       isFlipped = false;
+      currentScale = 1;
+      currentEditMode = null;
+      updateToolButtonsUI();
       document.getElementById('global-blur-slider').value = 0;
       redrawCanvas();
       saveCanvasState();
