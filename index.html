@@ -929,7 +929,7 @@
       const isDark = localStorage.getItem('mj_chat_dark') === 'true';
       if (isDark) {
         document.body.classList.add('dark-mode');
-        document.getElementById('dark-toggle-btn').innerHTML = '<span class="btn-text-mobile">โหมดสว่าง</span>';
+        document.getElementById('dark-toggle-btn').innerText = '☀️';
       }
       checkAndRestoreLogin();
     };
@@ -940,7 +940,8 @@
       body.classList.toggle('dark-mode');
       const isDark = body.classList.contains('dark-mode');
       localStorage.setItem('mj_chat_dark', isDark);
-      btn.innerHTML = isDark ? '<span class="btn-text-mobile">โหมดสว่าง</span>' : '<span class="btn-text-mobile">โหมดมืด</span>';
+      // เปลี่ยนไอคอนระหว่าง พระจันทร์ (โหมดมืด) กับ พระอาทิตย์ (โหมดสว่าง)
+      btn.innerText = isDark ? '☀️' : '🌙';
     }
 
     function applyTheme(color) {
