@@ -1447,16 +1447,17 @@
 
         const isNotiEnabled = localStorage.getItem('mj_chat_noti_enabled') === 'true';
         if (!isFirstLoad && lastMsg && lastMsg.sender === activeFriend && isNotiEnabled) {
-          // สร้าง ID อ้างอิงจากผู้ส่ง + เวลา เพื่อเช็คว่าใช่ข้อความเดิมไหม
-          const currentMsgId = lastMsg.sender + '_' + (lastMsg.time || '');
+          // สร้าง ID จาก [ผู้ส่ง + เนื้อหา/ประเภท + เวลาปัจจุบัน] เพื่อให้ได้ ID ใหม่ที่ไม่ซ้ำกันทุกข้อความ
+          const msgContent = lastMsg.msg || lastMsg.type || '';
+          const currentMsgId = lastMsg.sender + '_' + msgContent + '_' + (lastMsg.timestamp || Date.now());
 
           if (lastNotiId !== currentMsgId) {
-            lastNotiId = currentMsgId; // บันทึกไว้ว่าแจ้งเตือนข้อความนี้ไปแล้ว
+            lastNotiId = currentMsgId; // บันทึก ID ล่าสุด
             
             playNotificationSound();
             triggerVibrate();
 
-            // สั่งเด้งแจ้งเตือนขึ้นหน้าจอทันที
+            // สั่งเด้งแจ้งเตือนขึ้นหน้าจอ
             if ("Notification" in window && Notification.permission === "granted") {
               const notiText = lastMsg.type === 'image' ? 'ได้ส่งรูปภาพถึงคุณ' : (lastMsg.type === 'sticker' ? 'ส่งสติกเกอร์' : lastMsg.msg);
               const friendAv = activeFriendData && activeFriendData.avatar ? activeFriendData.avatar : 'https://via.placeholder.com/150';
