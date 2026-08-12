@@ -1,15 +1,23 @@
 {
-  "name": "1Chat",
   "short_name": "1Chat",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#007bff",
+  "name": "1Chat Application",
   "icons": [
     {
       "src": "icon.png",
-      "sizes": "192x192 512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
-  ]
+  ],
+  "start_url": "./index.html",
+  "background_color": "#ffffff",
+  "theme_color": "#0084ff",
+  "display": "standalone",
+  "orientation": "portrait"
 }
