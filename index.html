@@ -594,6 +594,7 @@
     let currentUser = null;
     let activeFriend = null;
     let activeFriendData = null;
+    let lastNotiId = ''; // เอาไว้เช็คไม่ให้แจ้งเตือนข้อความเดิมซ้ำ
     let tempAvatarBase64 = null;
     let tempBgBase64 = null;
     let isBgCleared = false;
@@ -1446,9 +1447,26 @@
 
         const isNotiEnabled = localStorage.getItem('mj_chat_noti_enabled') === 'true';
         if (!isFirstLoad && lastMsg && lastMsg.sender === activeFriend && isNotiEnabled) {
-          playNotificationSound();
-          triggerVibrate();
-          // เอาการสร้าง Notification ซ้ำในหน้านี้ออก เพื่อไม่ให้เด้งซ้อนกับ Service Worker
+          // สร้าง ID อ้างอิงจากผู้ส่ง + เวลา เพื่อเช็คว่าใช่ข้อความเดิมไหม
+          const currentMsgId = lastMsg.sender + '_' + (lastMsg.time || '');
+
+          if (lastNotiId !== currentMsgId) {
+            lastNotiId = currentMsgId; // บันทึกไว้ว่าแจ้งเตือนข้อความนี้ไปแล้ว
+            
+            playNotificationSound();
+            triggerVibrate();
+
+            // สั่งเด้งแจ้งเตือนขึ้นหน้าจอทันที
+            if ("Notification" in window && Notification.permission === "granted") {
+              const notiText = lastMsg.type === 'image' ? 'ได้ส่งรูปภาพถึงคุณ' : (lastMsg.type === 'sticker' ? 'ส่งสติกเกอร์' : lastMsg.msg);
+              const friendAv = activeFriendData && activeFriendData.avatar ? activeFriendData.avatar : 'https://via.placeholder.com/150';
+              
+              new Notification(activeFriendData ? activeFriendData.name : activeFriend, { 
+                body: notiText, 
+                icon: friendAv 
+              });
+            }
+          }
         }
 
         markMessagesAsRead(roomId);
