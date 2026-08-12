@@ -372,16 +372,15 @@
     }
     .chat-message img, 
     .message-bubble img {
-      width: 100% !important;        /* ให้รูปขยายกว้างเต็มกล่องแชท */
-      max-width: 380px !important;    /* กำหนดความกว้างสูงสุด (ปรับเพิ่ม/ลดได้ตามชอบ) */
-      height: auto !important;       /* คงสัดส่วนรูปเดิมไม่ให้เบี้ยว */
-      max-height: 500px !important;   /* ความสูงสูงสุดไม่ให้ยาวเกินไป */
-      object-fit: cover !important;  /* จัดรูปให้อยู่ในกรอบสวยงาม */
-      border-radius: 12px !important;/* ทำมุมโค้งมนนุ่มนวล */
+      width: auto !important;
+      max-width: 260px !important;    /* ขนาดความกว้างแบบ LINE */
+      max-height: 320px !important;   /* ไม่ให้รูปแนวตั้งยาวเกินไป */
+      height: auto !important;
+      border-radius: 16px !important;  /* ทำมุมมนนุ่มนวลสไตล์ LINE */
+      object-fit: cover !important;
       display: block !important;
-      margin: 5px 0 !important;
+      margin: 4px 0 !important;
     }
-
     /* ขยายกล่องข้อความ (Bubble) เวลาเป็นรูปภาพให้กว้างขึ้น */
     .chat-message:has(img),
     .message-bubble:has(img) {
