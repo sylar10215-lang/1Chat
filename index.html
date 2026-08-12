@@ -2,24 +2,1770 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>My App</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#007bff">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MJ Chat App (Fullscreen)</title>
+  
+  <!-- Firebase SDK v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background: #ffffff; }
-    iframe { width: 100%; height: 100%; border: none; display: block; }
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    :root {
+      --theme-color: #0084ff;
+      --bg-main: #f0f2f5;
+      --bg-card: #ffffff;
+      --text-color: #050505;
+      --text-sub: #65676b;
+      --border-color: #ddd;
+      --chat-bg: #f9f9f9;
+      --msg-them-bg: #e4e6eb;
+      --msg-them-text: #000000;
+    }
+
+    body.dark-mode {
+      --bg-main: #18191a;
+      --bg-card: #242526;
+      --text-color: #e4e6eb;
+      --text-sub: #b0b3b8;
+      --border-color: #363738;
+      --chat-bg: #18191a;
+      --msg-them-bg: #3a3b3c;
+      --msg-them-text: #e4e6eb;
+    }
+
+    html, body {
+      margin: 0; padding: 0;
+      width: 100vw; height: 100vh;
+      overflow: hidden;
+      background: var(--bg-main);
+      color: var(--text-color);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .box {
+      background: var(--bg-card);
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%; max-width: 400px;
+      margin: 100px auto 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .chat-container {
+      display: none;
+      width: 100vw; height: 100vh;
+      background: var(--bg-card);
+    }
+
+    .chat-header {
+      background: var(--theme-color);
+      color: white;
+      padding: 10px 15px;
+      display: flex; justify-content: space-between; align-items: center;
+      height: 60px;
+      transition: background 0.3s;
+    }
+
+    .avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #ddd;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .avatar-lg {
+      width: 90px; height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #eee;
+      border: 2px solid var(--theme-color);
+    }
+
+    .chat-body {
+      display: flex;
+      height: calc(100vh - 60px);
+      position: relative;
+    }
+
+    .sidebar {
+      width: 280px; min-width: 180px; max-width: 500px;
+      padding: 15px;
+      background: var(--bg-card);
+      display: flex; flex-direction: column;
+      z-index: 10;
+      border-right: 1px solid var(--border-color);
+    }
+    .sidebar.hidden { display: none !important; }
+
+    .resizer {
+      width: 6px;
+      background: var(--border-color);
+      cursor: col-resize;
+      transition: background 0.2s;
+      user-select: none;
+    }
+    .resizer:hover, .resizer.resizing { background: var(--theme-color); }
+
+    .friend-scroll-list { flex: 1; overflow-y: auto; }
+
+    .main-chat {
+      flex: 1;
+      display: flex; flex-direction: column;
+      min-width: 0;
+      background: var(--chat-bg);
+    }
+
+    .messages-wrapper {
+      flex: 1; position: relative;
+      overflow: hidden;
+      background-color: var(--chat-bg);
+    }
+
+    .chat-bg-layer {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-size: cover; background-position: center; background-repeat: no-repeat;
+      opacity: 0.5;
+      pointer-events: none;
+      z-index: 1;
+      transition: opacity 0.2s;
+    }
+
+    .messages {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      padding: 15px 15px 90px 15px;
+      overflow-y: auto;
+      display: flex; flex-direction: column;
+      z-index: 2;
+    }
+
+    .msg-row { display: flex; align-items: flex-end; gap: 8px; margin: 4px 0; }
+    .msg-row.me-row { flex-direction: row-reverse; }
+
+    .msg {
+      padding: 10px 14px;
+      border-radius: 18px;
+      width: fit-content; max-width: 70%;
+      word-break: break-word; white-space: pre-wrap;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      user-select: text; -webkit-user-select: text;
+      font-size: 15px; line-height: 1.4;
+      display: flex; flex-direction: column;
+    }
+
+    .msg.is-sticker {
+      background: transparent !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+    }
+    .msg.is-sticker img.sticker-img {
+      width: 120px; height: 120px;
+      object-fit: contain; display: block;
+    }
+
+    .msg.is-image {
+      background: transparent !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+    }
+    .msg img.chat-img {
+      max-width: 100%; max-height: 300px;
+      border-radius: 12px; display: block;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .msg.is-image > .msg-meta-box, .msg.is-sticker > .msg-meta-box {
+      background: rgba(0, 0, 0, 0.5);
+      color: #ffffff !important;
+      padding: 2px 8px; border-radius: 10px;
+      margin-top: 4px; align-self: flex-end;
+      z-index: 3; backdrop-filter: blur(2px);
+    }
+
+    .msg-meta-box {
+      font-size: 10px; margin-top: 4px;
+      display: flex; gap: 4px; align-items: center;
+    }
+    .msg.me .msg-meta-box { color: rgba(255, 255, 255, 0.9) !important; }
+    .msg.them .msg-meta-box { color: var(--text-sub) !important; }
+
+    .me { background: var(--theme-color); color: white; transition: background 0.3s; }
+    .them { background: var(--msg-them-bg); color: var(--msg-them-text); }
+
+    .friend-item {
+      position: relative; padding: 10px; cursor: pointer;
+      border-bottom: 1px solid var(--border-color);
+      border-radius: 8px; display: flex; align-items: center; gap: 10px;
+      overflow: hidden; margin-bottom: 4px;
+    }
+    .friend-item::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: var(--bg-avatar);
+      background-size: cover; background-position: center;
+      opacity: 0.2; filter: blur(2px); z-index: 1;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .friend-item:hover::before { opacity: 0.35; transform: scale(1.05); }
+    .friend-item .avatar, .friend-item div { position: relative; z-index: 2; }
+    .friend-item.active {
+      background: var(--theme-color) !important;
+      color: white !important; font-weight: bold;
+    }
+    .friend-item.active::before { display: none; }
+
+    input, button, textarea {
+      width: 100%; padding: 10px; margin: 5px 0;
+      border: 1px solid var(--border-color); border-radius: 5px;
+      background: var(--bg-card); color: var(--text-color); outline: none;
+    }
+    button {
+      background: var(--theme-color); color: white;
+      border: none; cursor: pointer; font-weight: bold;
+      transition: background 0.3s, opacity 0.2s;
+    }
+    button:active { opacity: 0.8; }
+
+    .chat-target-header {
+      padding: 10px 15px; background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      font-size: 14px; font-weight: bold; color: var(--text-color);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .img-btn {
+      background: #42b72a; width: 38px; height: 38px; padding: 0;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: white; flex-shrink: 0; margin: 0;
+    }
+
+    .floating-input-bar {
+      position: relative; display: flex; align-items: flex-end; gap: 8px;
+      padding: 8px 12px; margin: 8px 12px 12px 12px;
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); z-index: 10;
+    }
+
+    .chat-textarea {
+      flex: 1; background: transparent; border: none; outline: none;
+      color: var(--text-color); font-size: 15px; line-height: 1.35;
+      resize: none; max-height: 120px; min-height: 22px; height: 22px;
+      padding: 2px 0; margin: 6px 0; overflow-y: auto;
+    }
+
+    .btn-send {
+      width: 38px; height: 38px; border-radius: 50%; padding: 0;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin: 0; font-size: 16px;
+    }
+
+    .toggle-btn {
+      background: rgba(0,0,0,0.15); color: var(--text-color);
+      width: auto; padding: 6px 12px; margin: 0; font-size: 13px;
+      border-radius: 20px; display: flex; align-items: center; gap: 4px;
+    }
+
+    .noti-toggle-container {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(0, 0, 0, 0.08); padding: 4px 10px;
+      border-radius: 20px; font-size: 12px; font-weight: bold;
+    }
+    .dark-mode .noti-toggle-container { background: rgba(255, 255, 255, 0.15); }
+
+    .switch { position: relative; display: inline-block; width: 36px; height: 20px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc; transition: .3s; border-radius: 20px;
+    }
+    .slider:before {
+      position: absolute; content: ""; height: 14px; width: 14px;
+      left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%;
+    }
+    input:checked + .slider { background-color: #28a745; }
+    input:checked + .slider:before { transform: translateX(16px); }
+
+    .picker-panel {
+      display: none; position: absolute; bottom: 70px; left: 12px;
+      width: 330px; height: 320px; background: var(--bg-card);
+      border: 1px solid var(--border-color); border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2); z-index: 100;
+      flex-direction: column; overflow: hidden;
+    }
+
+    .picker-tabs { display: flex; border-bottom: 1px solid var(--border-color); background: rgba(0,0,0,0.03); }
+    .picker-tab {
+      flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: bold;
+      cursor: pointer; background: transparent; border: none; color: var(--text-color); margin: 0; border-radius: 0;
+    }
+    .picker-tab.active { border-bottom: 3px solid var(--theme-color, #0084ff); color: var(--theme-color, #0084ff); }
+
+    .picker-content { flex: 1; padding: 10px; overflow-y: auto; }
+    .emoji-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; font-size: 22px; text-align: center; }
+    .emoji-item { cursor: pointer; padding: 4px; border-radius: 8px; transition: transform 0.1s; user-select: none; }
+    .emoji-item:hover { transform: scale(1.2); background: rgba(0,0,0,0.05); }
+
+    .sticker-view-wrapper { display: flex; flex-direction: column; gap: 8px; height: 100%; }
+    .sticker-add-box { display: flex; gap: 4px; align-items: center; padding-bottom: 8px; border-bottom: 1px solid var(--border-color); }
+    .sticker-custom-grid { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; align-content: start; overflow-y: auto; padding-top: 4px; }
+    .sticker-item-wrapper { position: relative; display: flex; justify-content: center; align-items: center; }
+    .sticker-item-wrapper:hover .sticker-del-btn { display: flex; }
+    .sticker-item { cursor: pointer; width: 100%; height: 75px; object-fit: contain; border-radius: 8px; padding: 4px; transition: transform 0.15s; }
+    .sticker-item:hover { transform: scale(1.08); background: rgba(0,0,0,0.05); }
+    .sticker-del-btn {
+      display: none; position: absolute; top: 2px; right: -2px;
+      background: #ff4d4d; color: white; border-radius: 50%; width: 20px; height: 20px;
+      padding: 0; margin: 0; font-size: 11px; align-items: center; justify-content: center;
+      border: 1px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .modal {
+      display: none; position: fixed; top: 0; left: 0;
+      width: 100vw; height: 100vh; background: rgba(0,0,0,0.7);
+      z-index: 100; justify-content: center; align-items: center;
+    }
+    .modal-content {
+      background: var(--bg-card); color: var(--text-color); padding: 20px;
+      border-radius: 12px; width: 90%; max-width: 450px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: center;
+      max-height: 90vh; overflow-y: auto;
+    }
+    .image-editor-content { max-width: 850px !important; width: 95% !important; }
+    .canvas-wrapper { display: flex; justify-content: center; align-items: center; background: #000; border-radius: 8px; padding: 10px; margin-bottom: 12px; max-height: 60vh; overflow: hidden; }
+    #editor-canvas { max-width: 100%; max-height: 55vh; cursor: crosshair; border-radius: 4px; }
+    .editor-toolbar { display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.05); padding: 10px; border-radius: 8px; }
+    .toolbar-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
+    .editor-btn { width: auto !important; padding: 6px 12px !important; font-size: 12px !important; border-radius: 6px !important; margin: 0 !important; }
+
+    #context-menu { background: var(--bg-card) !important; border: 1px solid var(--border-color) !important; }
+    #context-menu div { color: var(--text-color) !important; transition: background 0.2s; }
+    #context-menu div:hover { background: rgba(0,0,0,0.05); }
+    body.dark-mode #context-menu div:hover { background: rgba(255,255,255,0.1); }
+
+    @media (max-width: 768px) {
+      .resizer { display: none; }
+      .sidebar { position: absolute; left: 0; top: 0; height: 100%; width: 80% !important; box-shadow: 2px 0 10px rgba(0,0,0,0.2); }
+      .btn-text-mobile { display: none; }
+      .toggle-btn { padding: 6px 8px; font-size: 14px; border-radius: 50%; }
+      .floating-input-bar { margin: 6px 8px 8px 8px; padding: 6px 10px; }
+      .picker-panel { width: 290px; bottom: 65px; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- 🎯 เอา URL Web App ของ Apps Script มาวางแทนที่ตรงนี้ค่ะ -->
-  <iframe src="https://script.google.com/macros/s/AKfycbxS9XGutY_UqM2Z7rP_n5_O8bL1yUhAjshsJPPeHehtokgIvBzYdHVZX-IZiesU8QMh/exec"></iframe>
+  <!-- Login/Register -->
+  <div id="auth-box" class="box">
+    <h2>MJ Chat App Profile Avatar</h2>
+    <input id="u" placeholder="Username (ไอดี)">
+    <input id="p" type="password" placeholder="Password">
+    <input id="n" placeholder="ชื่อเล่น (สำหรับสมัคร)">
+    <button onclick="login()">เข้าสู่ระบบ</button>
+    <button onclick="register()" style="background: #42b72a">สมัครสมาชิก</button>
+  </div>
+
+  <!-- Chat UI -->
+  <div id="chat-box" class="chat-container">
+    <div class="chat-header">
+      <div style="display: flex; align-items:center; gap:8px;">
+        <button class="toggle-btn" onclick="toggleSidebar()"> <span class="btn-text-mobile">เพื่อน</span></button>
+        <div style="display: flex; align-items:center; gap:8px; cursor:pointer;" onclick="openProfileModal(true)">
+          <img id="my-avatar" class="avatar" src="https://via.placeholder.com/150">
+          <span id="my-name" style="font-weight: bold;"></span>
+        </div>
+      </div>
+      <div style="display: flex; align-items:center; gap: 8px;">
+        <div class="noti-toggle-container">
+          <span><span class="btn-text-mobile">แจ้งเตือน</span></span>
+          <label class="switch">
+            <input type="checkbox" id="noti-toggle" onchange="toggleNotificationSetting(this)">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <button id="dark-toggle-btn" class="toggle-btn" onclick="toggleDarkMode()">
+          <span class="btn-text-mobile">โหมดมืด</span>
+        </button>
+        <button class="toggle-btn" onclick="openProfileModal(true)"> <span class="btn-text-mobile">โปรไฟล์</span></button>
+        <button onclick="logout()" style="width:auto; padding:6px 10px; background:#ff4d4d; border-radius: 20px; font-size:13px; border:none; color:#fff; cursor:pointer;">
+          <span class="btn-text-mobile">ออก</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="chat-body">
+      <!-- แถบเพื่อน -->
+      <div id="sidebar" class="sidebar">
+        <div style="display: flex; justify-content: space-between; align-items:center;">
+          <h4 style="margin:0;">เพื่อนของฉัน</h4>
+          <button class="toggle-btn" onclick="toggleSidebar()" style="padding:2px 8px; font-size:12px; background: #666;">X ซ่อน</button>
+        </div>
+        <div id="friend-list" class="friend-scroll-list" style="margin-top: 10px;">กำลังโหลด...</div>
+        <div>
+          <hr style="border-color: var(--border-color);">
+          <input id="friend-u" placeholder="User เพื่อน">
+          <button onclick="addFriend()">+ เพิ่มเพื่อน</button>
+        </div>
+      </div>
+
+      <div id="resizer" class="resizer"></div>
+
+      <!-- ฝั่งแช็ตหลัก -->
+      <div class="main-chat" id="drop-zone">
+        <div id="target-name" class="chat-target-header">
+          <div style="display: flex; align-items:center; gap:10px;">
+            <img id="target-avatar" class="avatar" src="https://via.placeholder.com/150" style="display:none;">
+            <span id="target-text">เลือกเพื่อนเปิดห้องแช็ต</span>
+          </div>
+          <button id="view-friend-btn" class="toggle-btn" style="display:none; background: #0084ff;" onclick="viewFriendProfile()">ดูโปรไฟล์เพื่อน</button>
+        </div>
+
+        <div class="messages-wrapper">
+          <div id="chat-bg-layer" class="chat-bg-layer"></div>
+          <div id="msg-list" class="messages"></div>
+        </div>
+
+        <!-- Reply Preview -->
+        <div id="reply-preview-bar" style="display:none; justify-content: space-between; align-items:center; background: var(--bg-card); border-left: 4px solid var(--theme-color, #0084ff); padding:6px 12px; margin: 0 12px; border-radius: 8px; font-size:13px;">
+          <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:85%;">
+            <strong id="reply-target-name" style="color:var(--theme-color, #0084ff);">ตอบกลับ :</strong>
+            <span id="reply-target-text" style="opacity:0.8;"></span>
+          </div>
+          <span onclick="cancelReply()" style="cursor:pointer; font-weight:bold; padding:0 4px; opacity:0.6;">X</span>
+        </div>
+
+        <!-- แถบพิมพ์ข้อความแบบลอย -->
+        <div class="floating-input-bar">
+          <button class="img-btn" style="background: #f39c12;" onclick="toggleEmojiPicker()">😊</button>
+          <button class="img-btn" onclick="document.getElementById('img-input').click()">📷</button>
+          <input type="file" id="img-input" accept="image/*" style="display:none" onchange="sendImage(this)">
+          <textarea id="msg-input" class="chat-textarea" placeholder="กำลังพิมพ์... (วางรูป/แคปหน้าจอได้เลย)" rows="1" oninput="autoExpandTextarea(this); handleTyping();" onkeydown="handleEnterKey(event)"></textarea>
+          <button class="btn-send" onclick="sendMsg()">></button>
+
+          <!-- Pop-up เลือก Sticker / Emoji -->
+          <div id="picker-panel" class="picker-panel">
+            <div class="picker-tabs">
+              <button class="picker-tab active" id="tab-emoji" onclick="switchPickerTab('emoji')">อิโมจิ</button>
+              <button class="picker-tab" id="tab-sticker" onclick="switchPickerTab('sticker')">สติกเกอร์ของฉัน</button>
+            </div>
+            <div id="picker-emoji-view" class="picker-content emoji-grid"></div>
+            <div id="picker-sticker-view" class="picker-content sticker-view-wrapper" style="display:none;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal หน้าต่างโปรไฟล์ -->
+  <div id="profile-modal" class="modal">
+    <div class="modal-content">
+      <h3 id="modal-title" style="margin-top:0;">ตั้งค่าโปรไฟล์</h3>
+      <div style="position:relative; display:inline-block; margin-bottom:15px;">
+        <img id="modal-avatar-preview" class="avatar-lg" src="https://via.placeholder.com/150">
+        <button id="upload-avatar-btn" class="toggle-btn" style="position:absolute; bottom:0; right:-10px; background: #42b72a; border-radius: 50%; width: 32px; height: 32px; padding:0;" onclick="document.getElementById('avatar-file-input').click()">📷</button>
+        <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="processAvatarUpload(this)">
+      </div>
+      <div style="text-align:left;">
+        <label style="font-size:12px; font-weight:bold;">ชื่อที่แสดง: </label>
+        <input id="prof-name">
+        <label style="font-size:12px; font-weight:bold; margin-top:10px; display:block;">Bio (คำอธิบายตัวเอง) : </label>
+        <textarea id="prof-bio" rows="2" placeholder="เขียนอะไรสั้นๆ เกี่ยวกับตัวเอง..."></textarea>
+        <div id="theme-selector-box">
+          <label style="font-size: 12px; font-weight:bold; margin-top:10px; display: block; ">สีธีมแอปโปรด: </label>
+          <div style="display: flex; gap:10px; margin-top: 5px;">
+            <input type="color" id="prof-theme" value="#0084ff" style="height:40px; width:60px; padding:2px; cursor:pointer;">
+            <span style="font-size:12px; opacity:0.7; align-self: center;">คลิกเลือกสีธีม</span>
+          </div>
+          <label style="font-size:12px; font-weight:bold; margin-top:10px; display: block; ">รูปพื้นหลังห้องแช็ต : </label>
+          <div style="display: flex; gap: 5px; margin-top: 5px;">
+            <button class="toggle-btn" style="background: #0084ff; flex:1;" onclick="document.getElementById('bg-file-input').click()">เลือกรูปภาพ</button>
+            <button class="toggle-btn" style="background: #e74c3c; width:auto;" onclick="clearBgImage()">x ลบรูป</button>
+            <input type="file" id="bg-file-input" accept="image/*" style="display:none" onchange="processBgUpload(this)">
+          </div>
+          <div style="margin-top:12px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight:bold;">
+              <span>ความจางพื้นหลัง: </span>
+              <span id="bg-opacity-val">50%</span>
+            </div>
+            <input type="range" id="bg-opacity-slider" min="10" max="100" value="50" oninput="updateOpacityPreview(this.value)" style="padding:0; margin-top:4px;">
+          </div>
+          <small id="bg-status-text" style="font-size:11px; opacity:0.7; display:block; margin-top:3px;">ใช้พื้นหลังเริ่มต้น</small>
+        </div>
+      </div>
+      <div style="display: flex; gap:10px; margin-top: 20px;">
+        <button id="save-prof-btn" onclick="saveProfile()" style="flex: 1;">บันทึก</button>
+        <button onclick="closeProfileModal()" style="flex:1; background: #888;">ปิด</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal ตัวอย่างรูปภาพส่งแช็ต -->
+  <div id="image-preview-modal" class="modal">
+    <div class="modal-content">
+      <h3 style="margin-top:0;">ตัวอย่างรูปภาพ</h3>
+      <div style="max-height: 300px; overflow: hidden; display: flex; justify-content: center; align-items: center; border-radius: 8px; background: rgba(0,0,0,0.05); margin-bottom: 15px;">
+        <img id="img-preview-target" src="" style="max-width: 100%; max-height: 300px; object-fit: contain;">
+      </div>
+      <div style="display: flex; gap:10px;">
+        <button onclick="confirmSendImage()" style="flex:1;">ส่งรูปภาพ (Enter)</button>
+        <button onclick="closeImagePreview()" style="flex:1; background: #888;">ยกเลิก</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL : ขยายรูป + เครื่องมือแต่งรูป -->
+  <div id="image-editor-modal" class="modal">
+    <div class="modal-content image-editor-content">
+      <div style="display: flex; justify-content: space-between; align-items:center; margin-bottom: 10px;">
+        <h3 style="margin:0;">ดูรูปและแก้ไขรูปภาพ</h3>
+        <button onclick="closeImageEditor()" style="width:auto; padding: 4px 10px; background:#888;">X</button>
+      </div>
+      <div class="canvas-wrapper">
+        <canvas id="editor-canvas"></canvas>
+      </div>
+      <div class="editor-toolbar">
+        <div class="toolbar-row">
+          <button class="editor-btn" id="btn-mode-draw" onclick="setEditMode('draw')">วาด</button>
+          <button class="editor-btn" id="btn-mode-blur" onclick="setEditMode('blur')">เบลอจุด</button>
+          <input type="color" id="editor-color" value="#ff0000" title="เลือกสีแปรง">
+          <label style="font-size: 12px;">ขนาดแปรง:
+            <input type="range" id="editor-brush-size" min="2" max="50" value="10" style="width: 70px; vertical-align:middle;">
+          </label>
+          <label style="font-size: 12px; margin-left:5px;">ความหยาบเบลอ:
+            <input type="range" id="blur-pixel-size" min="2" max="30" value="8" style="width: 70px; vertical-align:middle;">
+          </label>
+        </div>
+        <div class="toolbar-row">
+          <label style="font-size:12px;">เบลอทั้งรูป:
+            <input type="range" id="global-blur-slider" min="0" max="20" value="0" oninput="applyGlobalBlur(this.value)" style="width:80px; vertical-align:middle;">
+          </label>
+          <button class="editor-btn" onclick="rotateCanvas()">หมุน</button>
+          <button class="editor-btn" onclick="flipCanvas()">กลับด้าน</button>
+          <button class="editor-btn" onclick="undoEditorStep()">ย้อนกลับ</button>
+          <button class="editor-btn" style="background:#e74c3c;" onclick="resetEditorCanvas()">รีเซ็ต</button>
+        </div>
+        <div class="toolbar-row" style="margin-top:8px;">
+          <button class="editor-btn" style="background: #28a745; flex:1;" onclick="copyEditorImage()">คัดลอกรูป</button>
+          <button class="editor-btn" style="background: #0084ff; flex:1;" onclick="downloadEditorImage()">เซฟลงเครื่อง</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Context Menu -->
+  <div id="context-menu" style="display: none; position:fixed; z-index:9999; background: var(--bg-card, #fff); border-radius: 10px; padding:6px 0; min-width:150px; box-shadow:0 4px 16px rgba(0,0,0,0.2); border:1px solid var(--border-color, #eee);">
+    <div id="ctx-reply" onclick="triggerReply()" style="padding:10px 16px; cursor:pointer; font-size:14px; display: flex; align-items:center; gap:8px;">ตอบกลับ</div>
+    <div id="ctx-copy" onclick="copyMessageText()" style="padding: 10px 16px; cursor:pointer; font-size:14px; display: flex; align-items:center; gap:8px;">คัดลอกข้อความ</div>
+    <div id="ctx-delete" onclick="triggerDelete()" style="padding:10px 16px; cursor:pointer; font-size:14px; color: #ff4d4d; display: flex; align-items:center; gap: 8px;">ลบข้อความ</div>
+  </div>
 
   <script>
+    // ลงทะเบียน Service Worker สำหรับการแจ้งเตือน Push Notification
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
+      navigator.serviceWorker.register('firebase-messaging-sw.js')
+        .then(reg => console.log('Service Worker Registered!'))
+        .catch(err => console.log('Service Worker Registration Failed:', err));
+    }
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDbMaGhHmPTReldMPckDk0G_Vk2gqiRjs",
+      authDomain: "chat01-bd6fd.firebaseapp.com",
+      databaseURL: "https://chat01-bd6fd-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "chat01-bd6fd",
+      storageBucket: "chat01-bd6fd.firebasestorage.app",
+      messagingSenderId: "120948633141",
+      appId: "1:120948633141:web:36ae2459dda98164094b7c"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const messaging = firebase.messaging();
+
+    const DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+    let currentUser = null;
+    let activeFriend = null;
+    let activeFriendData = null;
+    let tempAvatarBase64 = null;
+    let tempBgBase64 = null;
+    let isBgCleared = false;
+    let msgListener = null;
+    let friendListener = null;
+    let typingListener = null;
+    let typingTimeout = null;
+    let stickerListener = null;
+    let usersCache = {};
+    let isFirstLoad = true;
+    let pendingImageFile = null;
+    let selectedMsgData = null;
+    let replyMsgData = null;
+    let userStickers = {};
+
+    const emojiList = [
+      "😀","😃","😄","😁","😆","😅","😂","🤣","🥲","☺️",
+      "😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗",
+      "😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓",
+      "😎","🥸","🤩","🥳","😏","😒","😞","😔","😟","😕",
+      "🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤",
+      "😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰",
+      "😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑",
+      "😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤",
+      "😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕",
+      "🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀",
+      "👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽",
+      "🙀","😿","😾","❤️","🧡","💛","💚","💙","💜","🖤",
+      "🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘",
+      "💝","💯"
+    ];
+
+    function formatTime(timestamp) {
+      if (!timestamp) return '';
+      const date = new Date(timestamp);
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function autoExpandTextarea(element) {
+      element.style.height = '22px';
+      const scrollH = element.scrollHeight;
+      element.style.height = Math.min(scrollH, 120) + 'px';
+    }
+
+    function handleEnterKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMsg();
+      }
+    }
+
+    function toggleEmojiPicker() {
+      const panel = document.getElementById('picker-panel');
+      if (panel.style.display === 'flex') {
+        panel.style.display = 'none';
+      } else {
+        panel.style.display = 'flex';
+        renderEmojiPicker();
+        renderStickerPicker();
+      }
+    }
+
+    function switchPickerTab(tab) {
+      document.getElementById('tab-emoji').classList.toggle('active', tab === 'emoji');
+      document.getElementById('tab-sticker').classList.toggle('active', tab === 'sticker');
+      document.getElementById('picker-emoji-view').style.display = tab === 'emoji' ? 'grid' : 'none';
+      document.getElementById('picker-sticker-view').style.display = tab === 'sticker' ? 'flex' : 'none';
+    }
+
+    function renderEmojiPicker() {
+      const container = document.getElementById('picker-emoji-view');
+      container.innerHTML = "";
+      emojiList.forEach(emoji => {
+        const span = document.createElement('span');
+        span.className = 'emoji-item';
+        span.innerText = emoji;
+        span.onclick = () => {
+          const input = document.getElementById('msg-input');
+          input.value += emoji;
+          autoExpandTextarea(input);
+          handleTyping();
+        };
+        container.appendChild(span);
+      });
+    }
+
+    function renderStickerPicker() {
+      const container = document.getElementById('picker-sticker-view');
+      container.innerHTML = '';
+      
+      const addBox = document.createElement('div');
+      addBox.className = 'sticker-add-box';
+      addBox.innerHTML = `
+        <input id="sticker-url-input" placeholder="วาง URL รูปสติกเกอร์..." style="margin:0; font-size:12px; padding: 6px;">
+        <button onclick="addStickerByUrl()" style="width:auto; margin:0; padding: 6px 10px; font-size:12px; background: #42b72a;">+ เพิ่ม URL</button>
+        <button onclick="document.getElementById('sticker-file-input').click()" style="width:auto; margin:0; padding:6px 10px; font-size: 12px; background: #0084ff;">ไฟล์</button>
+        <input type="file" id="sticker-file-input" accept="image/*" style="display:none" onchange="uploadStickerFile(this)">
+      `;
+      container.appendChild(addBox);
+
+      const grid = document.createElement('div');
+      grid.className = 'sticker-custom-grid';
+      const keys = Object.keys(userStickers);
+
+      if (keys.length === 0) {
+        grid.innerHTML = '<div style="grid-column: span 3; text-align:center; color:var(--text-sub); font-size:12px; margin-top:20px;">ยังไม่มีสติกเกอร์<br>เพิ่มรูปภาพด้วย URL หรืออัปโหลดรูปได้เลยค่ะ!</div>';
+      } else {
+        keys.forEach(key => {
+          const itemUrl = userStickers[key];
+          const wrapper = document.createElement('div');
+          wrapper.className = 'sticker-item-wrapper';
+          const img = document.createElement('img');
+          img.className = 'sticker-item';
+          img.src = itemUrl;
+          img.onclick = () => sendSticker(itemUrl);
+
+          const delBtn = document.createElement('button');
+          delBtn.className = 'sticker-del-btn';
+          delBtn.innerText = 'x';
+          delBtn.onclick = (e) => {
+            e.stopPropagation();
+            deleteSticker(key);
+          };
+
+          wrapper.appendChild(img);
+          wrapper.appendChild(delBtn);
+          grid.appendChild(wrapper);
+        });
+      }
+      container.appendChild(grid);
+    }
+
+    function listenUserStickers() {
+      if (!currentUser) return;
+      if (stickerListener) db.ref('stickers/' + currentUser.username).off('value', stickerListener);
+      stickerListener = db.ref('stickers/' + currentUser.username).on('value', snapshot => {
+        userStickers = snapshot.val() || {};
+        const panel = document.getElementById('picker-panel');
+        if (panel && panel.style.display === 'flex') renderStickerPicker();
+      });
+    }
+
+    function addStickerByUrl() {
+      const urlInput = document.getElementById('sticker-url-input');
+      const url = urlInput.value.trim();
+      if (!url) return alert('กรุณากรอก URL รูปสติกเกอร์ค่ะ!');
+      db.ref('stickers/' + currentUser.username).push(url).then(() => {
+        urlInput.value = '';
+      });
+    }
+
+    function uploadStickerFile(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          let width = img.width, height = img.height;
+          if (width > 300) {
+            height = Math.round((height * 300) / width);
+            width = 300;
+          }
+          canvas.width = width; canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          const resizedBase64 = canvas.toDataURL('image/png', 0.8);
+          db.ref('stickers/' + currentUser.username).push(resizedBase64);
+          input.value = '';
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function deleteSticker(key) {
+      if (confirm('MJ ต้องการลบสติกเกอร์นี้ใช่ไหมคะ?')) {
+        db.ref('stickers/' + currentUser.username + '/' + key).remove();
+      }
+    }
+
+    function sendSticker(stickerUrl) {
+      if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
+      const roomId = getRoomId(currentUser.username, activeFriend);
+      db.ref('chats/' + roomId).push({
+        sender: currentUser.username,
+        msg: stickerUrl,
+        type: 'sticker',
+        timestamp: Date.now(),
+        read: false
+      });
+      document.getElementById('picker-panel').style.display = 'none';
+    }
+
+    function saveUserSession(userData) {
+      const dataStr = JSON.stringify(userData);
+      localStorage.setItem('mj_chat_user', dataStr);
+      sessionStorage.setItem('mj_chat_user', dataStr);
+      document.cookie = "mj_chat_user=" + encodeURIComponent(dataStr) + "; path=/; max-age=31536000; SameSite=Lax";
+    }
+
+    function getUserSession() {
+      let saved = localStorage.getItem('mj_chat_user') || sessionStorage.getItem('mj_chat_user');
+      if (!saved) {
+        const match = document.cookie.match(new RegExp('(^| )mj_chat_user=([^;]+)'));
+        if (match) saved = decodeURIComponent(match[2]);
+      }
+      return saved ? JSON.parse(saved) : null;
+    }
+
+    function clearUserSession() {
+      localStorage.removeItem('mj_chat_user');
+      sessionStorage.removeItem('mj_chat_user');
+      document.cookie = "mj_chat_user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    }
+
+    function triggerVibrate() {
+      if ("vibrate" in navigator) {
+        try { navigator.vibrate(30); } catch(e) {}
+      }
+    }
+
+    function toggleNotificationSetting(toggleElem) {
+      if (toggleElem.checked) {
+        if (!('Notification' in window)) {
+          alert('เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือนค่ะ');
+          toggleElem.checked = false;
+          return;
+        }
+        Notification.requestPermission().then((permission) => {
+          if (permission === 'granted') {
+            localStorage.setItem('mj_chat_noti_enabled', 'true');
+            alert('เปิดการแจ้งเตือนเรียบร้อยแล้วค่ะ MJ!');
+            messaging.getToken({ vapidKey: 'BDTSjkK6IQKCTB45hQy1GK566XgXAmw-NKeHeATXhAw-aU8CJ1fKuGyu7192005ng_9Edje7tJCTyOaCIBdfDw' }).then((currentToken) => {
+              if (currentToken && currentUser) {
+                db.ref('users/' + currentUser.username + '/fcmToken').set(currentToken);
+              }
+            });
+          } else {
+            alert('MJ ไม่ได้อนุญาตสิทธิ์การแจ้งเตือนในเบราว์เซอร์ค่ะ');
+            toggleElem.checked = false;
+            localStorage.setItem('mj_chat_noti_enabled', 'false');
+          }
+        });
+      } else {
+        localStorage.setItem('mj_chat_noti_enabled', 'false');
+        alert('ปิดการแจ้งเตือนเรียบร้อยแล้วค่ะ');
+      }
+    }
+
+    function initNotiToggleState() {
+      const isEnabled = localStorage.getItem('mj_chat_noti_enabled') === 'true';
+      const toggleElem = document.getElementById('noti-toggle');
+      if (toggleElem) {
+        toggleElem.checked = isEnabled && ('Notification' in window) && (Notification.permission === 'granted');
+      }
+    }
+
+    function playNotificationSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.15);
+      } catch (e) {}
+    }
+
+    function checkAndRestoreLogin() {
+      const savedUser = getUserSession();
+      if (savedUser && savedUser.username) {
+        currentUser = savedUser;
+        initChatScreen();
+      }
+    }
+
+    function initPasteAndDragEvents() {
+      document.addEventListener('paste', function(e) {
+        if (!currentUser || !activeFriend) return;
+        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+        for (let index in items) {
+          const item = items[index];
+          if (item.kind === 'file' && item.type.indexOf('image') !== -1) {
+            const blob = item.getAsFile();
+            showImagePreview(blob);
+            e.preventDefault();
+            break;
+          }
+        }
+      });
+
+      const dropZone = document.getElementById('drop-zone');
+      if (dropZone) {
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+          dropZone.addEventListener(eventName, e => {
+            e.preventDefault();
+            e.stopPropagation();
+          }, false);
+        });
+
+        dropZone.addEventListener('drop', e => {
+          const dt = e.dataTransfer;
+          const files = dt.files;
+          if (files && files.length > 0 && files[0].type.startsWith('image/')) {
+            showImagePreview(files[0]);
+          }
+        });
+      }
+
+      document.addEventListener('keydown', function(e) {
+        const previewModal = document.getElementById('image-preview-modal');
+        if (previewModal && previewModal.style.display === 'flex') {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            confirmSendImage();
+          } else if (e.key === 'Escape') {
+            e.preventDefault();
+            closeImagePreview();
+          }
+        }
+      });
+    }
+
+    window.onload = function() {
+      setupResizer();
+      initImageEditorEvents();
+      initPasteAndDragEvents();
+      initNotiToggleState();
+      
+      const isDark = localStorage.getItem('mj_chat_dark') === 'true';
+      if (isDark) {
+        document.body.classList.add('dark-mode');
+        document.getElementById('dark-toggle-btn').innerHTML = '<span class="btn-text-mobile">โหมดสว่าง</span>';
+      }
+      checkAndRestoreLogin();
+    };
+
+    function toggleDarkMode() {
+      const body = document.body;
+      const btn = document.getElementById('dark-toggle-btn');
+      body.classList.toggle('dark-mode');
+      const isDark = body.classList.contains('dark-mode');
+      localStorage.setItem('mj_chat_dark', isDark);
+      btn.innerHTML = isDark ? '<span class="btn-text-mobile">โหมดสว่าง</span>' : '<span class="btn-text-mobile">โหมดมืด</span>';
+    }
+
+    function applyTheme(color) {
+      if (color) document.documentElement.style.setProperty('--theme-color', color);
+    }
+
+    function applyChatBackground(bgUrl, opacity = 0.5) {
+      const bgLayer = document.getElementById('chat-bg-layer');
+      if (!bgLayer) return;
+      if (bgUrl && bgUrl !== "") {
+        bgLayer.style.backgroundImage = `url('${bgUrl}')`;
+        bgLayer.style.opacity = opacity;
+      } else {
+        bgLayer.style.backgroundImage = 'none';
+      }
+    }
+
+    function updateOpacityPreview(val) {
+      document.getElementById('bg-opacity-val').innerText = val + '%';
+      const bgLayer = document.getElementById('chat-bg-layer');
+      if (bgLayer) bgLayer.style.opacity = val / 100;
+    }
+
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      const resizer = document.getElementById('resizer');
+      sb.classList.toggle('hidden');
+      if (sb.classList.contains('hidden')) {
+        resizer.style.display = 'none';
+      } else {
+        if (window.innerWidth > 768) resizer.style.display = 'block';
+      }
+    }
+
+    function setupResizer() {
+      const resizer = document.getElementById('resizer');
+      const sidebar = document.getElementById('sidebar');
+      let x = 0, w = 0;
+
+      const mouseDownHandler = function(e) {
+        x = e.clientX;
+        w = sidebar.getBoundingClientRect().width;
+        resizer.classList.add('resizing');
+        document.addEventListener('mousemove', mouseMoveHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
+      };
+
+      const mouseMoveHandler = function(e) {
+        const dx = e.clientX - x;
+        const newW = w + dx;
+        if (newW >= 180 && newW <= 500) sidebar.style.width = `${newW}px`;
+      };
+
+      const mouseUpHandler = function() {
+        resizer.classList.remove('resizing');
+        document.removeEventListener('mousemove', mouseMoveHandler);
+        document.removeEventListener('mouseup', mouseUpHandler);
+      };
+
+      if (resizer) resizer.addEventListener('mousedown', mouseDownHandler);
+    }
+
+    function register() {
+      const u = document.getElementById('u').value.trim().toLowerCase();
+      const p = document.getElementById('p').value.trim();
+      const n = document.getElementById('n').value.trim();
+      if (!u || !p || !n) return alert('กรอกข้อมูลให้ครบค่ะ!');
+
+      db.ref('users/' + u).get().then(snapshot => {
+        if (snapshot.exists()) {
+          alert('User นี้มีคนใช้แล้วค่ะ MJ!');
+        } else {
+          db.ref('users/' + u).set({
+            password: p, name: n, bio: 'สวัสดี! ฉันใช้ MJ Chat App', theme: '#0084ff', avatar: DEFAULT_AVATAR, bgImage: '', bgOpacity: 0.5
+          }).then(() => alert('สมัครสมาชิกเรียบร้อย!'));
+        }
+      });
+    }
+
+    function login() {
+      const u = document.getElementById('u').value.trim().toLowerCase();
+      const p = document.getElementById('p').value.trim();
+      db.ref('users/' + u).get().then(snapshot => {
+        if (snapshot.exists() && snapshot.val().password === p) {
+          const userData = snapshot.val();
+          currentUser = {
+            username: u, name: userData.name, bio: userData.bio, theme: userData.theme || '#0084ff', avatar: userData.avatar || DEFAULT_AVATAR,
+            bgImage: userData.bgImage || '', bgOpacity: userData.bgOpacity !== undefined ? userData.bgOpacity : 0.5
+          };
+          saveUserSession(currentUser);
+          initChatScreen();
+        } else {
+          alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!');
+        }
+      });
+    }
+
+    function initChatScreen() {
+      document.getElementById('auth-box').style.display = 'none';
+      document.getElementById('chat-box').style.display = 'block';
+      initNotiToggleState();
+
+      db.ref('users/' + currentUser.username).on('value', snapshot => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          currentUser.name = data.name;
+          currentUser.bio = data.bio || '';
+          currentUser.theme = data.theme || '#0084ff';
+          currentUser.avatar = data.avatar || DEFAULT_AVATAR;
+          currentUser.bgImage = data.bgImage || '';
+          currentUser.bgOpacity = data.bgOpacity !== undefined ? data.bgOpacity : 0.5;
+
+          saveUserSession(currentUser);
+          document.getElementById('my-name').innerText = currentUser.name;
+          document.getElementById('my-avatar').src = currentUser.avatar;
+          applyTheme(currentUser.theme);
+          applyChatBackground(currentUser.bgImage, currentUser.bgOpacity);
+        }
+      });
+
+      loadFriendsRealtime();
+      listenUserStickers();
+    }
+
+    function processAvatarUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          canvas.width = 200; canvas.height = 200;
+          const ctx = canvas.getContext('2d');
+          const minSide = Math.min(img.width, img.height);
+          const sx = (img.width - minSide) / 2;
+          const sy = (img.height - minSide) / 2;
+          ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, 200, 200);
+          tempAvatarBase64 = canvas.toDataURL('image/jpeg', 0.8);
+          document.getElementById('modal-avatar-preview').src = tempAvatarBase64;
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function processBgUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          let width = img.width, height = img.height;
+          if (width > 1280) {
+            height = Math.round((height * 1280) / width);
+            width = 1280;
+          }
+          canvas.width = width; canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          tempBgBase64 = canvas.toDataURL('image/jpeg', 0.7);
+          isBgCleared = false;
+          applyChatBackground(tempBgBase64, document.getElementById('bg-opacity-slider').value / 100);
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearBgImage() {
+      tempBgBase64 = '';
+      isBgCleared = true;
+      applyChatBackground('');
+    }
+
+    function openProfileModal(isSelf = true) {
+      const modal = document.getElementById('profile-modal');
+      tempAvatarBase64 = null; tempBgBase64 = null; isBgCleared = false;
+      modal.style.display = 'flex';
+
+      if (isSelf) {
+        document.getElementById('modal-title').innerText = 'ตั้งค่าโปรไฟล์';
+        document.getElementById('prof-name').value = currentUser.name;
+        document.getElementById('prof-bio').value = currentUser.bio;
+        document.getElementById('prof-theme').value = currentUser.theme || '#0084ff';
+        document.getElementById('modal-avatar-preview').src = currentUser.avatar || DEFAULT_AVATAR;
+        document.getElementById('theme-selector-box').style.display = 'block';
+        document.getElementById('upload-avatar-btn').style.display = 'block';
+        document.getElementById('save-prof-btn').style.display = 'block';
+      } else {
+        document.getElementById('modal-title').innerText = 'โปรไฟล์ของ ' + activeFriend;
+        document.getElementById('prof-name').value = activeFriendData ? activeFriendData.name : activeFriend;
+        document.getElementById('prof-bio').value = activeFriendData ? (activeFriendData.bio || 'ไม่มีคำอธิบาย') : '';
+        document.getElementById('modal-avatar-preview').src = (activeFriendData && activeFriendData.avatar) ? activeFriendData.avatar : DEFAULT_AVATAR;
+        document.getElementById('theme-selector-box').style.display = 'none';
+        document.getElementById('upload-avatar-btn').style.display = 'none';
+        document.getElementById('save-prof-btn').style.display = 'none';
+      }
+    }
+
+    function closeProfileModal() {
+      document.getElementById('profile-modal').style.display = 'none';
+      applyChatBackground(currentUser.bgImage, currentUser.bgOpacity);
+    }
+
+    function saveProfile() {
+      const newName = document.getElementById('prof-name').value.trim();
+      const newBio = document.getElementById('prof-bio').value.trim();
+      const newTheme = document.getElementById('prof-theme').value;
+      const newOpacity = parseFloat(document.getElementById('bg-opacity-slider').value) / 100;
+
+      if (!newName) return alert('กรุณากรอกชื่อด้วยค่ะ!');
+      const updateData = { name: newName, bio: newBio, theme: newTheme, bgOpacity: newOpacity };
+      
+      if (tempAvatarBase64) updateData.avatar = tempAvatarBase64;
+      if (isBgCleared) updateData.bgImage = '';
+      else if (tempBgBase64) updateData.bgImage = tempBgBase64;
+
+      db.ref('users/' + currentUser.username).update(updateData).then(() => {
+        currentUser.name = newName;
+        currentUser.bio = newBio;
+        currentUser.theme = newTheme;
+        currentUser.bgOpacity = newOpacity;
+        if (isBgCleared) currentUser.bgImage = "";
+        else if (tempBgBase64) currentUser.bgImage = tempBgBase64;
+
+        saveUserSession(currentUser);
+        applyChatBackground(currentUser.bgImage, currentUser.bgOpacity);
+        alert('บันทึกโปรไฟล์เรียบร้อย!');
+        closeProfileModal();
+      });
+    }
+
+    function viewFriendProfile() {
+      if (!activeFriend) return;
+      db.ref('users/' + activeFriend).get().then(snapshot => {
+        if (snapshot.exists()) {
+          activeFriendData = snapshot.val();
+          openProfileModal(false);
+        }
+      });
+    }
+
+    function logout() {
+      clearUserSession();
+      location.reload();
+    }
+
+    function addFriend() {
+      const fu = document.getElementById('friend-u').value.trim().toLowerCase();
+      if (!fu) return;
+      if (fu === currentUser.username) return alert('แอดตัวเองทำไมคะ 555+');
+
+      db.ref('users/' + fu).get().then(snapshot => {
+        if (!snapshot.exists()) alert('ไม่พบ User เพื่อนคนนี้ค่ะ');
+        else {
+          db.ref('friends/' + currentUser.username + '/' + fu).set(true);
+          db.ref('friends/' + fu + '/' + currentUser.username).set(true);
+          alert('เพิ่มเพื่อนสำเร็จ!');
+          document.getElementById('friend-u').value = '';
+        }
+      });
+    }
+
+    function loadFriendsRealtime() {
+      db.ref('friends/' + currentUser.username).on('value', snapshot => {
+        const el = document.getElementById('friend-list');
+        el.innerHTML = '';
+        const data = snapshot.val();
+        if (!data) {
+          el.innerHTML = '<small style="color:var(--text-sub);">ยังไม่มีเพื่อน ให้พิมพ์ User เพิ่มด้านล่าง</small>';
+          return;
+        }
+
+        Object.keys(data).forEach(f => {
+          db.ref('users/' + f).get().then(fSnap => {
+            const fData = fSnap.exists() ? fSnap.val() : {};
+            usersCache[f] = fData;
+            const fAvatar = fData.avatar || DEFAULT_AVATAR;
+            const fName = fData.name || f;
+
+            const div = document.createElement('div');
+            div.className = 'friend-item' + (activeFriend === f ? ' active' : '');
+            div.style.setProperty('--bg-avatar', `url('${fAvatar}')`);
+            div.innerHTML = `
+              <img class="avatar" src="${fAvatar}">
+              <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                <div style="font-size:14px; font-weight:bold;">${fName}</div>
+                <small style="opacity:0.8;">@${f}</small>
+              </div>
+            `;
+            div.onclick = () => selectFriend(f, div);
+            el.appendChild(div);
+          });
+        });
+      });
+    }
+
+    function selectFriend(f, elem) {
+      activeFriend = f;
+      isFirstLoad = true;
+      document.querySelectorAll('.friend-item').forEach(e => e.classList.remove('active'));
+      elem.classList.add('active');
+
+      if (friendListener) db.ref('users/' + activeFriend).off('value', friendListener);
+      friendListener = db.ref('users/' + f).on('value', snapshot => {
+        if (snapshot.exists()) {
+          activeFriendData = snapshot.val();
+          document.getElementById('target-avatar').src = activeFriendData.avatar || DEFAULT_AVATAR;
+          document.getElementById('target-avatar').style.display = 'block';
+          document.getElementById('target-text').innerText = activeFriendData.name + ' (@' + f + ')';
+        }
+      });
+
+      document.getElementById('view-friend-btn').style.display = 'inline-block';
+      if (window.innerWidth <= 768) toggleSidebar();
+      listenMessages(f);
+      listenTypingStatus();
+    }
+
+    function getRoomId(u1, u2) {
+      return u1 < u2 ? `${u1}_${u2}` : `${u2}_${u1}`;
+    }
+
+    function handleTyping() {
+      if (!activeFriend) return;
+      const roomId = getRoomId(currentUser.username, activeFriend);
+      db.ref('typing/' + roomId + '/' + currentUser.username).set(true);
+      if (typingTimeout) clearTimeout(typingTimeout);
+      typingTimeout = setTimeout(() => {
+        db.ref('typing/' + roomId + '/' + currentUser.username).set(false);
+      }, 2000);
+    }
+
+    function listenTypingStatus() {
+      if (!activeFriend) return;
+      const roomId = getRoomId(currentUser.username, activeFriend);
+      if (typingListener) db.ref('typing/' + roomId + '/' + activeFriend).off('value', typingListener);
+
+      typingListener = db.ref('typing/' + roomId + '/' + activeFriend).on('value', snapshot => {
+        const isTyping = snapshot.val();
+        let typingBox = document.getElementById('typing-indicator');
+
+        if (isTyping) {
+          const friendAv = (activeFriendData && activeFriendData.avatar) ? activeFriendData.avatar : DEFAULT_AVATAR;
+          if (!typingBox) {
+            typingBox = document.createElement('div');
+            typingBox.id = 'typing-indicator';
+            typingBox.style.cssText = 'display: flex; align-items:center; gap:8px; padding: 6px 15px; font-size:12px; color: var(--text-sub); opacity:0.8;';
+          }
+          document.getElementById('msg-list').appendChild(typingBox);
+          typingBox.innerHTML = `<img src="${friendAv}" style="width:22px; height: 22px; border-radius: 50%; opacity:0.5;"><span>กำลังพิมพ์...</span>`;
+          const msgList = document.getElementById('msg-list');
+          msgList.scrollTop = msgList.scrollHeight;
+        } else if (typingBox) {
+          typingBox.remove();
+        }
+      });
+    }
+
+    function showImagePreview(file) {
+      if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
+      pendingImageFile = file;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('img-preview-target').src = e.target.result;
+        document.getElementById('image-preview-modal').style.display = 'flex';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function closeImagePreview() {
+      pendingImageFile = null;
+      document.getElementById('img-preview-target').src = '';
+      document.getElementById('image-preview-modal').style.display = 'none';
+    }
+
+    function confirmSendImage() {
+      if (!pendingImageFile) return;
+      processAndSendImage(pendingImageFile);
+      closeImagePreview();
+    }
+
+    function processAndSendImage(file) {
+      if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          let width = img.width, height = img.height;
+          if (width > 1024) {
+            height = Math.round((height * 1024) / width);
+            width = 1024;
+          }
+          canvas.width = width; canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          const resizedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+
+          const roomId = getRoomId(currentUser.username, activeFriend);
+          db.ref('chats/' + roomId).push({
+            sender: currentUser.username,
+            msg: resizedBase64,
+            type: 'image',
+            timestamp: Date.now(),
+            read: false
+          });
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function sendImage(input) {
+      const file = input.files[0];
+      if (file) {
+        showImagePreview(file);
+        input.value = '';
+      }
+    }
+
+    function sendMsg() {
+      const input = document.getElementById('msg-input');
+      const val = input.value.trim();
+      if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
+      if (!val) return;
+
+      const roomId = getRoomId(currentUser.username, activeFriend);
+      db.ref('typing/' + roomId + '/' + currentUser.username).set(false);
+
+      const payload = {
+        sender: currentUser.username,
+        msg: val,
+        type: 'text',
+        timestamp: Date.now(),
+        read: false
+      };
+
+      if (replyMsgData) {
+        payload.replyTo = {
+          sender: replyMsgData.sender === currentUser.username ? 'ตัวเอง' : (activeFriendData ? activeFriendData.name : replyMsgData.sender),
+          msg: replyMsgData.type === 'image' ? 'รูปภาพ' : (replyMsgData.type === 'sticker' ? 'สติกเกอร์' : replyMsgData.msg)
+        };
+      }
+
+      db.ref('chats/' + roomId).push(payload);
+      input.value = '';
+      autoExpandTextarea(input);
+      cancelReply();
+      document.getElementById('picker-panel').style.display = 'none';
+    }
+
+    function markMessagesAsRead(roomId) {
+      db.ref('chats/' + roomId).once('value', snapshot => {
+        const data = snapshot.val();
+        if (!data) return;
+        const updates = {};
+        Object.keys(data).forEach(key => {
+          if (data[key].sender === activeFriend && !data[key].read) {
+            updates['chats/' + roomId + '/' + key + '/read'] = true;
+          }
+        });
+        if (Object.keys(updates).length > 0) {
+          db.ref().update(updates);
+        }
+      });
+    }
+
+    function listenMessages(targetFriend) {
+      const currentChatFriend = targetFriend || activeFriend;
+      if (!currentChatFriend) return;
+
+      const roomId = getRoomId(currentUser.username, currentChatFriend);
+      if (msgListener) db.ref('chats/' + roomId).off('value', msgListener);
+
+      const el = document.getElementById('msg-list');
+      markMessagesAsRead(roomId);
+
+      msgListener = db.ref('chats/' + roomId).on('value', snapshot => {
+        if (activeFriend !== currentChatFriend) return;
+        el.innerHTML = '';
+        const data = snapshot.val();
+
+        if (!data) {
+          el.innerHTML = '<center style="color:var(--text-sub); margin-top:20px;">ยังไม่มีข้อความ ทักทายเพื่อนเลย!</center>';
+          isFirstLoad = false;
+          return;
+        }
+
+        const friendAv = (activeFriendData && activeFriendData.avatar) ? activeFriendData.avatar : DEFAULT_AVATAR;
+        const msgKeys = Object.keys(data);
+        const lastKey = msgKeys[msgKeys.length - 1];
+        const lastMsg = data[lastKey];
+
+        const isNotiEnabled = localStorage.getItem('mj_chat_noti_enabled') === 'true';
+        if (!isFirstLoad && lastMsg && lastMsg.sender === activeFriend && isNotiEnabled) {
+          playNotificationSound();
+          if ("Notification" in window && Notification.permission === "granted") {
+            const notiText = lastMsg.type === 'image' ? 'ได้ส่งรูปภาพถึงคุณ' : (lastMsg.type === 'sticker' ? 'ส่งสติกเกอร์' : lastMsg.msg);
+            new Notification(activeFriendData ? activeFriendData.name : activeFriend, { body: notiText, icon: friendAv });
+          }
+        }
+
+        markMessagesAsRead(roomId);
+        isFirstLoad = false;
+
+        msgKeys.forEach(key => {
+          const m = data[key];
+          const isMe = m.sender === currentUser.username;
+          const cls = isMe ? 'me' : 'them';
+          const rowCls = isMe ? 'me-row' : '';
+
+          let replyQuoteHtml = '';
+          if (m.replyTo) {
+            replyQuoteHtml = `<div style="background:rgba(0,0,0,0.1); border-left:3px solid var(--theme-color, #0084ff); padding:3px 8px; border-radius: 4px; font-size:11px; margin-bottom:4px; opacity:0.85;"><strong>${m.replyTo.sender}:</strong> ${m.replyTo.msg}</div>`;
+          }
+
+          const timeStr = formatTime(m.timestamp);
+          let statusHtml = '';
+          if (isMe) {
+            statusHtml = m.read ? '<span style="color:#0084ff; font-weight:bold;">อ่านแล้ว</span>' : '<span style="opacity:0.6;">ส่งแล้ว</span>';
+          }
+
+          const metaHtml = `<div class="msg-meta-box"><span>${timeStr}</span>${statusHtml}</div>`;
+          const rowDiv = document.createElement('div');
+          rowDiv.className = `msg-row ${rowCls}`;
+          const avatarHtml = isMe ? "" : `<img class="avatar" src="${friendAv}" style="width: 28px; height: 28px;">`;
+
+          const msgBox = document.createElement('div');
+          if (m.type === 'sticker') {
+            msgBox.className = `msg ${cls} is-sticker`;
+            msgBox.innerHTML = `${replyQuoteHtml}<img class="sticker-img" src="${m.msg}">${metaHtml}`;
+          } else if (m.type === 'image') {
+            msgBox.className = `msg ${cls} is-image`;
+            msgBox.innerHTML = `${replyQuoteHtml}<img class="chat-img" src="${m.msg}" onclick="openImageEditor(this.src)">${metaHtml}`;
+          } else {
+            msgBox.className = `msg ${cls}`;
+            msgBox.innerHTML = `${replyQuoteHtml}<div>${m.msg}</div>${metaHtml}`;
+          }
+
+          attachContextMenuToMsg(msgBox, key, m.sender, m.msg, m.type);
+          rowDiv.innerHTML = avatarHtml;
+          rowDiv.appendChild(msgBox);
+          el.appendChild(rowDiv);
+        });
+
+        el.scrollTop = el.scrollHeight;
+      });
+    }
+
+    function attachContextMenuToMsg(el, msgKey, msgSender, msgText, msgType) {
+      el.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        openContextMenu(e.clientX, e.clientY, msgKey, msgSender, msgText, msgType);
+      });
+
+      let touchTimer = null;
+      el.addEventListener('touchstart', (e) => {
+        touchTimer = setTimeout(() => {
+          const t = e.touches[0];
+          openContextMenu(t.clientX, t.clientY, msgKey, msgSender, msgText, msgType);
+        }, 450);
+      }, { passive: true });
+
+      el.addEventListener('touchend', () => clearTimeout(touchTimer));
+      el.addEventListener('touchmove', () => clearTimeout(touchTimer));
+    }
+
+    function openContextMenu(x, y, msgKey, msgSender, msgText, msgType) {
+      triggerVibrate();
+      selectedMsgData = { key: msgKey, sender: msgSender, msg: msgText, type: msgType };
+      const menu = document.getElementById('context-menu');
+
+      document.getElementById('ctx-delete').style.display = (msgSender === currentUser.username) ? 'flex' : 'none';
+      document.getElementById('ctx-copy').style.display = (msgType === 'text') ? 'flex' : 'none';
+
+      const posX = Math.min(x, window.innerWidth - 170);
+      const posY = Math.min(y, window.innerHeight - 130);
+      menu.style.left = posX + 'px';
+      menu.style.top = posY + 'px';
+      menu.style.display = 'block';
+
+      document.addEventListener('click', function closeMenu(e) {
+        if (menu) menu.style.display = 'none';
+        const picker = document.getElementById('picker-panel');
+        if (picker && picker.style.display === 'flex') {
+          if (!picker.contains(e.target) && !e.target.innerText.includes('😊')) {
+            picker.style.display = 'none';
+          }
+        }
+        document.removeEventListener('click', closeMenu);
+      });
+    }
+
+    function copyMessageText() {
+      if (!selectedMsgData || selectedMsgData.type !== 'text') return;
+      navigator.clipboard.writeText(selectedMsgData.msg).then(() => alert('คัดลอกข้อความแล้วค่ะ!'));
+    }
+
+    function triggerReply() {
+      if (!selectedMsgData) return;
+      replyMsgData = selectedMsgData;
+      const senderName = replyMsgData.sender === currentUser.username ? 'ตัวเอง' : (activeFriendData ? activeFriendData.name : replyMsgData.sender);
+      document.getElementById('reply-target-name').innerText = 'ตอบกลับ ' + senderName + ':';
+      document.getElementById('reply-target-text').innerText = replyMsgData.type === 'image' ? 'รูปภาพ' : (replyMsgData.type === 'sticker' ? 'สติกเกอร์' : replyMsgData.msg);
+      document.getElementById('reply-preview-bar').style.display = 'flex';
+      document.getElementById('msg-input').focus();
+    }
+
+    function cancelReply() {
+      replyMsgData = null;
+      document.getElementById('reply-preview-bar').style.display = 'none';
+    }
+
+    function triggerDelete() {
+      if (!selectedMsgData) return;
+      if (confirm('MJ ต้องการลบข้อความนี้ใช่ไหมคะ?')) {
+        const roomId = getRoomId(currentUser.username, activeFriend);
+        db.ref('chats/' + roomId + '/' + selectedMsgData.key).remove();
+      }
+    }
+
+    /* CANVAS IMAGE EDITOR */
+    let editorCanvas, editorCtx;
+    let originalImage = new Image();
+    let currentEditMode = 'draw';
+    let isDrawing = false;
+    let canvasHistory = [];
+    let currentRotation = 0;
+    let isFlipped = false;
+
+    function initImageEditorEvents() {
+      editorCanvas = document.getElementById('editor-canvas');
+      editorCtx = editorCanvas.getContext('2d');
+
+      editorCanvas.addEventListener('mousedown', startDrawing);
+      editorCanvas.addEventListener('mousemove', draw);
+      editorCanvas.addEventListener('mouseup', stopDrawing);
+      editorCanvas.addEventListener('mouseleave', stopDrawing);
+
+      editorCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e.touches[0]); });
+      editorCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); });
+      editorCanvas.addEventListener('touchend', stopDrawing);
+    }
+
+    function openImageEditor(src) {
+      const modal = document.getElementById('image-editor-modal');
+      modal.style.display = 'flex';
+
+      originalImage = new Image();
+      originalImage.crossOrigin = 'anonymous';
+      originalImage.src = src;
+      originalImage.onload = function() {
+        currentRotation = 0;
+        isFlipped = false;
+        canvasHistory = [];
+        document.getElementById('global-blur-slider').value = 0;
+        resetCanvasDimensions();
+        saveCanvasState();
+      };
+    }
+
+    function closeImageEditor() {
+      document.getElementById('image-editor-modal').style.display = 'none';
+    }
+
+    function resetCanvasDimensions() {
+      const maxW = Math.min(window.innerWidth * 0.85, 800);
+      const maxH = Math.min(window.innerHeight * 0.55, 600);
+      let w = originalImage.width;
+      let h = originalImage.height;
+
+      const ratio = Math.min(maxW / w, maxH / h);
+      editorCanvas.width = w * ratio;
+      editorCanvas.height = h * ratio;
+      redrawCanvas();
+    }
+
+    function saveCanvasState() {
+      if (canvasHistory.length > 10) canvasHistory.shift();
+      canvasHistory.push(editorCtx.getImageData(0, 0, editorCanvas.width, editorCanvas.height));
+    }
+
+    function undoEditorStep() {
+      if (canvasHistory.length > 1) {
+        canvasHistory.pop();
+        editorCtx.putImageData(canvasHistory[canvasHistory.length - 1], 0, 0);
+      }
+    }
+
+    function redrawCanvas() {
+      editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height);
+      editorCtx.save();
+      editorCtx.translate(editorCanvas.width / 2, editorCanvas.height / 2);
+      editorCtx.rotate((currentRotation * Math.PI) / 180);
+      editorCtx.scale(isFlipped ? -1 : 1, 1);
+      editorCtx.drawImage(originalImage, -editorCanvas.width / 2, -editorCanvas.height / 2, editorCanvas.width, editorCanvas.height);
+      editorCtx.restore();
+    }
+
+    function setEditMode(mode) {
+      currentEditMode = mode;
+      document.getElementById('btn-mode-draw').style.background = mode === 'draw' ? '#0084ff' : '#666';
+      document.getElementById('btn-mode-blur').style.background = mode === 'blur' ? '#0084ff' : '#666';
+    }
+
+    function getCanvasCoords(e) {
+      const rect = editorCanvas.getBoundingClientRect();
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    }
+
+    function startDrawing(e) {
+      isDrawing = true;
+      const coords = getCanvasCoords(e);
+      editorCtx.beginPath();
+      editorCtx.moveTo(coords.x, coords.y);
+    }
+
+    function draw(e) {
+      if (!isDrawing) return;
+      const coords = getCanvasCoords(e);
+      const size = document.getElementById('editor-brush-size').value;
+
+      if (currentEditMode === 'draw') {
+        const color = document.getElementById('editor-color').value;
+        editorCtx.strokeStyle = color;
+        editorCtx.lineWidth = size;
+        editorCtx.lineCap = 'round';
+        editorCtx.lineJoin = 'round';
+        editorCtx.lineTo(coords.x, coords.y);
+        editorCtx.stroke();
+      } else if (currentEditMode === 'blur') {
+        applyPixelateArea(coords.x, coords.y, size * 2);
+      }
+    }
+
+    function stopDrawing() {
+      if (isDrawing) {
+        isDrawing = false;
+        editorCtx.closePath();
+        saveCanvasState();
+      }
+    }
+
+    function applyPixelateArea(x, y, size) {
+      const sampleSize = parseInt(document.getElementById('blur-pixel-size').value) || 8;
+      const startX = Math.max(0, x - size / 2);
+      const startY = Math.max(0, y - size / 2);
+      const imgData = editorCtx.getImageData(startX, startY, size, size);
+
+      for (let py = 0; py < size; py += sampleSize) {
+        for (let px = 0; px < size; px += sampleSize) {
+          const i = (py * size + px) * 4;
+          const r = imgData.data[i];
+          const g = imgData.data[i + 1];
+          const b = imgData.data[i + 2];
+
+          for (let subY = py; subY < py + sampleSize && subY < size; subY++) {
+            for (let subX = px; subX < px + sampleSize && subX < size; subX++) {
+              const subI = (subY * size + subX) * 4;
+              imgData.data[subI] = r;
+              imgData.data[subI + 1] = g;
+              imgData.data[subI + 2] = b;
+            }
+          }
+        }
+      }
+      editorCtx.putImageData(imgData, startX, startY);
+    }
+
+    function applyGlobalBlur(val) {
+      redrawCanvas();
+      if (val > 0) {
+        editorCtx.filter = `blur(${val}px)`;
+        editorCtx.drawImage(editorCanvas, 0, 0);
+        editorCtx.filter = 'none';
+      }
+    }
+
+    function rotateCanvas() {
+      currentRotation = (currentRotation + 90) % 360;
+      redrawCanvas();
+      saveCanvasState();
+    }
+
+    function flipCanvas() {
+      isFlipped = !isFlipped;
+      redrawCanvas();
+      saveCanvasState();
+    }
+
+    function resetEditorCanvas() {
+      currentRotation = 0;
+      isFlipped = false;
+      document.getElementById('global-blur-slider').value = 0;
+      redrawCanvas();
+      saveCanvasState();
+    }
+
+    function downloadEditorImage() {
+      const link = document.createElement('a');
+      link.download = 'mj-edited-image.jpg';
+      link.href = editorCanvas.toDataURL('image/jpeg', 0.9);
+      link.click();
+    }
+
+    async function copyEditorImage() {
+      try {
+        editorCanvas.toBlob(async (blob) => {
+          await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
+          alert('คัดลอกรูปภาพลง Clipboard เรียบร้อยแล้วค่ะ!');
+        }, 'image/png');
+      } catch (err) {
+        alert('คัดลอกไม่สำเร็จ (เบราว์เซอร์ไม่รองรับค่ะ)');
+      }
     }
   </script>
 </body>
