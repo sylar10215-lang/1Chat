@@ -377,7 +377,7 @@
   <div id="chat-box" class="chat-container">
     <div class="chat-header">
       <div style="display: flex; align-items:center; gap:8px;">
-        <button class="toggle-btn" onclick="toggleSidebar()"> <span class="btn-text-mobile">เพื่อน</span></button>
+        <button class="toggle-btn" onclick="toggleSidebar()" title="เพื่อน">👥</button>
         <div style="display: flex; align-items:center; gap:8px; cursor:pointer;" onclick="openProfileModal(true)">
           <img id="my-avatar" class="avatar" src="https://via.placeholder.com/150">
           <span id="my-name" style="font-weight: bold;"></span>
@@ -385,19 +385,15 @@
       </div>
       <div style="display: flex; align-items:center; gap: 8px;">
         <div class="noti-toggle-container">
-          <span><span class="btn-text-mobile">แจ้งเตือน</span></span>
+          <span style="font-size:16px;" title="แจ้งเตือน">🔔</span>
           <label class="switch">
             <input type="checkbox" id="noti-toggle" onchange="toggleNotificationSetting(this)">
             <span class="slider"></span>
           </label>
         </div>
-        <button id="dark-toggle-btn" class="toggle-btn" onclick="toggleDarkMode()">
-          <span class="btn-text-mobile">โหมดมืด</span>
-        </button>
-        <button class="toggle-btn" onclick="openProfileModal(true)"> <span class="btn-text-mobile">โปรไฟล์</span></button>
-        <button onclick="logout()" style="width:auto; padding:6px 10px; background:#ff4d4d; border-radius: 20px; font-size:13px; border:none; color:#fff; cursor:pointer;">
-          <span class="btn-text-mobile">ออก</span>
-        </button>
+        <button id="dark-toggle-btn" class="toggle-btn" onclick="toggleDarkMode()" title="สลับโหมดมืด/สว่าง" style="font-size:16px;">🌙</button>
+        <button class="toggle-btn" onclick="openProfileModal(true)" title="โปรไฟล์" style="font-size:16px;">⚙️</button>
+        <button onclick="logout()" style="width:auto; padding:6px 10px; background:#ff4d4d; border-radius: 20px; font-size:16px; border:none; color:#fff; cursor:pointer;" title="ออกจากระบบ">🚪</button>
       </div>
     </div>
 
@@ -406,7 +402,7 @@
       <div id="sidebar" class="sidebar">
         <div style="display: flex; justify-content: space-between; align-items:center;">
           <h4 style="margin:0;">เพื่อนของฉัน</h4>
-          <button class="toggle-btn" onclick="toggleSidebar()" style="padding:2px 8px; font-size:12px; background: #666;">X ซ่อน</button>
+          <button class="toggle-btn" onclick="toggleSidebar()" style="padding:2px 8px; font-size:12px; background: #666;">❌ ซ่อน</button>
         </div>
         <div id="friend-list" class="friend-scroll-list" style="margin-top: 10px;">กำลังโหลด...</div>
         <div>
