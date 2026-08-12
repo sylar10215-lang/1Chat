@@ -1,20 +1,46 @@
-importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js');
+// รับ Push Notification จากเบื้องหลัง (Background)
+self.addEventListener('push', function(event) {
+  let data = {};
+  if (event.data) {
+    try {
+      data = event.data.json();
+    } catch (e) {
+      data = { title: '1Chat', body: event.data.text() };
+    }
+  }
 
-firebase.initializeApp({
-  apiKey: "AIzaSyDbMaGhHmPTReldMPckDk0G_Vk2gqiRjs",
-  projectId: "chat01-bd6fd",
-  messagingSenderId: "120948633141",
-  appId: "1:120948633141:web:36ae2459dda98164094b7c"
+  const title = data.title || data.notification?.title || '1Chat';
+  const options = {
+    body: data.body || data.notification?.body || 'คุณมีข้อความใหม่',
+    icon: data.icon || 'icon.png',
+    badge: 'icon.png',
+    vibrate: [100, 50, 100],
+    data: {
+      url: self.registration.scope
+    }
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(title, options)
+  );
 });
 
-const messaging = firebase.messaging();
-
-messaging.onBackgroundMessage(function (payload) {
-  const notificationTitle = payload.notification.title || 'ข้อความใหม่จาก MJ Chat';
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: payload.notification.icon || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'
-  };
-  self.registration.showNotification(notificationTitle, notificationOptions);
+// เมื่อผู้ใช้กดที่การแจ้งเตือน ให้เปิดหน้าแชทขึ้นมาทันที
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(clientList) {
+      // ถ้ามีแท็บแชทเปิดอยู่แล้ว ให้สลับไปแท็บนั้น
+      for (let i = 0; i < clientList.length; i++) {
+        let client = clientList[i];
+        if (client.url && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      // ถ้าไม่มี ให้เปิดแอปขึ้นมาใหม่
+      if (clients.openWindow) {
+        return clients.openWindow('/');
+      }
+    })
+  );
 });
