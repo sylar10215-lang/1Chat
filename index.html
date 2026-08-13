@@ -14,7 +14,7 @@
   
   <!-- Link Manifest -->
   <link rel="manifest" href="manifest.json">
-  <title>MJ Chat App (Fullscreen)</title>
+  <title>1Chat</title>
   
   <!-- Firebase SDK v8 -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -414,8 +414,8 @@
           <button class="img-btn" style="background: #f39c12;" onclick="toggleEmojiPicker()">😊</button>
           <button class="img-btn" onclick="document.getElementById('img-input').click()">📷</button>
           <input type="file" id="img-input" accept="image/*" style="display:none" onchange="sendImage(this)">
-          <textarea id="msg-input" class="chat-textarea" placeholder="กำลังพิมพ์... (วางรูป/แคปหน้าจอได้เลย)" rows="1" oninput="autoExpandTextarea(this); handleTyping();" onkeydown="handleEnterKey(event)"></textarea>
-          <button class="btn-send" onclick="sendMsg()">></button>
+          <textarea id="msg-input" class="chat-textarea" placeholder="พิมพ์ข้อความหรือวางรูปที่นี่)" rows="1" oninput="autoExpandTextarea(this); handleTyping();" onkeydown="handleEnterKey(event)"></textarea>
+          <button class="btn-send" onclick="sendMsg()">📤</button>
           
           <!-- Pop-up เลือก Sticker / Emoji -->
           <div id="picker-panel" class="picker-panel">
@@ -492,7 +492,7 @@
   <div id="image-editor-modal" class="modal">
     <div class="modal-content image-editor-content">
       <div style="display: flex; justify-content: space-between; align-items:center; margin-bottom: 10px;">
-        <h3 style="margin:0;">ดูรูปและแก้ไขรูปภาพ</h3>
+        <h3 style="margin:0;">ดูรูป/แก้ไขรูป</h3>
         <button onclick="closeImageEditor()" style="width:auto; padding: 4px 10px; background:#888;">X</button>
       </div>
       <div class="canvas-wrapper" id="canvas-container">
@@ -501,13 +501,13 @@
       <div class="editor-toolbar">
         <div class="toolbar-row">
           <!-- ปุ่มเปิด/ปิด เครื่องมือ -->
-          <button class="editor-btn" id="btn-mode-draw" onclick="toggleEditMode('draw')" style="background:#666;">✏️ วาด</button>
-          <button class="editor-btn" id="btn-mode-blur" onclick="toggleEditMode('blur')" style="background:#666;">💧 เบลอจุด</button>
+          <button class="editor-btn" id="btn-mode-draw" onclick="toggleEditMode('draw')" style="background:#666;">✏️วาด</button>
+          <button class="editor-btn" id="btn-mode-blur" onclick="toggleEditMode('blur')" style="background:#666;">💧เบลอจุด</button>
           <input type="color" id="editor-color" value="#ff0000" title="เลือกสีแปรง">
           <label style="font-size: 12px;">ขนาดแปรง:
             <input type="range" id="editor-brush-size" min="2" max="50" value="10" style="width: 70px; vertical-align:middle;">
           </label>
-          <label style="font-size: 12px; margin-left:5px;">ความหยาบเบลอ:
+          <label style="font-size: 12px; margin-left:5px;">ความเบลอ:
             <input type="range" id="blur-pixel-size" min="2" max="30" value="8" style="width: 70px; vertical-align:middle;">
           </label>
         </div>
@@ -518,9 +518,9 @@
           <!-- เครื่องมือขยายรูป / หมุน / ย้อนกลับ -->
           <button class="editor-btn" onclick="zoomImage(0.2)" title="ขยายรูป">🔍+</button>
           <button class="editor-btn" onclick="zoomImage(-0.2)" title="ย่อรูป">🔍-</button>
-          <button class="editor-btn" onclick="rotateCanvas()">🔄 หมุน</button>
-          <button class="editor-btn" onclick="flipCanvas()">↔️ กลับด้าน</button>
-          <button class="editor-btn" onclick="undoEditorStep()">↩️ ย้อนกลับ</button>
+          <button class="editor-btn" onclick="rotateCanvas()">🔄หมุน</button>
+          <button class="editor-btn" onclick="flipCanvas()">↔️กลับด้าน</button>
+          <button class="editor-btn" onclick="undoEditorStep()">↩️ย้อนกลับ</button>
         </div>
         <div class="toolbar-row" style="margin-top:8px;">
           <button class="editor-btn" style="background: #28a745; flex:1;" onclick="copyEditorImage()">คัดลอกรูป</button>
@@ -747,7 +747,7 @@
     }
 
     function deleteSticker(key) {
-      if (confirm('MJ ต้องการลบสติกเกอร์นี้ใช่ไหมคะ?')) {
+      if (confirm('ต้องการลบสติกเกอร์นี้ใช่ไหมคะ?')) {
         db.ref('stickers/' + currentUser.username + '/' + key).remove();
       }
     }
@@ -810,7 +810,7 @@
               }
             });
           } else {
-            alert('MJ ไม่ได้อนุญาตสิทธิ์การแจ้งเตือนในเบราว์เซอร์ค่ะ');
+            alert('กดอนุญาตสิทธิ์การแจ้งเตือนในเบราว์เซอร์ก่อนค่ะ');
             toggleElem.checked = false;
             localStorage.setItem('mj_chat_noti_enabled', 'false');
           }
@@ -1508,7 +1508,7 @@
 
     function triggerDelete() {
       if (!selectedMsgData) return;
-      if (confirm('MJ ต้องการลบข้อความนี้ใช่ไหมคะ?')) {
+      if (confirm('ต้องการลบข้อความนี้ใช่ไหมคะ?')) {
         const roomId = getRoomId(currentUser.username, activeFriend);
         db.ref('chats/' + roomId + '/' + selectedMsgData.key).remove();
       }
@@ -1746,7 +1746,7 @@
       try {
         editorCanvas.toBlob(async (blob) => {
           await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
-          alert('คัดลอกรูปภาพลง Clipboard เรียบร้อยแล้วค่ะ!');
+          alert('คัดลอกรูปภาพลงคลิปบอร์ดเรียบร้อยแล้วค่ะ!');
         }, 'image/png');
       } catch (err) {
         alert('คัดลอกไม่สำเร็จ (เบราว์เซอร์ไม่รองรับค่ะ)');
