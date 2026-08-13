@@ -874,7 +874,7 @@
         img.onload = function() {
           const canvas = document.createElement('canvas');
           let width = img.width, height = img.height;
-          const MAX_SIZE = 2048;
+          const MAX_SIZE = 1024;
           if (width > MAX_SIZE || height > MAX_SIZE) {
             if (width > height) {
               height = Math.round((height * MAX_SIZE) / width);
