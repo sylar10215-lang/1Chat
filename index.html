@@ -49,9 +49,8 @@
     html, body {
       margin: 0; 
       padding: 0;
-      width: 100%; 
-      height: 100%;
-      height: -webkit-fill-available; /* ให้เต็มจอ iOS พอดีแบบไม่ล้น */
+      width: 100vw; 
+      height: 100dvh; /* ใช้ความสูงหน้าจอแบบไดนามิกพอดีเป๊ะ */
       overflow: hidden;
       background: var(--bg-main);
       color: var(--text-color);
@@ -75,21 +74,21 @@
     }
     .chat-container {
       display: none;
-      width: 100vw; height: 100vh;
+      width: 100vw; 
+      height: 100dvh;
       background: var(--bg-card);
+      flex-direction: column; /* เรียงจากบนลงล่าง */
     }
     .chat-header {
       background: var(--theme-color);
       color: white;
-      padding-top: max(12px, env(safe-area-inset-top)); /* ดันเนื้อหาลงมาหลบรอยแหว่ง แต่สีพื้นหลังจะดันไปสุดจอ */
-      padding-bottom: 12px;
-      padding-left: 15px;
-      padding-right: 15px;
+      padding: max(10px, env(safe-area-inset-top)) 15px 10px 15px;
       display: flex; 
       justify-content: space-between; 
       align-items: center;
+      height: auto;
+      flex-shrink: 0; /* ห้ามโดนบีบ */
       transition: background 0.3s;
-      flex-shrink: 0;
     }
     .avatar {
       width: 38px; height: 38px;
@@ -107,7 +106,8 @@
     }
     .chat-body {
       display: flex;
-      flex: 1;
+      flex: 1; /* ดึงพื้นที่ตรงกลางทั้งหมด */
+      height: calc(100dvh - 60px - env(safe-area-inset-top));
       position: relative;
       overflow: hidden;
     }
@@ -259,16 +259,33 @@
       font-size: 18px; color: white; flex-shrink: 0; margin: 0;
     }
     .floating-input-bar {
-      position: relative; display: flex; align-items: flex-end; gap: 8px;
-      padding: 8px 12px; margin: 8px 12px 12px 12px;
-      background: var(--bg-card); border: 1px solid var(--border-color);
-      border-radius: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); z-index: 10;
+      position: relative; 
+      display: flex; 
+      align-items: flex-end; 
+      gap: 8px;
+      padding: 8px 12px; 
+      margin: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)) 12px; /* เว้นระยะขอบล่างให้พอดีขอบจอ */
+      background: var(--bg-card); 
+      border: 1px solid var(--border-color);
+      border-radius: 24px; 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
+      z-index: 10;
     }
     .chat-textarea {
-      flex: 1; background: transparent; border: none; outline: none;
-      color: var(--text-color); font-size: 15px; line-height: 1.35;
-      resize: none !important; max-height: 120px; min-height: 22px; height: 22px;
-      padding: 2px 0; margin: 6px 0; overflow-y: auto;
+      flex: 1; 
+      background: transparent; 
+      border: none; 
+      outline: none;
+      color: var(--text-color); 
+      font-size: 15px; 
+      line-height: 1.35;
+      resize: none !important; /* ปิดปุ่มลูกศรยืดขยายมุมขวา */
+      max-height: 120px; 
+      min-height: 22px; 
+      height: 22px;
+      padding: 2px 0; 
+      margin: 6px 0; 
+      overflow-y: auto;
     }
     .btn-send {
       width: 38px; height: 38px; border-radius: 50%; padding: 0;
@@ -1038,7 +1055,7 @@
 
     function initChatScreen() {
       document.getElementById('auth-box').style.display = 'none';
-      document.getElementById('chat-box').style.display = 'block';
+      document.getElementById('chat-box').style.display = 'flex'; /* เปลี่ยนจาก block เป็น flex */
       initNotiToggleState();
       db.ref('users/' + currentUser.username).on('value', snapshot => {
         if (snapshot.exists()) {
