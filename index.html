@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <!-- PWA Meta Tags สำหรับ Android & iOS -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#0084ff">
   
   <!-- iOS / Safari PWA Config -->
@@ -48,7 +48,8 @@
     }
     html, body {
       margin: 0; padding: 0;
-      width: 100vw; height: 100vh;
+      width: 100vw; 
+      height: 100dvh; /* ใช้ 100dvh แทน 100vh เพื่อป้องกันแถบ Safari ดันหน้าจอ */
       overflow: hidden;
       background: var(--bg-main);
       color: var(--text-color);
@@ -70,9 +71,11 @@
     .chat-header {
       background: var(--theme-color);
       color: white;
-      padding: 10px 15px;
-      display: flex; justify-content: space-between; align-items: center;
-      height: 60px;
+      padding: env(safe-area-inset-top, 10px) 15px 10px 15px; /* เว้นหลบเกาะกลาง/Notch ของ iPhone */
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      height: calc(60px + env(safe-area-inset-top, 0px));
       transition: background 0.3s;
     }
     .avatar {
@@ -91,7 +94,7 @@
     }
     .chat-body {
       display: flex;
-      height: calc(100vh - 60px);
+      height: calc(100dvh - 60px - env(safe-area-inset-top, 0px));
       position: relative;
     }
     .sidebar {
@@ -244,7 +247,7 @@
     .chat-textarea {
       flex: 1; background: transparent; border: none; outline: none;
       color: var(--text-color); font-size: 15px; line-height: 1.35;
-      resize: none; max-height: 120px; min-height: 22px; height: 22px;
+      resize: none !important; max-height: 120px; min-height: 22px; height: 22px;
       padding: 2px 0; margin: 6px 0; overflow-y: auto;
     }
     .btn-send {
