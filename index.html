@@ -393,7 +393,7 @@
             <img id="target-avatar" class="avatar" src="https://via.placeholder.com/150" style="display:none;">
             <span id="target-text">เลือกเพื่อนเปิดห้องแช็ต</span>
           </div>
-          <button id="view-friend-btn" class="toggle-btn" style="display:none; background: #0084ff;" onclick="viewFriendProfile()">ดูโปรไฟล์เพื่อน</button>
+          <button id="view-friend-btn" class="toggle-btn" style="display:none; background: #0084ff;" onclick="viewFriendProfile()">ดูโปรไฟล์</button>
         </div>
         <div class="messages-wrapper">
           <div id="chat-bg-layer" class="chat-bg-layer"></div>
@@ -414,8 +414,8 @@
           <button class="img-btn" style="background: #f39c12;" onclick="toggleEmojiPicker()">😊</button>
           <button class="img-btn" onclick="document.getElementById('img-input').click()">📷</button>
           <input type="file" id="img-input" accept="image/*" style="display:none" onchange="sendImage(this)">
-          <textarea id="msg-input" class="chat-textarea" placeholder="พิมพ์ข้อความหรือวางรูปที่นี่)" rows="1" oninput="autoExpandTextarea(this); handleTyping();" onkeydown="handleEnterKey(event)"></textarea>
-          <button class="btn-send" onclick="sendMsg()">📤</button>
+          <textarea id="msg-input" class="chat-textarea" placeholder="พิมพ์ข้อความหรือวางรูปที่นี่" rows="1" oninput="autoExpandTextarea(this); handleTyping();" onkeydown="handleEnterKey(event)"></textarea>
+          <button class="btn-send" onclick="sendMsg()">⬆️</button>
           
           <!-- Pop-up เลือก Sticker / Emoji -->
           <div id="picker-panel" class="picker-panel">
