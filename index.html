@@ -82,9 +82,20 @@
     .chat-header {
       background: var(--theme-color);
       color: white;
-      padding: 5px 15px; /* <--- ลองลด padding ลงเหลือ 5px */
-      display: flex; justify-content: space-between; align-items: center;
-      height: 36px;      /* <--- ของเดิมคือ 60px ลองลดเหลือ 40px หรือ 45px ดูค่ะ */
+  
+      /*  เพิ่มดันขอบบนหลบติ่ง iPhone ตรงนี้ค่ะ */
+      padding-top: max(12px, env(safe-area-inset-top)); 
+      padding-bottom: 10px;
+      padding-left: 15px;
+      padding-right: 15px;
+  
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+  
+      /* เปลี่ยนความสูงให้ยืดตามเนื้อหาเพื่อไม่ให้โดนตัด */
+      height: auto;
+      min-height: 50px;
       transition: background 0.3s;
     }
     .avatar {
@@ -103,7 +114,8 @@
     }
    .chat-body {
       display: flex;
-      height: calc(100vh - 36px); /* <--- ถ้าลด .chat-header เหลือ 45px อย่าลืมเปลี่ยนเลข 60px ตรงนี้เป็น 45px ด้วยนะคะ จอจะได้ไม่แหว่ง! */
+      flex: 1;
+      height: auto; /* ให้สูงพอดีพื้นที่เหลือ */
       position: relative;
     }
     .chat-footer {
