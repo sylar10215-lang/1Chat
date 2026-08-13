@@ -1288,34 +1288,46 @@
     }
 
     function processAndSendImage(file) {
-      if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const img = new Image();
-        img.src = e.target.result;
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          let width = img.width, height = img.height;
-          if (width > 1024) {
-            height = Math.round((height * 1024) / width);
-            width = 1024;
-          }
-          canvas.width = width; canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          const resizedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-          const roomId = getRoomId(currentUser.username, activeFriend);
-          db.ref('chats/' + roomId).push({
-            sender: currentUser.username,
-            msg: resizedBase64,
-            type: 'image',
-            timestamp: Date.now(),
-            read: false
-          });
-        };
-      };
-      reader.readAsDataURL(file);
-    }
+  if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.src = e.target.result;
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      let width = img.width, height = img.height;
+      
+      // ปรับขนาดความกว้างสูงสุดเพิ่มเป็น 2048px (จากเดิม 1024px)
+      const MAX_SIZE = 2048; 
+      if (width > MAX_SIZE || height > MAX_SIZE) {
+        if (width > height) {
+          height = Math.round((height * MAX_SIZE) / width);
+          width = MAX_SIZE;
+        } else {
+          width = Math.round((width * MAX_SIZE) / height);
+          height = MAX_SIZE;
+        }
+      }
+
+      canvas.width = width; canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      // เพิ่มความคมชัดเป็น 0.9 (90%) จากเดิม 0.7
+      const resizedBase64 = canvas.toDataURL('image/jpeg', 0.9); 
+      
+      const roomId = getRoomId(currentUser.username, activeFriend);
+      db.ref('chats/' + roomId).push({
+        sender: currentUser.username,
+        msg: resizedBase64,
+        type: 'image',
+        timestamp: Date.now(),
+        read: false
+      });
+    };
+  };
+  reader.readAsDataURL(file);
+}
 
     function sendImage(input) {
       const file = input.files[0];
