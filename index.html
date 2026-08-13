@@ -72,24 +72,6 @@
       margin: 100px auto 0;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    .main-header {
-      background: var(--bg-card); /* หรือสีแถบดำดั้งเดิม */
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-  
-      /*  ปรับความสูงของแถบบนสุดที่มีปุ่มเยอะๆ ตรงนี้เลยค่ะ  */
-      padding-top: max(12px, env(safe-area-inset-top)); /* ระยะเว้นจากขอบบนสุดจอ iPhone */
-      padding-bottom: 12px;  /* ระยะเว้นด้านล่างของแถบปุ่ม */
-      padding-left: 15px;
-      padding-right: 15px;
-  
-      /* หากต้องการล็อกความสูงขั้นต่ำ สามารถใส่บรรทัดนี้เพิ่มได้ค่ะ */
-      min-height: 55px; /* ปรับลดเหลือ 40px ถ้าอยากให้เตี้ยลง หรือเพิ่มเป็น 55px ถ้าอยากให้สูงขึ้น */
-  
-      flex-shrink: 0;
-      border-bottom: 1px solid var(--border-color);
-    }
     .chat-container {
       display: none;
       width: 100vw; 
@@ -100,12 +82,18 @@
     .chat-header {
       background: var(--theme-color);
       color: white;
-      padding: max(10px, env(safe-area-inset-top)) 15px 10px 15px;
+  
+      /*  1. ปรับความสูง/ความกว้างของแถบบนสุดที่มีปุ่มเยอะๆ ตรงนี้ค่ะ */
+      padding-top: max(8px, env(safe-area-inset-top)); /* ระยะห่างจากขอบบนจอ (ปรับลดเพื่อลดความสูง) */
+      padding-bottom: 2px;                             /* ระยะห่างด้านล่าง (ปรับลดเพื่อลดความสูง) */
+      min-height: 42px;                                /* กำหนดความสูงขั้นต่ำ (ปรับตัวเลขนี้ได้เลย เช่น 38px, 45px, 50px) */
+  
+      padding-left: 15px;
+      padding-right: 15px;
       display: flex; 
       justify-content: space-between; 
       align-items: center;
-      height: auto;
-      flex-shrink: 0; /* ห้ามโดนบีบ */
+      flex-shrink: 0;
       transition: background 0.3s;
     }
     .avatar {
