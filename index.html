@@ -83,9 +83,9 @@
       background: var(--theme-color);
       color: white;
   
-      /*  เพิ่มดันขอบบนหลบติ่ง iPhone ตรงนี้ค่ะ */
-      padding-top: max(12px, env(safe-area-inset-top)); 
-      padding-bottom: 10px;
+      /* ดันขอบบนลงมาเพิ่มอีก ให้พ้นติ่งและ Status Bar ชัดๆ ค่ะ */
+      padding-top: max(45px, env(safe-area-inset-top)); 
+      padding-bottom: 12px;
       padding-left: 15px;
       padding-right: 15px;
   
@@ -93,7 +93,6 @@
       justify-content: space-between; 
       align-items: center;
   
-      /* เปลี่ยนความสูงให้ยืดตามเนื้อหาเพื่อไม่ให้โดนตัด */
       height: auto;
       min-height: 50px;
       transition: background 0.3s;
