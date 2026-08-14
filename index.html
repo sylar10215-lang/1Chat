@@ -448,86 +448,56 @@
       max-height: 90vh; overflow-y: auto;
     }
     
-    /* สไตล์ปรับปรุงใหม่สำหรับ หน้าต่างแสดงรูปเต็มจอ */
-    .image-viewer-content {
-      width: 100vw !important;
-      height: 100vh !important;
-      max-width: 100vw !important;
-      max-height: 100vh !important;
-      border-radius: 0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      background: #000 !important;
-      position: relative;
-    }
-    .viewer-header {
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      display: flex;
-      justify-content: space-between;
+    /* MODAL ดูรูปภาพเต็มจอ พร้อมรองรับ Touch Zoom และ Mouse Wheel Zoom */
+    .image-viewer-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 10000;
+      overflow: hidden;
+      touch-action: none;
+      justify-content: center;
       align-items: center;
-      padding: 15px 20px;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
-      z-index: 10;
-      color: white;
     }
-    .viewer-toolbar {
+    .viewer-close-btn {
       position: absolute;
-      bottom: 25px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 12px;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(8px);
-      padding: 8px 16px;
-      border-radius: 30px;
-      z-index: 10;
-    }
-    .viewer-btn {
-      background: rgba(255,255,255,0.2);
+      top: 20px; right: 20px;
+      background: rgba(255, 255, 255, 0.2);
       color: white;
       border: none;
-      border-radius: 20px;
-      padding: 6px 14px;
-      font-size: 13px;
+      border-radius: 50%;
+      width: 40px; height: 40px;
+      font-size: 20px;
       cursor: pointer;
-      width: auto;
-      margin: 0;
+      z-index: 10001;
       display: flex;
       align-items: center;
-      gap: 4px;
+      justify-content: center;
+      backdrop-filter: blur(4px);
     }
-    .viewer-btn:hover {
-      background: rgba(255,255,255,0.4);
-    }
-    .full-image-wrapper { 
-      flex: 1 !important;
-      display: flex !important; 
-      justify-content: center !important; 
-      align-items: center !important; 
+    .viewer-img-container {
       width: 100%;
       height: 100%;
-      overflow: hidden; 
-      position: relative;
-      touch-action: none; /* ป้องกัน default scroll บนมือถือเพื่อใช้ระบบ pinch-to-zoom */
+      display: flex;
+      justify-content: center;
+      align-items: center;
       cursor: grab;
     }
-    .full-image-wrapper:active {
+    .viewer-img-container:active {
       cursor: grabbing;
     }
-    #full-size-img { 
-      max-width: 100%; 
-      max-height: 100%; 
+    #full-size-img {
+      max-width: 100%;
+      max-height: 100%;
       object-fit: contain;
-      transition: transform 0.05s ease-out;
       transform-origin: center center;
+      transition: transform 0.05s ease-out;
       user-select: none;
       -webkit-user-drag: none;
     }
-    
+
     #context-menu { background: var(--bg-card) !important; border: 1px solid var(--border-color) !important; }
     #context-menu div { color: var(--text-color) !important; transition: background 0.2s; }
     #context-menu div:hover { background: rgba(0,0,0,0.05); }
@@ -704,13 +674,13 @@
             <span id="target-text">เลือกเพื่อนเปิดห้องแช็ต</span>
           </div>
           <div class="chat-search-box">
-          <input type="text" id="chatSearchInput" placeholder="ค้นหา..." oninput="searchChatMessages()">
-          <span id="searchResultCount" class="search-count"></span>
-          <div class="search-nav-btns">
-            <button type="button" onclick="prevSearchResult()" title="ข้อความก่อนหน้า">▲</button>
-            <button type="button" onclick="nextSearchResult()" title="ข้อความถัดไป">▼</button>
+            <input type="text" id="chatSearchInput" placeholder="ค้นหา..." oninput="searchChatMessages()">
+            <span id="searchResultCount" class="search-count"></span>
+            <div class="search-nav-btns">
+              <button type="button" onclick="prevSearchResult()" title="ข้อความก่อนหน้า">▲</button>
+              <button type="button" onclick="nextSearchResult()" title="ข้อความถัดไป">▼</button>
+            </div>
           </div>
-        </div>
           <button id="view-friend-btn" class="toggle-btn" style="display:none; background: #0084ff;" onclick="viewFriendProfile()">โปรไฟล์</button>
         </div>
         <div class="messages-wrapper">
@@ -748,6 +718,7 @@
       </div>
     </div>
   </div>
+  
   <!-- Modal หน้าต่างโปรไฟล์ -->
   <div id="profile-modal" class="modal">
     <div class="modal-content">
@@ -790,7 +761,8 @@
       </div>
     </div>
   </div>
-  <!-- Modal ตัวอย่างรูปภาพส่งแช็ต -->
+
+  <!-- Modal ตัวอย่างรูปภาพก่อนส่งแช็ต -->
   <div id="image-preview-modal" class="modal">
     <div class="modal-content">
       <h3 style="margin-top:0;">ตัวอย่างรูปภาพ</h3>
@@ -804,23 +776,11 @@
     </div>
   </div>
 
-  <!-- MODAL : ดูรูปภาพเต็มจอ + ซูมเข้าออก -->
-  <div id="image-editor-modal" class="modal">
-    <div class="modal-content image-viewer-content">
-      <div class="viewer-header">
-        <span style="font-size: 14px; font-weight: bold;">ดูรูปภาพ</span>
-        <button onclick="closeImageEditor()" style="width:auto; padding: 4px 12px; background: rgba(255,255,255,0.2); border-radius: 20px; color: white;">✕ ปิด</button>
-      </div>
-      <div class="full-image-wrapper" id="canvas-container">
-        <img id="full-size-img" src="" alt="Full view">
-      </div>
-      <div class="viewer-toolbar">
-        <button class="viewer-btn" onclick="zoomImage(0.25)" title="ขยายรูป">🔍+</button>
-        <button class="viewer-btn" onclick="zoomImage(-0.25)" title="ย่อรูป">🔍-</button>
-        <button class="viewer-btn" onclick="resetZoom()" title="ขนาดปกติ">↺ รีเซ็ต</button>
-        <button class="viewer-btn" style="background: #28a745;" onclick="copyFullImage()">คัดลอก</button>
-        <button class="viewer-btn" style="background: #0084ff;" onclick="downloadFullImage()">ดาวน์โหลด</button>
-      </div>
+  <!-- MODAL : หน้าต่างดูรูปภาพเต็มจอ + ซูมเข้าออก (ซูมมือถือ & เมาส์คอม) -->
+  <div id="image-viewer-modal" class="image-viewer-modal">
+    <button class="viewer-close-btn" onclick="closeImageViewer()">✕</button>
+    <div class="viewer-img-container" id="viewer-container">
+      <img id="full-size-img" src="" alt="Full view">
     </div>
   </div>
 
@@ -830,6 +790,7 @@
     <div id="ctx-copy" onclick="copyMessageText()" style="padding: 10px 16px; cursor:pointer; font-size:14px; display: flex; align-items:center; gap:8px;">คัดลอกข้อความ</div>
     <div id="ctx-delete" onclick="triggerDelete()" style="padding:10px 16px; cursor:pointer; font-size:14px; color: #ff4d4d; display: flex; align-items:center; gap: 8px;">ลบข้อความ</div>
   </div>
+
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
@@ -877,8 +838,7 @@
       "😀","😃","😄","😁","😆","😅","😂","🤣","🥲","☺️",
       "😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗",
       "😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓",
-      "😎","```html
-,"🥸","🤩","🥳","😏","😒","😞","😔","😟","😕",
+      "😎","🥸","🤩","🥳","😏","😒","😞","😔","😟","😕",
       "🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤",
       "😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰",
       "😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑",
@@ -891,228 +851,22 @@
       "💝","💯"
     ];
 
-    // ==========================================
-    // ตัวแปรและฟังก์ชันสำหรับระบบดูรูปเต็มจอ + ซูมเข้า/ออก (Zoom & Pan)
-    // ==========================================
-    let currentZoomScale = 1;
-    let pointX = 0;
-    let pointY = 0;
-    let startX = 0;
-    let startY = 0;
-    let isDragging = false;
-    let initialPinchDistance = null;
-
-    function openImageEditor(src) {
-      const modal = document.getElementById('image-editor-modal');
-      const img = document.getElementById('full-size-img');
-      img.src = src;
-      modal.style.display = 'flex';
-      resetZoom();
-    }
-
-    function closeImageEditor() {
-      const modal = document.getElementById('image-editor-modal');
-      modal.style.display = 'none';
-    }
-
-    function updateTransform() {
-      const img = document.getElementById('full-size-img');
-      img.style.transform = `translate(${pointX}px, ${pointY}px) scale(${currentZoomScale})`;
-    }
-
-    function zoomImage(delta) {
-      currentZoomScale += delta;
-      if (currentZoomScale < 0.5) currentZoomScale = 0.5;
-      if (currentZoomScale > 5) currentZoomScale = 5;
-      updateTransform();
-    }
-
-    function resetZoom() {
-      currentZoomScale = 1;
-      pointX = 0;
-      pointY = 0;
-      updateTransform();
-    }
-
-    function initImageViewerEvents() {
-      const wrapper = document.getElementById('canvas-container');
-      const img = document.getElementById('full-size-img');
-
-      // 1. ซูมด้วย Mouse Wheel บนคอมพิวเตอร์
-      wrapper.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        const delta = e.deltaY < 0 ? 0.2 : -0.2;
-        zoomImage(delta);
-      }, { passive: false });
-
-      // 2. คลิกลากภาพบนคอมพิวเตอร์ (Mouse Drag)
-      wrapper.addEventListener('mousedown', function(e) {
-        if (e.button !== 0) return;
-        isDragging = true;
-        startX = e.clientX - pointX;
-        startY = e.clientY - pointY;
-      });
-
-      window.addEventListener('mousemove', function(e) {
-        if (!isDragging) return;
-        e.preventDefault();
-        pointX = e.clientX - startX;
-        pointY = e.clientY - startY;
-        updateTransform();
-      });
-
-      window.addEventListener('mouseup', function() {
-        isDragging = false;
-      });
-
-      // 3. รองรับการใช้นิ้วบนมือถือ (Touch Events: Drag & Pinch-to-zoom)
-      wrapper.addEventListener('touchstart', function(e) {
-        if (e.touches.length === 1) {
-          isDragging = true;
-          startX = e.touches[0].clientX - pointX;
-          startY = e.touches[0].clientY - pointY;
-        } else if (e.touches.length === 2) {
-          isDragging = false;
-          initialPinchDistance = Math.hypot(
-            e.touches[0].clientX - e.touches[1].clientX,
-            e.touches[0].clientY - e.touches[1].clientY
-          );
-        }
-      }, { passive: true });
-
-      wrapper.addEventListener('touchmove', function(e) {
-        if (isDragging && e.touches.length === 1) {
-          pointX = e.touches[0].clientX - startX;
-          pointY = e.touches[0].clientY - startY;
-          updateTransform();
-        } else if (e.touches.length === 2 && initialPinchDistance) {
-          const currentDistance = Math.hypot(
-            e.touches[0].clientX - e.touches[1].clientX,
-            e.touches[0].clientY - e.touches[1].clientY
-          );
-          const factor = currentDistance / initialPinchDistance;
-          currentZoomScale *= factor;
-          if (currentZoomScale < 0.5) currentZoomScale = 0.5;
-          if (currentZoomScale > 5) currentZoomScale = 5;
-          initialPinchDistance = currentDistance;
-          updateTransform();
-        }
-      }, { passive: true });
-
-      wrapper.addEventListener('touchend', function(e) {
-        if (e.touches.length < 2) initialPinchDistance = null;
-        if (e.touches.length === 0) isDragging = false;
-      });
-    }
-
-    function downloadFullImage() {
-      const img = document.getElementById('full-size-img');
-      const a = document.createElement('a');
-      a.href = img.src;
-      a.download = 'image_' + Date.now() + '.png';
-      a.click();
-    }
-
-    async function copyFullImage() {
-      const img = document.getElementById('full-size-img');
-      try {
-        const response = await fetch(img.src);
-        const blob = await response.blob();
-        await navigator.clipboard.write([
-          new ClipboardItem({ [blob.type]: blob })
-        ]);
-        alert('คัดลอกรูปภาพแล้วค่ะ!');
-      } catch (err) {
-        alert('ไม่สามารถคัดลอกรูปได้ในเบราว์เซอร์นี้ค่ะ');
-      }
-    }
-
-    // ==========================================
-    // ฟังก์ชันการประมวลผลรูปภาพ (บีบอัดเป็น 90% ของขนาดจริง)
-    // ==========================================
-    function processAndSendImage(file) {
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const img = new Image();
-        img.src = e.target.result;
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-
-          // บีบอัดเป็น 90% (Quality = 0.9)
-          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.9);
-
-          const roomId = getRoomId(currentUser.username, activeFriend);
-          const payload = {
-            sender: currentUser.username,
-            msg: compressedBase64,
-            type: 'image',
-            timestamp: Date.now(),
-            read: false
-          };
-          if (replyMsgData) {
-            payload.replyTo = replyMsgData;
-          }
-          db.ref('chats/' + roomId).push(payload);
-          cancelReply();
-        };
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function sendImage(input) {
-      if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
-      if (input.files && input.files[0]) {
-        showImagePreview(input.files[0]);
-        input.value = '';
-      }
-    }
-
-    function showImagePreview(file) {
-      pendingImageFile = file;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById('img-preview-target').src = e.target.result;
-        document.getElementById('image-preview-modal').style.display = 'flex';
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function confirmSendImage() {
-      if (pendingImageFile) {
-        processAndSendImage(pendingImageFile);
-        closeImagePreview();
-      }
-    }
-
-    function closeImagePreview() {
-      pendingImageFile = null;
-      document.getElementById('image-preview-modal').style.display = 'none';
-    }
-
     function formatTime(timestamp) {
       if (!timestamp) return '';
       const date = new Date(timestamp);
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
-
     function autoExpandTextarea(element) {
       element.style.height = '22px';
       const scrollH = element.scrollHeight;
       element.style.height = Math.min(scrollH, 120) + 'px';
     }
-
     function handleEnterKey(e) {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         sendMsg();
       }
     }
-
     function toggleEmojiPicker() {
       const panel = document.getElementById('picker-panel');
       if (panel.style.display === 'flex') {
@@ -1123,14 +877,12 @@
         renderStickerPicker();
       }
     }
-
     function switchPickerTab(tab) {
       document.getElementById('tab-emoji').classList.toggle('active', tab === 'emoji');
       document.getElementById('tab-sticker').classList.toggle('active', tab === 'sticker');
       document.getElementById('picker-emoji-view').style.display = tab === 'emoji' ? 'grid' : 'none';
       document.getElementById('picker-sticker-view').style.display = tab === 'sticker' ? 'flex' : 'none';
     }
-
     function renderEmojiPicker() {
       const container = document.getElementById('picker-emoji-view');
       container.innerHTML = "";
@@ -1147,7 +899,6 @@
         container.appendChild(span);
       });
     }
-
     function renderStickerPicker() {
       const container = document.getElementById('picker-sticker-view');
       container.innerHTML = '';
@@ -1189,7 +940,25 @@
       }
       container.appendChild(grid);
     }
-
+    function listenUserStickers() {
+      if (!currentUser) return;
+      if (stickerListener) db.ref('stickers/' + currentUser.username).off('value', stickerListener);
+      stickerListener = db.ref('stickers/' + currentUser.username).on('value', snapshot => {
+        userStickers = snapshot.val() || {};
+        const panel = document.getElementById('picker-panel');
+        if (panel && panel.style.display === 'flex') renderStickerPicker();
+      });
+    }
+    function addStickerByUrl() {
+      const urlInput = document.getElementById('sticker-url-input');
+      const url = urlInput.value.trim();
+      if (!url) return alert('กรุณากรอก URL รูปสติกเกอร์ค่ะ!');
+      db.ref('stickers/' + currentUser.username).push(url).then(() => {
+        urlInput.value = '';
+      });
+    }
+    
+    /* อัปโหลดสติกเกอร์ (บีบอัดรูปเหลือ 80%) */
     function uploadStickerFile(input) {
       const file = input.files[0];
       if (!file) return;
@@ -1207,12 +976,324 @@
           canvas.width = width; canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
-          const resizedBase64 = canvas.toDataURL('image/png', 0.9);
+          const resizedBase64 = canvas.toDataURL('image/png', 0.8);
           db.ref('stickers/' + currentUser.username).push(resizedBase64);
           input.value = '';
         }
       };
       reader.readAsDataURL(file);
+    }
+    function deleteSticker(key) {
+      if (confirm('ต้องการลบสติกเกอร์นี้ใช่ไหมคะ?')) {
+        db.ref('stickers/' + currentUser.username + '/' + key).remove();
+      }
+    }
+    function sendSticker(stickerUrl) {
+      if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
+      const roomId = getRoomId(currentUser.username, activeFriend);
+      db.ref('chats/' + roomId).push({
+        sender: currentUser.username,
+        msg: stickerUrl,
+        type: 'sticker',
+        timestamp: Date.now(),
+        read: false
+      });
+      document.getElementById('picker-panel').style.display = 'none';
+    }
+    function saveUserSession(userData) {
+      const dataStr = JSON.stringify(userData);
+      localStorage.setItem('mj_chat_user', dataStr);
+      sessionStorage.setItem('mj_chat_user', dataStr);
+      document.cookie = "mj_chat_user=" + encodeURIComponent(dataStr) + "; path=/; max-age=31536000; SameSite=Lax";
+    }
+    function getUserSession() {
+      let saved = localStorage.getItem('mj_chat_user') || sessionStorage.getItem('mj_chat_user');
+      if (!saved) {
+        const match = document.cookie.match(new RegExp('(^| )mj_chat_user=([^;]+)'));
+        if (match) saved = decodeURIComponent(match[2]);
+      }
+      return saved ? JSON.parse(saved) : null;
+    }
+    function clearUserSession() {
+      localStorage.removeItem('mj_chat_user');
+      sessionStorage.removeItem('mj_chat_user');
+      document.cookie = "mj_chat_user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    }
+    function toggleNotificationSetting(toggleElem) {
+      if (toggleElem.checked) {
+        if (!('Notification' in window)) {
+          alert('เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือนค่ะ');
+          toggleElem.checked = false;
+          return;
+        }
+        Notification.requestPermission().then((permission) => {
+          if (permission === 'granted') {
+            localStorage.setItem('mj_chat_noti_enabled', 'true');
+            alert('เปิดการแจ้งเตือนเรียบร้อยแล้วค่ะ MJ!');
+            messaging.getToken({ vapidKey: 'BDTSjkK6IQKCTB45hQy1GK566XgXAmw-NKeHeATXhAw-aU8CJ1fKuGyu7192005ng_9Edje7tJCTyOaCIBdfDw' }).then((currentToken) => {
+              if (currentToken && currentUser) {
+                db.ref('users/' + currentUser.username + '/fcmToken').set(currentToken);
+              }
+            });
+          } else {
+            alert('กดอนุญาตสิทธิ์การแจ้งเตือนในเบราว์เซอร์ก่อนค่ะ');
+            toggleElem.checked = false;
+            localStorage.setItem('mj_chat_noti_enabled', 'false');
+          }
+        });
+      } else {
+        localStorage.setItem('mj_chat_noti_enabled', 'false');
+        alert('ปิดการแจ้งเตือนเรียบร้อยแล้วค่ะ');
+      }
+    }
+    function initNotiToggleState() {
+      const isEnabled = localStorage.getItem('mj_chat_noti_enabled') === 'true';
+      const toggleElem = document.getElementById('noti-toggle');
+      if (toggleElem) {
+        toggleElem.checked = isEnabled && ('Notification' in window) && (Notification.permission === 'granted');
+      }
+    }
+    function checkAndRestoreLogin() {
+      const savedUser = getUserSession();
+      if (savedUser && savedUser.username) {
+        currentUser = savedUser;
+        initChatScreen();
+      }
+    }
+    
+    /* แสดงตัวอย่างรูปภาพก่อนส่ง */
+    function showImagePreview(file) {
+      pendingImageFile = file;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('img-preview-target').src = e.target.result;
+        document.getElementById('image-preview-modal').style.display = 'flex';
+      };
+      reader.readAsDataURL(file);
+    }
+    function closeImagePreview() {
+      pendingImageFile = null;
+      document.getElementById('image-preview-modal').style.display = 'none';
+      document.getElementById('img-input').value = '';
+    }
+    function confirmSendImage() {
+      if (pendingImageFile) {
+        processAndSendImage(pendingImageFile);
+        closeImagePreview();
+      }
+    }
+    
+    /* ส่งรูปภาพ + บีบอัดเป็น 80% ของขนาดจริง (Quality 0.8) */
+    function processAndSendImage(file) {
+      if (!activeFriend) return alert('เลือกเพื่อนก่อนส่งรูปค่ะ!');
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          
+          // ปรับสเกลสูงสุดถ้ากว้างเกินไป
+          const maxDim = 1200;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // บีบอัดรูปภาพเป็น 80% (0.8)
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
+          
+          const roomId = getRoomId(currentUser.username, activeFriend);
+          const newMsgRef = db.ref('chats/' + roomId).push();
+          const payload = {
+            sender: currentUser.username,
+            msg: compressedBase64,
+            type: 'image',
+            timestamp: Date.now(),
+            read: false
+          };
+          if (replyMsgData) {
+            payload.replyTo = replyMsgData;
+            cancelReply();
+          }
+          newMsgRef.set(payload);
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+    function sendImage(input) {
+      if (input.files && input.files[0]) {
+        showImagePreview(input.files[0]);
+      }
+    }
+
+    /* ระบบดูรูปภาพเต็มจอ + ซูมเข้า/ออก (Pinch to zoom / Mouse Wheel / Double Click) */
+    let imgScale = 1;
+    let imgPanX = 0;
+    let imgPanY = 0;
+    let isDraggingImg = false;
+    let startX = 0, startY = 0;
+    let initialPinchDist = null;
+
+    function openImageViewer(imgSrc) {
+      const modal = document.getElementById('image-viewer-modal');
+      const img = document.getElementById('full-size-img');
+      img.src = imgSrc;
+      imgScale = 1;
+      imgPanX = 0;
+      imgPanY = 0;
+      updateImgTransform();
+      modal.style.display = 'flex';
+    }
+
+    function closeImageViewer() {
+      document.getElementById('image-viewer-modal').style.display = 'none';
+    }
+
+    function updateImgTransform() {
+      const img = document.getElementById('full-size-img');
+      img.style.transform = `translate(${imgPanX}px, ${imgPanY}px) scale(${imgScale})`;
+    }
+
+    function initImageViewerEvents() {
+      const container = document.getElementById('viewer-container');
+      const img = document.getElementById('full-size-img');
+
+      // ซูมด้วยเมาส์บนคอม (Mouse Wheel)
+      container.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        const zoomFactor = e.deltaY < 0 ? 1.15 : 0.85;
+        imgScale = Math.min(Math.max(1, imgScale * zoomFactor), 5);
+        if (imgScale === 1) { imgPanX = 0; imgPanY = 0; }
+        updateImgTransform();
+      }, { passive: false });
+
+      // ดับเบิลคลิกเพื่อซูม / รีเซ็ต
+      container.addEventListener('dblclick', function(e) {
+        if (imgScale > 1) {
+          imgScale = 1;
+          imgPanX = 0;
+          imgPanY = 0;
+        } else {
+          imgScale = 2.5;
+        }
+        updateImgTransform();
+      });
+
+      // ลากรูปภาพ (Drag)
+      container.addEventListener('mousedown', function(e) {
+        if (imgScale > 1) {
+          isDraggingImg = true;
+          startX = e.clientX - imgPanX;
+          startY = e.clientY - imgPanY;
+        }
+      });
+
+      window.addEventListener('mousemove', function(e) {
+        if (isDraggingImg && imgScale > 1) {
+          imgPanX = e.clientX - startX;
+          imgPanY = e.clientY - startY;
+          updateImgTransform();
+        }
+      });
+
+      window.addEventListener('mouseup', function() {
+        isDraggingImg = false;
+      });
+
+      // รองรับสองนิ้วซูมบนโทรศัพท์ (Touch / Pinch Zoom)
+      container.addEventListener('touchstart', function(e) {
+        if (e.touches.length === 2) {
+          initialPinchDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+        } else if (e.touches.length === 1 && imgScale > 1) {
+          isDraggingImg = true;
+          startX = e.touches[0].clientX - imgPanX;
+          startY = e.touches[0].clientY - imgPanY;
+        }
+      });
+
+      container.addEventListener('touchmove', function(e) {
+        if (e.touches.length === 2 && initialPinchDist) {
+          e.preventDefault();
+          const currentDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          const zoomFactor = currentDist / initialPinchDist;
+          imgScale = Math.min(Math.max(1, imgScale * zoomFactor), 5);
+          initialPinchDist = currentDist;
+          if (imgScale === 1) { imgPanX = 0; imgPanY = 0; }
+          updateImgTransform();
+        } else if (e.touches.length === 1 && isDraggingImg && imgScale > 1) {
+          e.preventDefault();
+          imgPanX = e.touches[0].clientX - startX;
+          imgPanY = e.touches[0].clientY - startY;
+          updateImgTransform();
+        }
+      }, { passive: false });
+
+      container.addEventListener('touchend', function(e) {
+        if (e.touches.length < 2) initialPinchDist = null;
+        if (e.touches.length === 0) isDraggingImg = false;
+      });
+    }
+
+    function initPasteAndDragEvents() {
+      document.addEventListener('paste', function(e) {
+        if (!currentUser || !activeFriend) return;
+        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+        for (let index in items) {
+          const item = items[index];
+          if (item.kind === 'file' && item.type.indexOf('image') !== -1) {
+            const blob = item.getAsFile();
+            showImagePreview(blob);
+            e.preventDefault();
+            break;
+          }
+        }
+      });
+      const dropZone = document.getElementById('drop-zone');
+      if (dropZone) {
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+          dropZone.addEventListener(eventName, e => {
+            e.preventDefault();
+            e.stopPropagation();
+          }, false);
+        });
+        dropZone.addEventListener('drop', e => {
+          const dt = e.dataTransfer;
+          const files = dt.files;
+          if (files && files.length > 0 && files[0].type.startsWith('image/')) {
+            showImagePreview(files[0]);
+          }
+        });
+      }
+      document.addEventListener('keydown', function(e) {
+        const previewModal = document.getElementById('image-preview-modal');
+        if (previewModal && previewModal.style.display === 'flex') {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            confirmSendImage();
+          } else if (e.key === 'Escape') {
+            e.preventDefault();
+            closeImagePreview();
+          }
+        }
+      });
     }
 
     window.onload = function() {
@@ -1228,6 +1309,375 @@
       }
       checkAndRestoreLogin();
     };
+
+    function toggleDarkMode() {
+      const body = document.body;
+      const btn = document.getElementById('dark-toggle-btn');
+      body.classList.toggle('dark-mode');
+      const isDark = body.classList.contains('dark-mode');
+      localStorage.setItem('mj_chat_dark', isDark);
+      btn.innerText = isDark ? '☀️' : '🌙';
+    }
+    function applyTheme(color) {
+      if (color) document.documentElement.style.setProperty('--theme-color', color);
+    }
+    function applyChatBackground(bgUrl, opacity = 0.5) {
+      const bgLayer = document.getElementById('chat-bg-layer');
+      if (!bgLayer) return;
+      if (bgUrl && bgUrl !== "") {
+        bgLayer.style.backgroundImage = `url('${bgUrl}')`;
+        bgLayer.style.opacity = opacity;
+      } else {
+        bgLayer.style.backgroundImage = 'none';
+      }
+    }
+    function updateOpacityPreview(val) {
+      document.getElementById('bg-opacity-val').innerText = val + '%';
+      const bgLayer = document.getElementById('chat-bg-layer');
+      if (bgLayer) bgLayer.style.opacity = val / 100;
+    }
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      const resizer = document.getElementById('resizer');
+      sb.classList.toggle('hidden');
+      if (sb.classList.contains('hidden')) {
+        resizer.style.display = 'none';
+      } else {
+        if (window.innerWidth > 768) resizer.style.display = 'block';
+      }
+    }
+    function setupResizer() {
+      const resizer = document.getElementById('resizer');
+      const sidebar = document.getElementById('sidebar');
+      let x = 0, w = 0;
+      const mouseDownHandler = function(e) {
+        x = e.clientX;
+        w = sidebar.getBoundingClientRect().width;
+        resizer.classList.add('resizing');
+        document.addEventListener('mousemove', mouseMoveHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
+      };
+      const mouseMoveHandler = function(e) {
+        const dx = e.clientX - x;
+        const newW = w + dx;
+        if (newW >= 180 && newW <= 500) sidebar.style.width = `${newW}px`;
+      };
+      const mouseUpHandler = function() {
+        resizer.classList.remove('resizing');
+        document.removeEventListener('mousemove', mouseMoveHandler);
+        document.removeEventListener('mouseup', mouseUpHandler);
+      };
+      if (resizer) resizer.addEventListener('mousedown', mouseDownHandler);
+    }
+    function register() {
+      const u = document.getElementById('u').value.trim().toLowerCase();
+      const p = document.getElementById('p').value.trim();
+      const n = document.getElementById('n').value.trim();
+      if (!u || !p || !n) return alert('กรอกข้อมูลให้ครบค่ะ!');
+      db.ref('users/' + u).get().then(snapshot => {
+        if (snapshot.exists()) {
+          alert('User นี้มีคนใช้แล้วค่ะ MJ!');
+        } else {
+          db.ref('users/' + u).set({
+            password: p, name: n, bio: 'สวัสดี! ฉันใช้ MJ Chat App', theme: '#0084ff', avatar: DEFAULT_AVATAR, bgImage: '', bgOpacity: 0.5
+          }).then(() => alert('สมัครสมาชิกเรียบร้อย!'));
+        }
+      });
+    }
+    function login() {
+      const u = document.getElementById('u').value.trim().toLowerCase();
+      const p = document.getElementById('p').value.trim();
+      db.ref('users/' + u).get().then(snapshot => {
+        if (snapshot.exists() && snapshot.val().password === p) {
+          const userData = snapshot.val();
+          currentUser = {
+            username: u, name: userData.name, bio: userData.bio, theme: userData.theme || '#0084ff', avatar: userData.avatar || DEFAULT_AVATAR,
+            bgImage: userData.bgImage || '', bgOpacity: userData.bgOpacity !== undefined ? userData.bgOpacity : 0.5
+          };
+          saveUserSession(currentUser);
+          initChatScreen();
+        } else {
+          alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!');
+        }
+      });
+    }
+    function initChatScreen() {
+      document.getElementById('auth-box').style.display = 'none';
+      document.getElementById('chat-box').style.display = 'flex';
+      initNotiToggleState();
+      db.ref('users/' + currentUser.username).on('value', snapshot => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          currentUser.name = data.name;
+          currentUser.avatar = data.avatar || DEFAULT_AVATAR;
+          currentUser.theme = data.theme || '#0084ff';
+          currentUser.bgImage = data.bgImage || '';
+          currentUser.bgOpacity = data.bgOpacity !== undefined ? data.bgOpacity : 0.5;
+          
+          document.getElementById('my-name').innerText = currentUser.name;
+          document.getElementById('my-avatar').src = currentUser.avatar;
+          applyTheme(currentUser.theme);
+          applyChatBackground(currentUser.bgImage, currentUser.bgOpacity);
+        }
+      });
+      loadFriendList();
+      listenUserStickers();
+    }
+    function logout() {
+      clearUserSession();
+      location.reload();
+    }
+    function getRoomId(u1, u2) {
+      return u1 < u2 ? `${u1}_${u2}` : `${u2}_${u1}`;
+    }
+    function loadFriendList() {
+      if (friendListener) db.ref('friends/' + currentUser.username).off('value', friendListener);
+      friendListener = db.ref('friends/' + currentUser.username).on('value', snapshot => {
+        const listContainer = document.getElementById('friend-list');
+        listContainer.innerHTML = '';
+        const friends = snapshot.val();
+        if (!friends) {
+          listContainer.innerHTML = '<div style="padding:10px; color:var(--text-sub); text-align:center;">ยังไม่มีเพื่อน</div>';
+          return;
+        }
+        Object.keys(friends).forEach(fUser => {
+          db.ref('users/' + fUser).once('value', uSnap => {
+            const fData = uSnap.val() || { name: fUser, avatar: DEFAULT_AVATAR };
+            usersCache[fUser] = fData;
+            const item = document.createElement('div');
+            item.className = 'friend-item' + (activeFriend === fUser ? ' active' : '');
+            item.style.setProperty('--bg-avatar', `url('${fData.avatar || DEFAULT_AVATAR}')`);
+            item.onclick = () => selectFriend(fUser, fData);
+            item.innerHTML = `
+              <img class="avatar" src="${fData.avatar || DEFAULT_AVATAR}">
+              <div>
+                <div style="font-weight:bold; font-size:14px;">${fData.name}</div>
+                <div style="font-size:11px; opacity:0.7;">@${fUser}</div>
+              </div>
+            `;
+            listContainer.appendChild(item);
+          });
+        });
+      });
+    }
+    function selectFriend(fUser, fData) {
+      activeFriend = fUser;
+      activeFriendData = fData;
+      document.getElementById('target-avatar').src = fData.avatar || DEFAULT_AVATAR;
+      document.getElementById('target-avatar').style.display = 'block';
+      document.getElementById('target-text').innerText = fData.name;
+      document.getElementById('view-friend-btn').style.display = 'inline-block';
+      
+      document.querySelectorAll('.friend-item').forEach(el => el.classList.remove('active'));
+      loadFriendList();
+      loadMessages();
+    }
+    function addFriend() {
+      const fInput = document.getElementById('friend-u');
+      const fUser = fInput.value.trim().toLowerCase();
+      if (!fUser) return;
+      if (fUser === currentUser.username) return alert('ไม่สามารถเพิ่มตัวเองเป็นเพื่อนได้ค่ะ!');
+      db.ref('users/' + fUser).get().then(snap => {
+        if (snap.exists()) {
+          db.ref('friends/' + currentUser.username + '/' + fUser).set(true);
+          db.ref('friends/' + fUser + '/' + currentUser.username).set(true);
+          fInput.value = '';
+          alert('เพิ่มเพื่อนเรียบร้อยค่ะ!');
+        } else {
+          alert('ไม่พบผู้ใช้งานนี้ในระบบค่ะ');
+        }
+      });
+    }
+
+    /* โหลดข้อความและเรียกเปิดรูปภาพใน Viewer */
+    function loadMessages() {
+      if (!activeFriend) return;
+      const roomId = getRoomId(currentUser.username, activeFriend);
+      if (msgListener) db.ref('chats/' + roomId).off('value', msgListener);
+      
+      msgListener = db.ref('chats/' + roomId).on('value', snapshot => {
+        const msgList = document.getElementById('msg-list');
+        msgList.innerHTML = '';
+        const data = snapshot.val();
+        if (data) {
+          Object.keys(data).forEach(msgId => {
+            const m = data[msgId];
+            m.id = msgId;
+            const isMe = m.sender === currentUser.username;
+            const row = document.createElement('div');
+            row.className = 'msg-row ' + (isMe ? 'me-row' : '');
+            
+            const msgBox = document.createElement('div');
+            msgBox.className = 'msg ' + (isMe ? 'me' : 'them');
+            
+            if (m.type === 'image') {
+              msgBox.classList.add('is-image');
+              const img = document.createElement('img');
+              img.className = 'chat-img';
+              img.src = m.msg;
+              // คลิกที่รูปภาพในแชทเพื่อเปิดดูรูปเต็มจอ + ซูมได้
+              img.onclick = () => openImageViewer(m.msg);
+              msgBox.appendChild(img);
+            } else if (m.type === 'sticker') {
+              msgBox.classList.add('is-sticker');
+              const img = document.createElement('img');
+              img.className = 'sticker-img';
+              img.src = m.msg;
+              msgBox.appendChild(img);
+            } else {
+              msgBox.innerText = m.msg;
+            }
+            
+            const meta = document.createElement('div');
+            meta.className = 'msg-meta-box';
+            meta.innerHTML = `<span>${formatTime(m.timestamp)}</span>`;
+            msgBox.appendChild(meta);
+
+            msgBox.oncontextmenu = (e) => {
+              e.preventDefault();
+              showContextMenu(e, m);
+            };
+
+            row.appendChild(msgBox);
+            msgList.appendChild(row);
+          });
+          msgList.scrollTop = msgList.scrollHeight;
+        }
+      });
+    }
+
+    function sendMsg() {
+      const input = document.getElementById('msg-input');
+      const text = input.value.trim();
+      if (!text || !activeFriend) return;
+      
+      const roomId = getRoomId(currentUser.username, activeFriend);
+      const payload = {
+        sender: currentUser.username,
+        msg: text,
+        type: 'text',
+        timestamp: Date.now(),
+        read: false
+      };
+      if (replyMsgData) {
+        payload.replyTo = replyMsgData;
+        cancelReply();
+      }
+      db.ref('chats/' + roomId).push(payload);
+      input.value = '';
+      autoExpandTextarea(input);
+    }
+
+    function showContextMenu(e, msgData) {
+      selectedMsgData = msgData;
+      const menu = document.getElementById('context-menu');
+      menu.style.display = 'block';
+      menu.style.left = e.clientX + 'px';
+      menu.style.top = e.clientY + 'px';
+    }
+
+    document.addEventListener('click', function() {
+      const menu = document.getElementById('context-menu');
+      if (menu) menu.style.display = 'none';
+    });
+
+    function triggerReply() {
+      if (!selectedMsgData) return;
+      replyMsgData = selectedMsgData;
+      document.getElementById('reply-target-name').innerText = selectedMsgData.sender === currentUser.username ? 'ตอบกลับตัวเอง :' : `ตอบกลับ ${activeFriendData.name} :`;
+      document.getElementById('reply-target-text').innerText = selectedMsgData.type === 'image' ? '[รูปภาพ]' : selectedMsgData.type === 'sticker' ? '[สติกเกอร์]' : selectedMsgData.msg;
+      document.getElementById('reply-preview-bar').style.display = 'flex';
+    }
+
+    function cancelReply() {
+      replyMsgData = null;
+      document.getElementById('reply-preview-bar').style.display = 'none';
+    }
+
+    function copyMessageText() {
+      if (selectedMsgData && selectedMsgData.type === 'text') {
+        navigator.clipboard.writeText(selectedMsgData.msg);
+      }
+    }
+
+    function triggerDelete() {
+      if (!selectedMsgData || !activeFriend) return;
+      if (confirm('ต้องการลบข้อความนี้ใช่ไหมคะ?')) {
+        const roomId = getRoomId(currentUser.username, activeFriend);
+        db.ref('chats/' + roomId + '/' + selectedMsgData.id).remove();
+      }
+    }
+
+    /* Modal โปรไฟล์ */
+    function openProfileModal(isSelf) {
+      const modal = document.getElementById('profile-modal');
+      modal.style.display = 'flex';
+      if (isSelf) {
+        document.getElementById('modal-title').innerText = 'ตั้งค่าโปรไฟล์';
+        document.getElementById('modal-avatar-preview').src = currentUser.avatar || DEFAULT_AVATAR;
+        document.getElementById('prof-name').value = currentUser.name || '';
+        document.getElementById('prof-bio').value = currentUser.bio || '';
+        document.getElementById('prof-theme').value = currentUser.theme || '#0084ff';
+        document.getElementById('bg-opacity-slider').value = (currentUser.bgOpacity || 0.5) * 100;
+        document.getElementById('bg-opacity-val').innerText = `${(currentUser.bgOpacity || 0.5) * 100}%`;
+      }
+    }
+
+    function closeProfileModal() {
+      document.getElementById('profile-modal').style.display = 'none';
+    }
+
+    function processAvatarUpload(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          tempAvatarBase64 = e.target.result;
+          document.getElementById('modal-avatar-preview').src = tempAvatarBase64;
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function processBgUpload(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          tempBgBase64 = e.target.result;
+          isBgCleared = false;
+          document.getElementById('bg-status-text').innerText = 'เลือกรูปภาพแล้ว (กดบันทึกเพื่อใช้งาน)';
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function clearBgImage() {
+      tempBgBase64 = '';
+      isBgCleared = true;
+      document.getElementById('bg-status-text').innerText = 'ลบรูปพื้นหลังเรียบร้อย (กดบันทึกเพื่อใช้งาน)';
+    }
+
+    function saveProfile() {
+      const name = document.getElementById('prof-name').value.trim();
+      const bio = document.getElementById('prof-bio').value.trim();
+      const theme = document.getElementById('prof-theme').value;
+      const opacity = document.getElementById('bg-opacity-slider').value / 100;
+
+      const updates = { name, bio, theme, bgOpacity: opacity };
+      if (tempAvatarBase64) updates.avatar = tempAvatarBase64;
+      if (isBgCleared) updates.bgImage = '';
+      else if (tempBgBase64) updates.bgImage = tempBgBase64;
+
+      db.ref('users/' + currentUser.username).update(updates).then(() => {
+        alert('บันทึกโปรไฟล์เรียบร้อยค่ะ!');
+        closeProfileModal();
+      });
+    }
+
+    function handleTyping() {}
+    function searchChatMessages() {}
+    function prevSearchResult() {}
+    function nextSearchResult() {}
+    function viewFriendProfile() {}
   </script>
 </body>
 </html>
