@@ -46,6 +46,97 @@
       --msg-them-bg: #3a3b3c;
       --msg-them-text: #e4e6eb;
     }
+    /* จัดให้อยู่ตรงกลางจอ และใส่รูป/สีพื้นหลัง */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #0f172a, #1e293b, #0284c7); /* โทนน้ำเงินเข้ม-ฟ้าสวยๆ */
+    font-family: 'Kanit', sans-serif, system-ui;
+}
+
+/* กล่อง Auth Box - สไตล์กระจกฝ้า */
+#auth-box {
+    background: rgba(255, 255, 255, 0.05); /* กล่องโปร่งแสง */
+    backdrop-filter: blur(16px);            /* เบลอฉากหลัง */
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px 30px;
+    width: 100%;
+    max-width: 360px; /* คุมไม่ให้กล่องกว้างเกินไป */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* จัดระยะห่างระหว่างช่องกรอกแบบอัตโนมัติ */
+}
+
+/* หัวข้อ */
+#auth-box h2 {
+    color: #ffffff;
+    font-size: 22px;
+    text-align: center;
+    margin: 0 0 10px 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* ช่องกรอกข้อมูล (Input) */
+#auth-box input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box; /* กันไม่ให้ขนาดล้น */
+    transition: all 0.3s ease;
+}
+
+/* เอฟเฟกต์ตอนกดพิมพ์ที่ช่อง Input */
+#auth-box input:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #38bdf8; /* สีฟ้าเรืองแสง */
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+#auth-box input::placeholder {
+    color: #94a3b8;
+}
+
+/* ปุ่มกด (Buttons) */
+#auth-box button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* ปุ่มเข้าสู่ระบบ (ปุ่มหลัก) */
+#auth-box button:first-of-type {
+    background: linear-gradient(135deg, #0284c7, #0ea5e9);
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+}
+
+/* เอฟเฟกต์ตอนเอาเมาส์ชี้ปุ่ม */
+#auth-box button:hover {
+    transform: translateY(-2px); /* ลอยขึ้นนิดนึง */
+    opacity: 0.9;
+}
+
+#auth-box button:active {
+    transform: translateY(0);
+}
     html, body {
       margin: 0; 
       padding: 0;
@@ -547,15 +638,15 @@
   </style>
 </head>
 <body>
-  <!-- Login/Register -->
-  <div id="auth-box" class="box">
-    <h2>MJ Chat App Profile Avatar</h2>
-    <input id="u" placeholder="Username (ไอดี)">
-    <input id="p" type="password" placeholder="Password">
-    <input id="n" placeholder="ชื่อเล่น (สำหรับสมัคร)">
-    <button onclick="login()">เข้าสู่ระบบ</button>
-    <button onclick="register()" style="background: #42b72a">สมัครสมาชิก</button>
-  </div>
+    <!-- Login/Register -->
+    <div id="auth-box" class="box">
+      <h2>MJ Chat App</h2>
+      <input id="u" placeholder="Username (ไอดี)">
+      <input id="p" type="password" placeholder="Password">
+      <input id="n" placeholder="ชื่อเล่น (สำหรับสมัคร)">
+      <button onclick="login()">เข้าสู่ระบบ</button>
+      <button onclick="register()" style="background: linear-gradient(135deg, #22c55e, #16a34a);">สมัครสมาชิก</button>
+    </div>
 
 
   <!-- Chat UI -->
