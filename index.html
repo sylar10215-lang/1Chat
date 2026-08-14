@@ -612,6 +612,14 @@
             <img id="target-avatar" class="avatar" src="https://via.placeholder.com/150" style="display:none;">
             <span id="target-text">เลือกเพื่อนเปิดห้องแช็ต</span>
           </div>
+          <div class="chat-search-box">
+          <input type="text" id="chatSearchInput" placeholder="ค้นหา..." oninput="searchChatMessages()">
+          <span id="searchResultCount" class="search-count"></span>
+          <div class="search-nav-btns">
+            <button type="button" onclick="prevSearchResult()" title="ข้อความก่อนหน้า">▲</button>
+            <button type="button" onclick="nextSearchResult()" title="ข้อความถัดไป">▼</button>
+          </div>
+        </div>
           <button id="view-friend-btn" class="toggle-btn" style="display:none; background: #0084ff;" onclick="viewFriendProfile()">ดูโปรไฟล์</button>
         </div>
         <div class="messages-wrapper">
