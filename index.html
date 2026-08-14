@@ -72,13 +72,13 @@
       margin: 100px auto 0;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    /* 1. คืนค่าตัวครอบหลัก ให้จัดเรียงแนวตั้งแบบถูกต้อง */
+    /* 1. คืนค่าตัวครอบหลัก ให้จัดเรียงแนวตั้งแบบถูกต้อง[cite: 1] */
     .chat-container {
       display: none;
       width: 100vw; 
       height: 100vh;
       background: var(--bg-card);
-      flex-direction: column; /* ล็อคให้บนกับล่างเรียงต่อกัน ไม่แยกซ้ายขวา */
+      flex-direction: column; /* ล็อคให้บนกับล่างเรียงต่อกัน ไม่แยกซ้ายขวา[cite: 1] */
     }
     /* ==========================================
    1. ค่ามาตรฐาน (สำหรับ คอมพิวเตอร์ / แอนดรอยด์)
@@ -113,7 +113,7 @@
       background: #eee;
       border: 2px solid var(--theme-color);
     }
-      /* 3. ส่วนเนื้อหาแชท คืนค่าให้กินพื้นที่ที่เหลือทั้งหมด */
+      /* 3. ส่วนเนื้อหาแชท คืนค่าให้กินพื้นที่ที่เหลือทั้งหมด[cite: 1] */
     .chat-body {
       display: flex;
       flex: 1;
@@ -131,6 +131,8 @@
           height: 70px;     /* ขยายความสูงสำหรับไอโฟน */
           margin-top: 45px; /* ดันลงมาหลบติ่งสำหรับไอโฟน */
         }
+
+
         .chat-body {
           height: calc(100vh - 115px); /* หักลบระยะดันของไอโฟน */
         }
@@ -273,8 +275,8 @@
     }
     button:active { opacity: 0.8; }
     .chat-target-header {
-      padding: 4px 15px;
-      height: 40px;
+      padding: 4px 15px; /* <--- ของเดิมคือ 10px 15px ลองลดเหลือ 4px 15px */
+      height: 40px;      /* <--- เพิ่มความสูงคงที่ตรงนี้ได้เลย (เช่น 35px หรือ 40px) */
       background: var(--bg-card);
       border-bottom: 1px solid var(--border-color);
       font-size: 14px; font-weight: bold; color: var(--text-color);
@@ -291,7 +293,7 @@
       align-items: flex-end; 
       gap: 8px;
       padding: 8px 12px; 
-      margin: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)) 12px;
+      margin: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)) 12px; /* เว้นระยะขอบล่างให้พอดีขอบจอ */
       background: var(--bg-card); 
       border: 1px solid var(--border-color);
       border-radius: 24px; 
@@ -306,7 +308,7 @@
       color: var(--text-color); 
       font-size: 15px; 
       line-height: 1.35;
-      resize: none !important;
+      resize: none !important; /* ปิดปุ่มลูกศรยืดขยายมุมขวา */
       max-height: 120px; 
       min-height: 22px; 
       height: 22px;
@@ -410,6 +412,8 @@
       padding: 4px 10px;
       border-radius: 20px;
     }
+
+
     .search-box input {
       background: transparent;
       border: none;
@@ -418,15 +422,21 @@
       font-size: 13px;
       width: 130px;
     }
+
+
     .search-box input::placeholder {
       color: rgba(255, 255, 255, 0.7);
     }
+
+
     #searchResultCount {
       font-size: 11px;
-      color: #ffd700;
+      color: #ffd700; /* สีเหลืองแสดงจำนวนที่เจอ */
       font-weight: bold;
     }
-    /* สีไฮไลต์ข้อความที่ค้นหาเจอ */
+
+
+    /* สีไฮไลต์ข้อความที่ค้นหาเจอ (ตรงตัวเป๊ะๆ) */
     mark.chat-highlight {
       background-color: #f1c40f;
       color: #000;
@@ -434,80 +444,106 @@
       padding: 0 2px;
       font-weight: bold;
     }
-    .chat-highlight {
-      background-color: #ffeb3b;
-      color: #000;
-      border-radius: 2px;
-      padding: 0 2px;
-    }
-    .chat-highlight.active-search-highlight {
-      background-color: #ff9800;
-      color: #fff;
-      font-weight: bold;
-      outline: 2px solid #e65100;
-      transition: all 0.2s ease-in-out;
-    }
-    .chat-search-box {
-      display: flex;
-      align-items: center;
-      background-color: #383838;
-      border-radius: 20px;
-      padding: 4px 10px;
-      height: 36px;
-      box-sizing: border-box;
-      gap: 8px;
-    }
-    .chat-search-box input {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: #fff;
-      font-size: 13px;
-      width: 80px;
-    }
-    .search-count {
-      color: #ffeb3b;
-      font-size: 12px;
-      font-weight: bold;
-      white-space: nowrap;
-    }
-    .search-nav-btns {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 4px;
-    }
-    .search-nav-btns button {
-      background: rgba(255, 255, 255, 0.1);
-      border: none;
-      border-radius: 50%;
-      color: #ddd;
-      font-size: 12px;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      padding: 0;
-      transition: all 0.2s ease;
-    }
-    .search-nav-btns button:hover {
-      background: rgba(255, 255, 255, 0.25);
-      color: #fff;
-    }
-    .search-nav-btns button:active {
-      transform: scale(0.9);
-    }
-    @keyframes highlightFlash {
-      0% { background-color: rgba(255, 152, 0, 0.6); }
-      50% { background-color: rgba(255, 152, 0, 0.3); }
-      100% { background-color: transparent; }
-    }
-    .highlight-target-msg {
-      animation: highlightFlash 1.5s ease-in-out;
-      border-radius: 8px;
-    }
+    /* ไฮไลต์คำค้นหาทั่วไป (สีเหลือง) */
+.chat-highlight {
+  background-color: #ffeb3b;
+  color: #000;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+
+/* ไฮไลต์คำที่เรากำลังเลื่อนไปดูอยู่ (สีส้มเด่นๆ + เด้งนิดๆ) */
+.chat-highlight.active-search-highlight {
+  background-color: #ff9800;
+  color: #fff;
+  font-weight: bold;
+  outline: 2px solid #e65100;
+  transition: all 0.2s ease-in-out;
+}
+/* กล่องค้นหาหลัก - ความสูงและความมนเท่ากล่องแจ้งเตือน */
+.chat-search-box {
+  display: flex;
+  align-items: center;
+  background-color: #383838;
+  border-radius: 20px;
+  padding: 4px 10px;
+  height: 36px;
+  box-sizing: border-box;
+  gap: 8px;
+}
+
+
+/* ช่องพิมพ์ข้อความ */
+.chat-search-box input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 13px;
+  width: 80px;
+}
+
+
+/* ตัวเลขบอกตำแหน่ง เช่น 7/19 */
+.search-count {
+  color: #ffeb3b;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+
+/* กลุ่มปุ่มกด - เปลี่ยนเป็นเรียงซ้าย-ขวา (flex-direction: row) */
+.search-nav-btns {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+
+
+/* ปุ่ม ▲ และ ▼ แบบใหญ่กดง่าย */
+.search-nav-btns button {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: #ddd;
+  font-size: 12px;       /* ปรับตัวอักษรปุ่มให้ใหญ่ขึ้น */
+  width: 24px;           /* ความกว้างปุ่มวงกลม */
+  height: 24px;          /* ความสูงปุ่มวงกลม */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+
+/* โฮเวอร์แล้วปุ่มสว่างขึ้น */
+.search-nav-btns button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+
+/* เวลาคลิกปุ่ม ยุบลงนิดนึงเพิ่มฟีลลิ่งการกด */
+.search-nav-btns button:active {
+  transform: scale(0.9);
+}
+/* เอฟเฟกต์กะพริบเน้นข้อความต้นฉบับเมื่อวาร์ปไปหา */
+@keyframes highlightFlash {
+  0% { background-color: rgba(255, 152, 0, 0.6); }
+  50% { background-color: rgba(255, 152, 0, 0.3); }
+  100% { background-color: transparent; }
+}
+
+
+.highlight-target-msg {
+  animation: highlightFlash 1.5s ease-in-out;
+  border-radius: 8px;
+}
   </style>
 </head>
 <body>
@@ -520,7 +556,8 @@
     <button onclick="login()">เข้าสู่ระบบ</button>
     <button onclick="register()" style="background: #42b72a">สมัครสมาชิก</button>
   </div>
-  
+
+
   <!-- Chat UI -->
   <div id="chat-box" class="chat-container">
     <div class="chat-header">
@@ -532,13 +569,13 @@
         </div>
       </div>
       <div class="chat-search-box">
-        <input type="text" id="chatSearchInput" placeholder="ค้นหา..." oninput="searchChatMessages()">
-        <span id="searchResultCount" class="search-count"></span>
-        <div class="search-nav-btns">
-          <button type="button" onclick="prevSearchResult()" title="ข้อความก่อนหน้า">▲</button>
-          <button type="button" onclick="nextSearchResult()" title="ข้อความถัดไป">▼</button>
-        </div>
+      <input type="text" id="chatSearchInput" placeholder="ค้นหา..." oninput="searchChatMessages()">
+      <span id="searchResultCount" class="search-count"></span>
+      <div class="search-nav-btns">
+        <button type="button" onclick="prevSearchResult()" title="ข้อความก่อนหน้า">▲</button>
+        <button type="button" onclick="nextSearchResult()" title="ข้อความถัดไป">▼</button>
       </div>
+    </div>
       <div style="display: flex; align-items:center; gap: 8px;">
         <div class="noti-toggle-container">
           <span style="font-size:16px;" title="แจ้งเตือน">🔔</span>
@@ -613,6 +650,7 @@
     </div>
   </div>
 
+
   <!-- Modal หน้าต่างโปรไฟล์ -->
   <div id="profile-modal" class="modal">
     <div class="modal-content">
@@ -656,6 +694,7 @@
     </div>
   </div>
 
+
   <!-- Modal ตัวอย่างรูปภาพส่งแช็ต -->
   <div id="image-preview-modal" class="modal">
     <div class="modal-content">
@@ -670,6 +709,7 @@
     </div>
   </div>
 
+
   <!-- MODAL : ดูรูป ขยายรูป และเครื่องมือแต่งรูป -->
   <div id="image-editor-modal" class="modal">
     <div class="modal-content image-editor-content">
@@ -682,6 +722,7 @@
       </div>
       <div class="editor-toolbar">
         <div class="toolbar-row">
+          <!-- ปุ่มเปิด/ปิด เครื่องมือ -->
           <button class="editor-btn" id="btn-mode-draw" onclick="toggleEditMode('draw')" style="background:#666;">✏️วาด</button>
           <button class="editor-btn" id="btn-mode-blur" onclick="toggleEditMode('blur')" style="background:#666;">💧เบลอจุด</button>
           <input type="color" id="editor-color" value="#ff0000" title="เลือกสีแปรง">
@@ -696,6 +737,7 @@
           <label style="font-size:12px;">เบลอทั้งรูป:
             <input type="range" id="global-blur-slider" min="0" max="20" value="0" oninput="applyGlobalBlur(this.value)" style="width:80px; vertical-align:middle;">
           </label>
+          <!-- เครื่องมือขยายรูป / หมุน / ย้อนกลับ -->
           <button class="editor-btn" onclick="zoomImage(0.2)" title="ขยายรูป">🔍+</button>
           <button class="editor-btn" onclick="zoomImage(-0.2)" title="ย่อรูป">🔍-</button>
           <button class="editor-btn" onclick="rotateCanvas()">🔄หมุน</button>
@@ -704,6 +746,7 @@
         </div>
         <div class="toolbar-row" style="margin-top:8px;">
           <button class="editor-btn" style="background: #28a745; flex:1;" onclick="copyEditorImage()">คัดลอกรูป</button>
+          <!-- ปุ่มยกเลิกแก้ไข -->
           <button class="editor-btn" style="background: #e74c3c; flex:1;" onclick="resetEditorCanvas()">ยกเลิกแก้ไข</button>
           <button class="editor-btn" style="background: #0084ff; flex:1;" onclick="downloadEditorImage()">เซฟลงเครื่อง</button>
         </div>
@@ -711,12 +754,14 @@
     </div>
   </div>
 
+
   <!-- Context Menu -->
   <div id="context-menu" style="display: none; position:fixed; z-index:9999; background: var(--bg-card, #fff); border-radius: 10px; padding:6px 0; min-width:150px; box-shadow:0 4px 16px rgba(0,0,0,0.2); border:1px solid var(--border-color, #eee);">
     <div id="ctx-reply" onclick="triggerReply()" style="padding:10px 16px; cursor:pointer; font-size:14px; display: flex; align-items:center; gap:8px;">ตอบกลับ</div>
     <div id="ctx-copy" onclick="copyMessageText()" style="padding: 10px 16px; cursor:pointer; font-size:14px; display: flex; align-items:center; gap:8px;">คัดลอกข้อความ</div>
     <div id="ctx-delete" onclick="triggerDelete()" style="padding:10px 16px; cursor:pointer; font-size:14px; color: #ff4d4d; display: flex; align-items:center; gap: 8px;">ลบข้อความ</div>
   </div>
+
 
   <script>
     if ('serviceWorker' in navigator) {
@@ -731,6 +776,7 @@
       });
     }
 
+
     const firebaseConfig = {
       apiKey: "AIzaSyDbMaGhHmPTReldMPckDk0G_Vk2gqiRjs",
       authDomain: "chat01-bd6fd.firebaseapp.com",
@@ -740,11 +786,14 @@
       messagingSenderId: "120948633141",
       appId: "1:120948633141:web:36ae2459dda98164094b7c"
     };
+
+
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const messaging = firebase.messaging();
-
     const DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+
     let currentUser = null;
     let activeFriend = null;
     let activeFriendData = null;
@@ -764,6 +813,7 @@
     let replyMsgData = null;
     let userStickers = {};
 
+
     const emojiList = [
       "😀","😃","😄","😁","😆","😅","😂","🤣","🥲","☺️",
       "😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗",
@@ -781,11 +831,13 @@
       "💝","💯"
     ];
 
+
     function formatTime(timestamp) {
       if (!timestamp) return '';
       const date = new Date(timestamp);
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
+
 
     function autoExpandTextarea(element) {
       element.style.height = '22px';
@@ -793,12 +845,14 @@
       element.style.height = Math.min(scrollH, 120) + 'px';
     }
 
+
     function handleEnterKey(e) {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         sendMsg();
       }
     }
+
 
     function toggleEmojiPicker() {
       const panel = document.getElementById('picker-panel');
@@ -811,12 +865,14 @@
       }
     }
 
+
     function switchPickerTab(tab) {
       document.getElementById('tab-emoji').classList.toggle('active', tab === 'emoji');
       document.getElementById('tab-sticker').classList.toggle('active', tab === 'sticker');
       document.getElementById('picker-emoji-view').style.display = tab === 'emoji' ? 'grid' : 'none';
       document.getElementById('picker-sticker-view').style.display = tab === 'sticker' ? 'flex' : 'none';
     }
+
 
     function renderEmojiPicker() {
       const container = document.getElementById('picker-emoji-view');
@@ -835,6 +891,7 @@
       });
     }
 
+
     function renderStickerPicker() {
       const container = document.getElementById('picker-sticker-view');
       container.innerHTML = '';
@@ -848,6 +905,7 @@
         <input type="file" id="sticker-file-input" accept="image/*" style="display:none" onchange="uploadStickerFile(this)">
       `;
       container.appendChild(addBox);
+
 
       const grid = document.createElement('div');
       grid.className = 'sticker-custom-grid';
@@ -863,6 +921,8 @@
           img.className = 'sticker-item';
           img.src = itemUrl;
           img.onclick = () => sendSticker(itemUrl);
+
+
           const delBtn = document.createElement('button');
           delBtn.className = 'sticker-del-btn';
           delBtn.innerText = 'x';
@@ -870,6 +930,8 @@
             e.stopPropagation();
             deleteSticker(key);
           };
+
+
           wrapper.appendChild(img);
           wrapper.appendChild(delBtn);
           grid.appendChild(wrapper);
@@ -877,6 +939,7 @@
       }
       container.appendChild(grid);
     }
+
 
     function listenUserStickers() {
       if (!currentUser) return;
@@ -888,6 +951,7 @@
       });
     }
 
+
     function addStickerByUrl() {
       const urlInput = document.getElementById('sticker-url-input');
       const url = urlInput.value.trim();
@@ -896,6 +960,7 @@
         urlInput.value = '';
       });
     }
+
 
     function uploadStickerFile(input) {
       const file = input.files[0];
@@ -922,11 +987,13 @@
       reader.readAsDataURL(file);
     }
 
+
     function deleteSticker(key) {
       if (confirm('ต้องการลบสติกเกอร์นี้ใช่ไหมคะ?')) {
         db.ref('stickers/' + currentUser.username + '/' + key).remove();
       }
     }
+
 
     function sendSticker(stickerUrl) {
       if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
@@ -941,12 +1008,14 @@
       document.getElementById('picker-panel').style.display = 'none';
     }
 
+
     function saveUserSession(userData) {
       const dataStr = JSON.stringify(userData);
       localStorage.setItem('mj_chat_user', dataStr);
       sessionStorage.setItem('mj_chat_user', dataStr);
       document.cookie = "mj_chat_user=" + encodeURIComponent(dataStr) + "; path=/; max-age=31536000; SameSite=Lax";
     }
+
 
     function getUserSession() {
       let saved = localStorage.getItem('mj_chat_user') || sessionStorage.getItem('mj_chat_user');
@@ -957,17 +1026,20 @@
       return saved ? JSON.parse(saved) : null;
     }
 
+
     function clearUserSession() {
       localStorage.removeItem('mj_chat_user');
       sessionStorage.removeItem('mj_chat_user');
       document.cookie = "mj_chat_user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     }
 
+
     function triggerVibrate() {
       if ("vibrate" in navigator) {
         try { navigator.vibrate(30); } catch(e) {}
       }
     }
+
 
     function toggleNotificationSetting(toggleElem) {
       if (toggleElem.checked) {
@@ -997,6 +1069,7 @@
       }
     }
 
+
     function initNotiToggleState() {
       const isEnabled = localStorage.getItem('mj_chat_noti_enabled') === 'true';
       const toggleElem = document.getElementById('noti-toggle');
@@ -1004,6 +1077,7 @@
         toggleElem.checked = isEnabled && ('Notification' in window) && (Notification.permission === 'granted');
       }
     }
+
 
     function playNotificationSound() {
       try {
@@ -1022,6 +1096,7 @@
       } catch (e) {}
     }
 
+
     function checkAndRestoreLogin() {
       const savedUser = getUserSession();
       if (savedUser && savedUser.username) {
@@ -1029,6 +1104,7 @@
         initChatScreen();
       }
     }
+
 
     function initPasteAndDragEvents() {
       document.addEventListener('paste', function(e) {
@@ -1044,6 +1120,8 @@
           }
         }
       });
+
+
       const dropZone = document.getElementById('drop-zone');
       if (dropZone) {
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -1060,6 +1138,8 @@
           }
         });
       }
+
+
       document.addEventListener('keydown', function(e) {
         const previewModal = document.getElementById('image-preview-modal');
         if (previewModal && previewModal.style.display === 'flex') {
@@ -1073,6 +1153,7 @@
         }
       });
     }
+
 
     window.onload = function() {
       setupResizer();
@@ -1088,6 +1169,7 @@
       checkAndRestoreLogin();
     };
 
+
     function toggleDarkMode() {
       const body = document.body;
       const btn = document.getElementById('dark-toggle-btn');
@@ -1097,9 +1179,11 @@
       btn.innerText = isDark ? '☀️' : '🌙';
     }
 
+
     function applyTheme(color) {
       if (color) document.documentElement.style.setProperty('--theme-color', color);
     }
+
 
     function applyChatBackground(bgUrl, opacity = 0.5) {
       const bgLayer = document.getElementById('chat-bg-layer');
@@ -1112,11 +1196,13 @@
       }
     }
 
+
     function updateOpacityPreview(val) {
       document.getElementById('bg-opacity-val').innerText = val + '%';
       const bgLayer = document.getElementById('chat-bg-layer');
       if (bgLayer) bgLayer.style.opacity = val / 100;
     }
+
 
     function toggleSidebar() {
       const sb = document.getElementById('sidebar');
@@ -1128,6 +1214,7 @@
         if (window.innerWidth > 768) resizer.style.display = 'block';
       }
     }
+
 
     function setupResizer() {
       const resizer = document.getElementById('resizer');
@@ -1153,6 +1240,7 @@
       if (resizer) resizer.addEventListener('mousedown', mouseDownHandler);
     }
 
+
     function register() {
       const u = document.getElementById('u').value.trim().toLowerCase();
       const p = document.getElementById('p').value.trim();
@@ -1168,6 +1256,7 @@
         }
       });
     }
+
 
     function login() {
       const u = document.getElementById('u').value.trim().toLowerCase();
@@ -1187,9 +1276,10 @@
       });
     }
 
+
     function initChatScreen() {
       document.getElementById('auth-box').style.display = 'none';
-      document.getElementById('chat-box').style.display = 'flex';
+      document.getElementById('chat-box').style.display = 'flex'; /* เปลี่ยนจาก block เป็น flex */
       initNotiToggleState();
       db.ref('users/' + currentUser.username).on('value', snapshot => {
         if (snapshot.exists()) {
@@ -1210,6 +1300,7 @@
       loadFriendsRealtime();
       listenUserStickers();
     }
+
 
     function processAvatarUpload(input) {
       const file = input.files[0];
@@ -1232,6 +1323,7 @@
       };
       reader.readAsDataURL(file);
     }
+
 
     function processBgUpload(input) {
       const file = input.files[0];
@@ -1258,11 +1350,13 @@
       reader.readAsDataURL(file);
     }
 
+
     function clearBgImage() {
       tempBgBase64 = '';
       isBgCleared = true;
       applyChatBackground('');
     }
+
 
     function openProfileModal(isSelf = true) {
       const modal = document.getElementById('profile-modal');
@@ -1288,10 +1382,12 @@
       }
     }
 
+
     function closeProfileModal() {
       document.getElementById('profile-modal').style.display = 'none';
       applyChatBackground(currentUser.bgImage, currentUser.bgOpacity);
     }
+
 
     function saveProfile() {
       const newName = document.getElementById('prof-name').value.trim();
@@ -1304,7 +1400,6 @@
       if (tempAvatarBase64) updateData.avatar = tempAvatarBase64;
       if (isBgCleared) updateData.bgImage = '';
       else if (tempBgBase64) updateData.bgImage = tempBgBase64;
-
       db.ref('users/' + currentUser.username).update(updateData).then(() => {
         currentUser.name = newName;
         currentUser.bio = newBio;
@@ -1319,6 +1414,7 @@
       });
     }
 
+
     function viewFriendProfile() {
       if (!activeFriend) return;
       db.ref('users/' + activeFriend).get().then(snapshot => {
@@ -1329,10 +1425,12 @@
       });
     }
 
+
     function logout() {
       clearUserSession();
       location.reload();
     }
+
 
     function addFriend() {
       const fu = document.getElementById('friend-u').value.trim().toLowerCase();
@@ -1348,6 +1446,7 @@
         }
       });
     }
+
 
     function loadFriendsRealtime() {
       db.ref('friends/' + currentUser.username).on('value', snapshot => {
@@ -1381,6 +1480,7 @@
       });
     }
 
+
     function selectFriend(f, elem) {
       activeFriend = f;
       isFirstLoad = true;
@@ -1401,9 +1501,11 @@
       listenTypingStatus();
     }
 
+
     function getRoomId(u1, u2) {
       return u1 < u2 ? `${u1}_${u2}` : `${u2}_${u1}`;
     }
+
 
     function handleTyping() {
       if (!activeFriend) return;
@@ -1414,6 +1516,7 @@
         db.ref('typing/' + roomId + '/' + currentUser.username).set(false);
       }, 2000);
     }
+
 
     function listenTypingStatus() {
       if (!activeFriend) return;
@@ -1439,6 +1542,7 @@
       });
     }
 
+
     function showImagePreview(file) {
       if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
       pendingImageFile = file;
@@ -1450,17 +1554,20 @@
       reader.readAsDataURL(file);
     }
 
+
     function closeImagePreview() {
       pendingImageFile = null;
       document.getElementById('img-preview-target').src = '';
       document.getElementById('image-preview-modal').style.display = 'none';
     }
 
+
     function confirmSendImage() {
       if (!pendingImageFile) return;
       processAndSendImage(pendingImageFile);
       closeImagePreview();
     }
+
 
     function processAndSendImage(file) {
       if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
@@ -1492,6 +1599,7 @@
       reader.readAsDataURL(file);
     }
 
+
     function sendImage(input) {
       const file = input.files[0];
       if (file) {
@@ -1499,6 +1607,7 @@
         input.value = '';
       }
     }
+
 
     function sendMsg() {
       const input = document.getElementById('msg-input');
@@ -1527,6 +1636,7 @@
       document.getElementById('picker-panel').style.display = 'none';
     }
 
+
     function markMessagesAsRead(roomId) {
       db.ref('chats/' + roomId).once('value', snapshot => {
         const data = snapshot.val();
@@ -1542,6 +1652,7 @@
         }
       });
     }
+
 
     function listenMessages(targetFriend) {
       const currentChatFriend = targetFriend || activeFriend;
@@ -1564,6 +1675,8 @@
         const lastKey = msgKeys[msgKeys.length - 1];
         const lastMsg = data[lastKey];
         const isNotiEnabled = localStorage.getItem('mj_chat_noti_enabled') === 'true';
+
+
         if (!isFirstLoad && lastMsg && lastMsg.sender === activeFriend && isNotiEnabled) {
           const currentMsgId = lastKey;
           if (lastNotiId !== currentMsgId) {
@@ -1580,6 +1693,8 @@
             }
           }
         }
+
+
         markMessagesAsRead(roomId);
         isFirstLoad = false;
         msgKeys.forEach(key => {
@@ -1620,6 +1735,7 @@
       });
     }
 
+
     function attachContextMenuToMsg(el, msgKey, msgSender, msgText, msgType) {
       el.addEventListener('contextmenu', (e) => {
         e.preventDefault();
@@ -1635,6 +1751,7 @@
       el.addEventListener('touchend', () => clearTimeout(touchTimer));
       el.addEventListener('touchmove', () => clearTimeout(touchTimer));
     }
+
 
     function openContextMenu(x, y, msgKey, msgSender, msgText, msgType) {
       triggerVibrate();
@@ -1659,10 +1776,12 @@
       });
     }
 
+
     function copyMessageText() {
       if (!selectedMsgData || selectedMsgData.type !== 'text') return;
       navigator.clipboard.writeText(selectedMsgData.msg).then(() => alert('คัดลอกข้อความแล้วค่ะ!'));
     }
+
 
     function triggerReply() {
       if (!selectedMsgData) return;
@@ -1674,10 +1793,12 @@
       document.getElementById('msg-input').focus();
     }
 
+
     function cancelReply() {
       replyMsgData = null;
       document.getElementById('reply-preview-bar').style.display = 'none';
     }
+
 
     function triggerDelete() {
       if (!selectedMsgData) return;
@@ -1686,6 +1807,7 @@
         db.ref('chats/' + roomId + '/' + selectedMsgData.key).remove();
       }
     }
+
 
     /* CANVAS IMAGE EDITOR */
     let editorCanvas, editorCtx;
@@ -1697,6 +1819,7 @@
     let isFlipped = false;
     let currentScale = 1;
 
+
     function initImageEditorEvents() {
       editorCanvas = document.getElementById('editor-canvas');
       editorCtx = editorCanvas.getContext('2d');
@@ -1704,6 +1827,8 @@
       editorCanvas.addEventListener('mousemove', draw);
       editorCanvas.addEventListener('mouseup', stopDrawing);
       editorCanvas.addEventListener('mouseleave', stopDrawing);
+
+
       editorCanvas.addEventListener('touchstart', (e) => { 
         if (currentEditMode) e.preventDefault(); 
         startDrawing(e.touches[0]); 
@@ -1715,6 +1840,8 @@
       }, { passive: false });
       
       editorCanvas.addEventListener('touchend', stopDrawing);
+
+
       const container = document.getElementById('canvas-container');
       if (container) {
         container.addEventListener('wheel', (e) => {
@@ -1724,6 +1851,7 @@
         }, { passive: false });
       }
     }
+
 
     function openImageEditor(src) {
       const modal = document.getElementById('image-editor-modal');
@@ -1744,9 +1872,11 @@
       };
     }
 
+
     function closeImageEditor() {
       document.getElementById('image-editor-modal').style.display = 'none';
     }
+
 
     function resetCanvasDimensions() {
       const maxW = Math.min(window.innerWidth * 0.85, 800);
@@ -1759,10 +1889,12 @@
       redrawCanvas();
     }
 
+
     function saveCanvasState() {
       if (canvasHistory.length > 10) canvasHistory.shift();
       canvasHistory.push(editorCtx.getImageData(0, 0, editorCanvas.width, editorCanvas.height));
     }
+
 
     function undoEditorStep() {
       if (canvasHistory.length > 1) {
@@ -1770,6 +1902,7 @@
         editorCtx.putImageData(canvasHistory[canvasHistory.length - 1], 0, 0);
       }
     }
+
 
     function redrawCanvas() {
       editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height);
@@ -1781,12 +1914,14 @@
       editorCtx.restore();
     }
 
+
     function zoomImage(amount) {
       currentScale += amount;
       if (currentScale < 0.5) currentScale = 0.5;
       if (currentScale > 4) currentScale = 4;
       redrawCanvas();
     }
+
 
     function toggleEditMode(mode) {
       if (currentEditMode === mode) {
@@ -1796,6 +1931,7 @@
       }
       updateToolButtonsUI();
     }
+
 
     function updateToolButtonsUI() {
       const drawBtn = document.getElementById('btn-mode-draw');
@@ -1809,6 +1945,7 @@
       }
     }
 
+
     function getCanvasCoords(e) {
       const rect = editorCanvas.getBoundingClientRect();
       return {
@@ -1817,6 +1954,7 @@
       };
     }
 
+
     function startDrawing(e) {
       if (!currentEditMode) return;
       isDrawing = true;
@@ -1824,6 +1962,7 @@
       editorCtx.beginPath();
       editorCtx.moveTo(coords.x, coords.y);
     }
+
 
     function draw(e) {
       if (!isDrawing || !currentEditMode) return;
@@ -1842,6 +1981,7 @@
       }
     }
 
+
     function stopDrawing() {
       if (isDrawing) {
         isDrawing = false;
@@ -1849,6 +1989,7 @@
         saveCanvasState();
       }
     }
+
 
     function applyPixelateArea(x, y, size) {
       const sampleSize = parseInt(document.getElementById('blur-pixel-size').value) || 8;
@@ -1874,6 +2015,7 @@
       editorCtx.putImageData(imgData, startX, startY);
     }
 
+
     function applyGlobalBlur(val) {
       redrawCanvas();
       if (val > 0) {
@@ -1883,17 +2025,20 @@
       }
     }
 
+
     function rotateCanvas() {
       currentRotation = (currentRotation + 90) % 360;
       redrawCanvas();
       saveCanvasState();
     }
 
+
     function flipCanvas() {
       isFlipped = !isFlipped;
       redrawCanvas();
       saveCanvasState();
     }
+
 
     function resetEditorCanvas() {
       currentRotation = 0;
@@ -1906,12 +2051,14 @@
       saveCanvasState();
     }
 
+
     function downloadEditorImage() {
       const link = document.createElement('a');
       link.download = 'mj-edited-image.jpg';
       link.href = editorCanvas.toDataURL('image/jpeg', 0.9);
       link.click();
     }
+
 
     async function copyEditorImage() {
       try {
@@ -1924,78 +2071,153 @@
       }
     }
 
+
     // ตัวแปรสำหรับระบบ เลื่อนไปยังข้อความที่ค้นพบ (Scroll to search result)
-    let currentHighlightIndex = -1;
-    let matchedElements = [];
+let currentHighlightIndex = -1;
+let matchedElements = [];
 
-    function searchChatMessages() {
-      const keyword = document.getElementById('chatSearchInput').value;
-      const messages = document.querySelectorAll('.msg:not(.is-sticker):not(.is-image) > div:not(.msg-meta-box)'); 
-      const countDisplay = document.getElementById('searchResultCount');
-      let totalFound = 0;
-      matchedElements = [];
-      currentHighlightIndex = -1;
 
-      messages.forEach(msg => {
-        // 1. ล้างไฮไลต์เก่าออก
-        if (msg.dataset.originalText !== undefined) {
-          msg.innerHTML = msg.dataset.originalText;
-        } else {
-          msg.dataset.originalText = msg.innerHTML;
-        }
+function searchChatMessages() {
+  const keyword = document.getElementById('chatSearchInput').value;
+  const messages = document.querySelectorAll('.msg:not(.is-sticker):not(.is-image) > div:not(.msg-meta-box)'); 
+  const countDisplay = document.getElementById('searchResultCount');
 
-        // 2. ค้นหาและทำไฮไลต์
-        if (keyword.trim() !== '') {
-          const original = msg.dataset.originalText;
-          if (original.includes(keyword)) {
-            const highlighted = original.split(keyword).join(`<mark class="chat-highlight">${keyword}</mark>`);
-            msg.innerHTML = highlighted;
-            const marks = msg.querySelectorAll('.chat-highlight');
-            marks.forEach(mark => matchedElements.push(mark));
-            const matchesCount = original.split(keyword).length - 1;
-            totalFound += matchesCount;
-          }
-        }
-      });
 
-      // 3. แสดงจำนวนและโฟกัสไปที่ข้อความแรกทันทีที่เจอ
-      if (keyword.trim() !== '' && totalFound > 0) {
-        currentHighlightIndex = 0;
-        focusHighlightedMessage(currentHighlightIndex);
-        countDisplay.innerText = `${currentHighlightIndex + 1}/${totalFound}`;
-      } else if (keyword.trim() !== '') {
-        countDisplay.innerText = 'ไม่พบ';
+  let totalFound = 0;
+  matchedElements = [];
+  currentHighlightIndex = -1;
+
+
+  messages.forEach(msg => {
+    // 1. ล้างไฮไลต์เก่าออก
+    if (msg.dataset.originalText !== undefined) {
+      msg.innerHTML = msg.dataset.originalText;
+    } else {
+      msg.dataset.originalText = msg.innerHTML;
+    }
+
+
+    // 2. ค้นหาและทำไฮไลต์
+    if (keyword.trim() !== '') {
+      const original = msg.dataset.originalText;
+
+
+      if (original.includes(keyword)) {
+        // เปลี่ยนคำที่เจอให้มีคลาสไฮไลต์
+        const highlighted = original.split(keyword).join(`<mark class="chat-highlight">${keyword}</mark>`);
+        msg.innerHTML = highlighted;
+
+
+        // ดึง element <mark> ทุกตัวในข้อความนี้เก็บไว้ในคลัง
+        const marks = msg.querySelectorAll('.chat-highlight');
+        marks.forEach(mark => matchedElements.push(mark));
+
+
+        const matchesCount = original.split(keyword).length - 1;
+        totalFound += matchesCount;
+      }
+    }
+  });
+
+
+  // 3. แสดงจำนวนและโฟกัสไปที่ข้อความแรกทันทีที่เจอ
+  if (keyword.trim() !== '' && totalFound > 0) {
+    currentHighlightIndex = 0;
+    focusHighlightedMessage(currentHighlightIndex);
+    countDisplay.innerText = `${currentHighlightIndex + 1}/${totalFound}`;
+  } else if (keyword.trim() !== '') {
+    countDisplay.innerText = 'ไม่พบ';
+  } else {
+    countDisplay.innerText = '';
+  }
+}
+
+
+// ฟังก์ชันเลื่อนหน้าจอไปยังตำแหน่งข้อความที่เลือก
+function focusHighlightedMessage(index) {
+  if (matchedElements.length === 0 || index < 0 || index >= matchedElements.length) return;
+
+
+  // เอาเน้นสีส้มออกจากอันเดิมก่อน
+  matchedElements.forEach(el => el.classList.remove('active-search-highlight'));
+
+
+  // ไฮไลต์สีส้มให้อันปัจจุบันที่กำลังดูอยู่
+  const activeEl = matchedElements[index];
+  activeEl.classList.add('active-search-highlight');
+
+
+  // เลื่อนหน้าจอไปหาข้อความแบบนุ่มนวล (Smooth Scroll)
+  activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+
+  // อัปเดตตัวเลขบอกตำแหน่ง เช่น (1/5)
+  const countDisplay = document.getElementById('searchResultCount');
+  if (countDisplay) {
+    countDisplay.innerText = `${index + 1}/${matchedElements.length}`;
+  }
+}
+
+
+// ฟังก์ชันเลื่อนไปข้อความถัดไป (Next)
+function nextSearchResult() {
+  if (matchedElements.length === 0) return;
+  currentHighlightIndex = (currentHighlightIndex + 1) % matchedElements.length;
+  focusHighlightedMessage(currentHighlightIndex);
+}
+
+
+// ฟังก์ชันเลื่อนย้อนกลับ (Previous)
+function prevSearchResult() {
+  if (matchedElements.length === 0) return;
+  currentHighlightIndex = (currentHighlightIndex - 1 + matchedElements.length) % matchedElements.length;
+  focusHighlightedMessage(currentHighlightIndex);
+}
+
+
+// เพิ่ม Event Listener ให้กด Enter หรือปุ่ม ลูกศรขึ้น-ลง บนคีย์บอร์ดในช่องค้นหาได้
+document.getElementById('chatSearchInput')?.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' || e.key === 'ArrowDown') {
+    e.preventDefault();
+    nextSearchResult(); // กด Enter หรือ ลูกศรลง = ไปข้อความถัดไป
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    prevSearchResult(); // กด ลูกศรขึ้น = ย้อนกลับข้อความก่อนหน้า
+  }
+});
+
+
+  // ดักจับการคลิกกล่องอ้างอิง/ตอบกลับ เพื่อวาร์ปไปยังข้อความต้นฉบับ
+document.addEventListener('click', function(e) {
+  // หา element กล่องตอบกลับ
+  const replyBox = e.target.closest('.msg-reply, .msg-reply-box, .reply-preview');
+  
+  if (replyBox) {
+    // ดึง ID ข้อความต้นฉบับจาก attribute
+    const targetId = replyBox.getAttribute('data-reply-id') || replyBox.dataset.replyId;
+
+
+    if (targetId) {
+      // หาตัวกล่องข้อความต้นฉบับในหน้าแชท (ค้นหาจาก id หรือ data-msg-id)
+      const targetMessage = document.getElementById(targetId) || document.querySelector(`[data-msg-id="${targetId}"]`);
+
+
+      if (targetMessage) {
+        // เลื่อนจอไปหาข้อความต้นฉบับแบบนุ่มนวล
+        targetMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+
+        // กะพริบเน้นข้อความให้เห็นชัดๆ
+        targetMessage.classList.add('highlight-target-msg');
+        setTimeout(() => {
+          targetMessage.classList.remove('highlight-target-msg');
+        }, 1500);
       } else {
-        countDisplay.innerText = '';
+        console.log('หาข้อความต้นฉบับไม่เจอ ID:', targetId);
       }
     }
-
-    // ฟังก์ชันเลื่อนหน้าจอไปยังตำแหน่งข้อความที่เลือก
-    function focusHighlightedMessage(index) {
-      if (matchedElements.length === 0 || index < 0 || index >= matchedElements.length) return;
-      matchedElements.forEach(el => el.classList.remove('active-search-highlight'));
-      const activeEl = matchedElements[index];
-      activeEl.classList.add('active-search-highlight');
-      activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      const countDisplay = document.getElementById('searchResultCount');
-      if (countDisplay) {
-        countDisplay.innerText = `${index + 1}/${matchedElements.length}`;
-      }
-    }
-
-    // ฟังก์ชันเลื่อนไปข้อความถัดไป (Next)
-    function nextSearchResult() {
-      if (matchedElements.length === 0) return;
-      currentHighlightIndex = (currentHighlightIndex + 1) % matchedElements.length;
-      focusHighlightedMessage(currentHighlightIndex);
-    }
-
-    // ฟังก์ชันเลื่อนไปข้อความก่อนหน้า (Previous)
-    function prevSearchResult() {
-      if (matchedElements.length === 0) return;
-      currentHighlightIndex = (currentHighlightIndex - 1 + matchedElements.length) % matchedElements.length;
-      focusHighlightedMessage(currentHighlightIndex);
-    }
+  }
+});
   </script>
 </body>
 </html>
