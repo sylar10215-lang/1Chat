@@ -80,7 +80,9 @@
       background: var(--bg-card);
       flex-direction: column; /* ล็อคให้บนกับล่างเรียงต่อกัน ไม่แยกซ้ายขวา[cite: 1] */
     }
-    /* 2. แถบบนสุด: ดันปุ่มลงมาจากข้างใน ไม่ดันกล่อง[cite: 1] */
+    /* ==========================================
+   1. ค่ามาตรฐาน (สำหรับ คอมพิวเตอร์ / แอนดรอยด์)
+   ========================================== */
     .chat-header {
       background: var(--theme-color);
       color: white;
@@ -88,13 +90,8 @@
       display: flex; 
       justify-content: space-between; 
       align-items: center;
-  
-      /* 1. ขยายความสูงแถบให้ใหญ่ขึ้น ชัดเต็มตา */
-      height: 70px; 
-  
-      /* 2. ดันลงมาจากขอบบนไอโฟนเพิ่มอีก หลบติ่งพ้นแน่นอน */
-      margin-top: 45px; 
-  
+      height: 60px; /* ความสูงปกติบนคอม/แอนดรอยด์ */
+      margin-top: 0; /* ชิดขอบบนปกติ */
       flex-shrink: 0;
       transition: background 0.3s;
     }
@@ -120,10 +117,25 @@
     .chat-body {
       display: flex;
       flex: 1;
-      /* หักลบความสูง header (70px) + margin-top (45px) = 115px */
-      height: calc(100vh - 115px); 
+      height: calc(100vh - 60px); /* หักลบความสูงปกติ */
       position: relative;
       overflow: hidden;
+    }
+    /* ==========================================
+   2. คำสั่งพิเศษ (วางต่อท้ายได้เลย) 
+   จะทำงานเฉพาะเมื่อเปิดใน iPhone / iPad เท่านั้น
+   ========================================== */
+    @supports (-webkit-touch-callout: none) {
+      @media all and (max-width: 768px) {
+        .chat-header {
+          height: 70px;     /* ขยายความสูงสำหรับไอโฟน */
+          margin-top: 45px; /* ดันลงมาหลบติ่งสำหรับไอโฟน */
+        }
+
+        .chat-body {
+          height: calc(100vh - 115px); /* หักลบระยะดันของไอโฟน */
+        }
+      }
     }
     .chat-footer {
       padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)) 10px; /* เซ็ตแนบชิดขอบพอดี */
