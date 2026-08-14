@@ -88,11 +88,13 @@
       display: flex; 
       justify-content: space-between; 
       align-items: center;
-      height: 60px; /* คืนค่าความสูงมาตรฐาน[cite: 1] */
+      height: 60px;
       flex-shrink: 0;
       transition: background 0.3s;
-    }
 
+  /* ดันแถบบนทั้งหมดลงมาหลบติ่งไอโฟนแบบชัวร์ๆ */
+  margin-top: 35px; 
+}
     /* ดันเฉพาะปุ่มข้างในให้ต่ำลงมาหลบติ่งไอโฟนนิดนึง */
     .chat-header > div {
       transform: translateY(10px); 
