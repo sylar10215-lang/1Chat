@@ -455,16 +455,16 @@
   outline: 2px solid #e65100;
   transition: all 0.2s ease-in-out;
 }
-/* กล่องค้นหาหลัก - ขนาดและความมนเท่ากับกล่องแจ้งเตือน */
+/* กล่องค้นหาหลัก - ความสูงและความมนเท่ากล่องแจ้งเตือน */
 .chat-search-box {
   display: flex;
   align-items: center;
-  background-color: #383838; /* สีพื้นหลังโทนเดียวกับแถบแจ้งเตือน */
-  border-radius: 20px;       /* ความมนระดับเดียวกับกล่องสวิตช์ */
+  background-color: #383838;
+  border-radius: 20px;
   padding: 4px 10px;
-  height: 36px;              /* ความสูงมาตรฐานของปุ่มแจ้งเตือน */
+  height: 36px;
   box-sizing: border-box;
-  gap: 6px;
+  gap: 8px;
 }
 
 /* ช่องพิมพ์ข้อความ */
@@ -474,7 +474,7 @@
   outline: none;
   color: #fff;
   font-size: 13px;
-  width: 90px; /* ปรับขนาดความกว้างตามชอบได้เลยค่ะ */
+  width: 80px;
 }
 
 /* ตัวเลขบอกตำแหน่ง เช่น 7/19 */
@@ -485,27 +485,40 @@
   white-space: nowrap;
 }
 
-/* ปุ่มกด ขึ้น - ลง */
+/* กลุ่มปุ่มกด - เปลี่ยนเป็นเรียงซ้าย-ขวา (flex-direction: row) */
 .search-nav-btns {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1px;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
 }
 
+/* ปุ่ม ▲ และ ▼ แบบใหญ่กดง่าย */
 .search-nav-btns button {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
-  color: #aaa;
-  font-size: 8px;
+  border-radius: 50%;
+  color: #ddd;
+  font-size: 12px;       /* ปรับตัวอักษรปุ่มให้ใหญ่ขึ้น */
+  width: 24px;           /* ความกว้างปุ่มวงกลม */
+  height: 24px;          /* ความสูงปุ่มวงกลม */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  padding: 0 2px;
-  line-height: 1;
-  transition: color 0.2s;
+  padding: 0;
+  transition: all 0.2s ease;
 }
 
+/* โฮเวอร์แล้วปุ่มสว่างขึ้น */
 .search-nav-btns button:hover {
+  background: rgba(255, 255, 255, 0.25);
   color: #fff;
+}
+
+/* เวลาคลิกปุ่ม ยุบลงนิดนึงเพิ่มฟีลลิ่งการกด */
+.search-nav-btns button:active {
+  transform: scale(0.9);
 }
   </style>
 </head>
