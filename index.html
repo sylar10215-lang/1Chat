@@ -520,6 +520,17 @@
 .search-nav-btns button:active {
   transform: scale(0.9);
 }
+/* เอฟเฟกต์กะพริบเน้นข้อความต้นฉบับเมื่อวาร์ปไปหา */
+@keyframes highlightFlash {
+  0% { background-color: rgba(255, 152, 0, 0.6); }
+  50% { background-color: rgba(255, 152, 0, 0.3); }
+  100% { background-color: transparent; }
+}
+
+.highlight-target-msg {
+  animation: highlightFlash 1.5s ease-in-out;
+  border-radius: 8px;
+}
   </style>
 </head>
 <body>
@@ -2042,6 +2053,35 @@ document.getElementById('chatSearchInput')?.addEventListener('keydown', function
   } else if (e.key === 'ArrowUp') {
     e.preventDefault();
     prevSearchResult(); // กด ลูกศรขึ้น = ย้อนกลับข้อความก่อนหน้า
+  }
+});
+
+  // เมื่อมีการคลิกที่กล่องข้อความตอบกลับ (Reply Preview)
+document.addEventListener('click', function(e) {
+  // ค้นหา element กล่องตอบกลับ (ปรับคลาส .msg-reply-box หรือ .reply-preview ให้ตรงกับที่มีในโปรเจกต์)
+  const replyBox = e.target.closest('.msg-reply-box, .reply-preview, [data-reply-id]');
+  
+  if (replyBox) {
+    // 1. ดึง ID ของข้อความต้นฉบับ (เช่น msg-12345 หรือจาก attribute data-reply-id)
+    const targetId = replyBox.getAttribute('data-reply-id') || replyBox.dataset.targetId;
+
+    if (targetId) {
+      // 2. ค้นหา element ข้อความต้นฉบับในหน้าแชท
+      const targetMessage = document.getElementById(targetId) || document.querySelector(`[data-msg-id="${targetId}"]`);
+
+      if (targetMessage) {
+        // 3. เลื่อนหน้าจอไปยังข้อความต้นฉบับแบบนุ่มนวล (Smooth Scroll)
+        targetMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // 4. (แถม) ใส่เอฟเฟกต์กะพริบ/ไฮไลต์สี ให้รู้ว่าเลื่อนมาเจอข้อความไหน
+        targetMessage.classList.add('highlight-target-msg');
+        setTimeout(() => {
+          targetMessage.classList.remove('highlight-target-msg');
+        }, 1500); // กะพริบเน้น 1.5 วินาทีแล้วจางหายไป
+      } else {
+        console.log('ไม่พบข้อความต้นฉบับ (อาจจะโดนลบไปแล้ว)');
+      }
+    }
   }
 });
   </script>
