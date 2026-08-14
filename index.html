@@ -72,13 +72,13 @@
       margin: 100px auto 0;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    /* 1. คืนค่าตัวครอบหลัก ให้จัดเรียงแนวตั้งแบบถูกต้อง[cite: 1] */
+    /* 1. คืนค่าตัวครอบหลัก ให้จัดเรียงแนวตั้งแบบถูกต้อง */
     .chat-container {
       display: none;
       width: 100vw; 
       height: 100vh;
       background: var(--bg-card);
-      flex-direction: column; /* ล็อคให้บนกับล่างเรียงต่อกัน ไม่แยกซ้ายขวา[cite: 1] */
+      flex-direction: column; /* ล็อคให้บนกับล่างเรียงต่อกัน ไม่แยกซ้ายขวา */
     }
     /* ==========================================
    1. ค่ามาตรฐาน (สำหรับ คอมพิวเตอร์ / แอนดรอยด์)
@@ -113,7 +113,7 @@
       background: #eee;
       border: 2px solid var(--theme-color);
     }
-      /* 3. ส่วนเนื้อหาแชท คืนค่าให้กินพื้นที่ที่เหลือทั้งหมด[cite: 1] */
+      /* 3. ส่วนเนื้อหาแชท คืนค่าให้กินพื้นที่ที่เหลือทั้งหมด */
     .chat-body {
       display: flex;
       flex: 1;
@@ -131,7 +131,6 @@
           height: 70px;     /* ขยายความสูงสำหรับไอโฟน */
           margin-top: 45px; /* ดันลงมาหลบติ่งสำหรับไอโฟน */
         }
-
         .chat-body {
           height: calc(100vh - 115px); /* หักลบระยะดันของไอโฟน */
         }
@@ -274,8 +273,8 @@
     }
     button:active { opacity: 0.8; }
     .chat-target-header {
-      padding: 4px 15px; /* <--- ของเดิมคือ 10px 15px ลองลดเหลือ 4px 15px */
-      height: 40px;      /* <--- เพิ่มความสูงคงที่ตรงนี้ได้เลย (เช่น 35px หรือ 40px) */
+      padding: 4px 15px;
+      height: 40px;
       background: var(--bg-card);
       border-bottom: 1px solid var(--border-color);
       font-size: 14px; font-weight: bold; color: var(--text-color);
@@ -292,7 +291,7 @@
       align-items: flex-end; 
       gap: 8px;
       padding: 8px 12px; 
-      margin: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)) 12px; /* เว้นระยะขอบล่างให้พอดีขอบจอ */
+      margin: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)) 12px;
       background: var(--bg-card); 
       border: 1px solid var(--border-color);
       border-radius: 24px; 
@@ -307,7 +306,7 @@
       color: var(--text-color); 
       font-size: 15px; 
       line-height: 1.35;
-      resize: none !important; /* ปิดปุ่มลูกศรยืดขยายมุมขวา */
+      resize: none !important;
       max-height: 120px; 
       min-height: 22px; 
       height: 22px;
@@ -411,7 +410,6 @@
       padding: 4px 10px;
       border-radius: 20px;
     }
-
     .search-box input {
       background: transparent;
       border: none;
@@ -420,18 +418,15 @@
       font-size: 13px;
       width: 130px;
     }
-
     .search-box input::placeholder {
       color: rgba(255, 255, 255, 0.7);
     }
-
     #searchResultCount {
       font-size: 11px;
-      color: #ffd700; /* สีเหลืองแสดงจำนวนที่เจอ */
+      color: #ffd700;
       font-weight: bold;
     }
-
-    /* สีไฮไลต์ข้อความที่ค้นหาเจอ (ตรงตัวเป๊ะๆ) */
+    /* สีไฮไลต์ข้อความที่ค้นหาเจอ */
     mark.chat-highlight {
       background-color: #f1c40f;
       color: #000;
@@ -439,98 +434,80 @@
       padding: 0 2px;
       font-weight: bold;
     }
-    /* ไฮไลต์คำค้นหาทั่วไป (สีเหลือง) */
-.chat-highlight {
-  background-color: #ffeb3b;
-  color: #000;
-  border-radius: 2px;
-  padding: 0 2px;
-}
-
-/* ไฮไลต์คำที่เรากำลังเลื่อนไปดูอยู่ (สีส้มเด่นๆ + เด้งนิดๆ) */
-.chat-highlight.active-search-highlight {
-  background-color: #ff9800;
-  color: #fff;
-  font-weight: bold;
-  outline: 2px solid #e65100;
-  transition: all 0.2s ease-in-out;
-}
-/* กล่องค้นหาหลัก - ความสูงและความมนเท่ากล่องแจ้งเตือน */
-.chat-search-box {
-  display: flex;
-  align-items: center;
-  background-color: #383838;
-  border-radius: 20px;
-  padding: 4px 10px;
-  height: 36px;
-  box-sizing: border-box;
-  gap: 8px;
-}
-
-/* ช่องพิมพ์ข้อความ */
-.chat-search-box input {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #fff;
-  font-size: 13px;
-  width: 80px;
-}
-
-/* ตัวเลขบอกตำแหน่ง เช่น 7/19 */
-.search-count {
-  color: #ffeb3b;
-  font-size: 12px;
-  font-weight: bold;
-  white-space: nowrap;
-}
-
-/* กลุ่มปุ่มกด - เปลี่ยนเป็นเรียงซ้าย-ขวา (flex-direction: row) */
-.search-nav-btns {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 4px;
-}
-
-/* ปุ่ม ▲ และ ▼ แบบใหญ่กดง่าย */
-.search-nav-btns button {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 50%;
-  color: #ddd;
-  font-size: 12px;       /* ปรับตัวอักษรปุ่มให้ใหญ่ขึ้น */
-  width: 24px;           /* ความกว้างปุ่มวงกลม */
-  height: 24px;          /* ความสูงปุ่มวงกลม */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
-  transition: all 0.2s ease;
-}
-
-/* โฮเวอร์แล้วปุ่มสว่างขึ้น */
-.search-nav-btns button:hover {
-  background: rgba(255, 255, 255, 0.25);
-  color: #fff;
-}
-
-/* เวลาคลิกปุ่ม ยุบลงนิดนึงเพิ่มฟีลลิ่งการกด */
-.search-nav-btns button:active {
-  transform: scale(0.9);
-}
-/* เอฟเฟกต์กะพริบเน้นข้อความต้นฉบับเมื่อวาร์ปไปหา */
-@keyframes highlightFlash {
-  0% { background-color: rgba(255, 152, 0, 0.6); }
-  50% { background-color: rgba(255, 152, 0, 0.3); }
-  100% { background-color: transparent; }
-}
-
-.highlight-target-msg {
-  animation: highlightFlash 1.5s ease-in-out;
-  border-radius: 8px;
-}
+    .chat-highlight {
+      background-color: #ffeb3b;
+      color: #000;
+      border-radius: 2px;
+      padding: 0 2px;
+    }
+    .chat-highlight.active-search-highlight {
+      background-color: #ff9800;
+      color: #fff;
+      font-weight: bold;
+      outline: 2px solid #e65100;
+      transition: all 0.2s ease-in-out;
+    }
+    .chat-search-box {
+      display: flex;
+      align-items: center;
+      background-color: #383838;
+      border-radius: 20px;
+      padding: 4px 10px;
+      height: 36px;
+      box-sizing: border-box;
+      gap: 8px;
+    }
+    .chat-search-box input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 13px;
+      width: 80px;
+    }
+    .search-count {
+      color: #ffeb3b;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+    .search-nav-btns {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 4px;
+    }
+    .search-nav-btns button {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: 50%;
+      color: #ddd;
+      font-size: 12px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.2s ease;
+    }
+    .search-nav-btns button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
+    }
+    .search-nav-btns button:active {
+      transform: scale(0.9);
+    }
+    @keyframes highlightFlash {
+      0% { background-color: rgba(255, 152, 0, 0.6); }
+      50% { background-color: rgba(255, 152, 0, 0.3); }
+      100% { background-color: transparent; }
+    }
+    .highlight-target-msg {
+      animation: highlightFlash 1.5s ease-in-out;
+      border-radius: 8px;
+    }
   </style>
 </head>
 <body>
@@ -543,7 +520,7 @@
     <button onclick="login()">เข้าสู่ระบบ</button>
     <button onclick="register()" style="background: #42b72a">สมัครสมาชิก</button>
   </div>
-
+  
   <!-- Chat UI -->
   <div id="chat-box" class="chat-container">
     <div class="chat-header">
@@ -555,13 +532,13 @@
         </div>
       </div>
       <div class="chat-search-box">
-      <input type="text" id="chatSearchInput" placeholder="ค้นหา..." oninput="searchChatMessages()">
-      <span id="searchResultCount" class="search-count"></span>
-      <div class="search-nav-btns">
-        <button type="button" onclick="prevSearchResult()" title="ข้อความก่อนหน้า">▲</button>
-        <button type="button" onclick="nextSearchResult()" title="ข้อความถัดไป">▼</button>
+        <input type="text" id="chatSearchInput" placeholder="ค้นหา..." oninput="searchChatMessages()">
+        <span id="searchResultCount" class="search-count"></span>
+        <div class="search-nav-btns">
+          <button type="button" onclick="prevSearchResult()" title="ข้อความก่อนหน้า">▲</button>
+          <button type="button" onclick="nextSearchResult()" title="ข้อความถัดไป">▼</button>
+        </div>
       </div>
-    </div>
       <div style="display: flex; align-items:center; gap: 8px;">
         <div class="noti-toggle-container">
           <span style="font-size:16px;" title="แจ้งเตือน">🔔</span>
@@ -705,7 +682,6 @@
       </div>
       <div class="editor-toolbar">
         <div class="toolbar-row">
-          <!-- ปุ่มเปิด/ปิด เครื่องมือ -->
           <button class="editor-btn" id="btn-mode-draw" onclick="toggleEditMode('draw')" style="background:#666;">✏️วาด</button>
           <button class="editor-btn" id="btn-mode-blur" onclick="toggleEditMode('blur')" style="background:#666;">💧เบลอจุด</button>
           <input type="color" id="editor-color" value="#ff0000" title="เลือกสีแปรง">
@@ -720,7 +696,6 @@
           <label style="font-size:12px;">เบลอทั้งรูป:
             <input type="range" id="global-blur-slider" min="0" max="20" value="0" oninput="applyGlobalBlur(this.value)" style="width:80px; vertical-align:middle;">
           </label>
-          <!-- เครื่องมือขยายรูป / หมุน / ย้อนกลับ -->
           <button class="editor-btn" onclick="zoomImage(0.2)" title="ขยายรูป">🔍+</button>
           <button class="editor-btn" onclick="zoomImage(-0.2)" title="ย่อรูป">🔍-</button>
           <button class="editor-btn" onclick="rotateCanvas()">🔄หมุน</button>
@@ -729,7 +704,6 @@
         </div>
         <div class="toolbar-row" style="margin-top:8px;">
           <button class="editor-btn" style="background: #28a745; flex:1;" onclick="copyEditorImage()">คัดลอกรูป</button>
-          <!-- ปุ่มยกเลิกแก้ไข -->
           <button class="editor-btn" style="background: #e74c3c; flex:1;" onclick="resetEditorCanvas()">ยกเลิกแก้ไข</button>
           <button class="editor-btn" style="background: #0084ff; flex:1;" onclick="downloadEditorImage()">เซฟลงเครื่อง</button>
         </div>
@@ -766,12 +740,11 @@
       messagingSenderId: "120948633141",
       appId: "1:120948633141:web:36ae2459dda98164094b7c"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const messaging = firebase.messaging();
-    const DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
+    const DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
     let currentUser = null;
     let activeFriend = null;
     let activeFriendData = null;
@@ -890,7 +863,6 @@
           img.className = 'sticker-item';
           img.src = itemUrl;
           img.onclick = () => sendSticker(itemUrl);
-
           const delBtn = document.createElement('button');
           delBtn.className = 'sticker-del-btn';
           delBtn.innerText = 'x';
@@ -898,7 +870,6 @@
             e.stopPropagation();
             deleteSticker(key);
           };
-
           wrapper.appendChild(img);
           wrapper.appendChild(delBtn);
           grid.appendChild(wrapper);
@@ -1073,7 +1044,6 @@
           }
         }
       });
-
       const dropZone = document.getElementById('drop-zone');
       if (dropZone) {
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -1090,7 +1060,6 @@
           }
         });
       }
-
       document.addEventListener('keydown', function(e) {
         const previewModal = document.getElementById('image-preview-modal');
         if (previewModal && previewModal.style.display === 'flex') {
@@ -1220,7 +1189,7 @@
 
     function initChatScreen() {
       document.getElementById('auth-box').style.display = 'none';
-      document.getElementById('chat-box').style.display = 'flex'; /* เปลี่ยนจาก block เป็น flex */
+      document.getElementById('chat-box').style.display = 'flex';
       initNotiToggleState();
       db.ref('users/' + currentUser.username).on('value', snapshot => {
         if (snapshot.exists()) {
@@ -1335,6 +1304,7 @@
       if (tempAvatarBase64) updateData.avatar = tempAvatarBase64;
       if (isBgCleared) updateData.bgImage = '';
       else if (tempBgBase64) updateData.bgImage = tempBgBase64;
+
       db.ref('users/' + currentUser.username).update(updateData).then(() => {
         currentUser.name = newName;
         currentUser.bio = newBio;
@@ -1594,7 +1564,6 @@
         const lastKey = msgKeys[msgKeys.length - 1];
         const lastMsg = data[lastKey];
         const isNotiEnabled = localStorage.getItem('mj_chat_noti_enabled') === 'true';
-
         if (!isFirstLoad && lastMsg && lastMsg.sender === activeFriend && isNotiEnabled) {
           const currentMsgId = lastKey;
           if (lastNotiId !== currentMsgId) {
@@ -1611,7 +1580,6 @@
             }
           }
         }
-
         markMessagesAsRead(roomId);
         isFirstLoad = false;
         msgKeys.forEach(key => {
@@ -1736,7 +1704,6 @@
       editorCanvas.addEventListener('mousemove', draw);
       editorCanvas.addEventListener('mouseup', stopDrawing);
       editorCanvas.addEventListener('mouseleave', stopDrawing);
-
       editorCanvas.addEventListener('touchstart', (e) => { 
         if (currentEditMode) e.preventDefault(); 
         startDrawing(e.touches[0]); 
@@ -1748,7 +1715,6 @@
       }, { passive: false });
       
       editorCanvas.addEventListener('touchend', stopDrawing);
-
       const container = document.getElementById('canvas-container');
       if (container) {
         container.addEventListener('wheel', (e) => {
@@ -1959,131 +1925,77 @@
     }
 
     // ตัวแปรสำหรับระบบ เลื่อนไปยังข้อความที่ค้นพบ (Scroll to search result)
-let currentHighlightIndex = -1;
-let matchedElements = [];
+    let currentHighlightIndex = -1;
+    let matchedElements = [];
 
-function searchChatMessages() {
-  const keyword = document.getElementById('chatSearchInput').value;
-  const messages = document.querySelectorAll('.msg:not(.is-sticker):not(.is-image) > div:not(.msg-meta-box)'); 
-  const countDisplay = document.getElementById('searchResultCount');
+    function searchChatMessages() {
+      const keyword = document.getElementById('chatSearchInput').value;
+      const messages = document.querySelectorAll('.msg:not(.is-sticker):not(.is-image) > div:not(.msg-meta-box)'); 
+      const countDisplay = document.getElementById('searchResultCount');
+      let totalFound = 0;
+      matchedElements = [];
+      currentHighlightIndex = -1;
 
-  let totalFound = 0;
-  matchedElements = [];
-  currentHighlightIndex = -1;
+      messages.forEach(msg => {
+        // 1. ล้างไฮไลต์เก่าออก
+        if (msg.dataset.originalText !== undefined) {
+          msg.innerHTML = msg.dataset.originalText;
+        } else {
+          msg.dataset.originalText = msg.innerHTML;
+        }
 
-  messages.forEach(msg => {
-    // 1. ล้างไฮไลต์เก่าออก
-    if (msg.dataset.originalText !== undefined) {
-      msg.innerHTML = msg.dataset.originalText;
-    } else {
-      msg.dataset.originalText = msg.innerHTML;
-    }
+        // 2. ค้นหาและทำไฮไลต์
+        if (keyword.trim() !== '') {
+          const original = msg.dataset.originalText;
+          if (original.includes(keyword)) {
+            const highlighted = original.split(keyword).join(`<mark class="chat-highlight">${keyword}</mark>`);
+            msg.innerHTML = highlighted;
+            const marks = msg.querySelectorAll('.chat-highlight');
+            marks.forEach(mark => matchedElements.push(mark));
+            const matchesCount = original.split(keyword).length - 1;
+            totalFound += matchesCount;
+          }
+        }
+      });
 
-    // 2. ค้นหาและทำไฮไลต์
-    if (keyword.trim() !== '') {
-      const original = msg.dataset.originalText;
-
-      if (original.includes(keyword)) {
-        // เปลี่ยนคำที่เจอให้มีคลาสไฮไลต์
-        const highlighted = original.split(keyword).join(`<mark class="chat-highlight">${keyword}</mark>`);
-        msg.innerHTML = highlighted;
-
-        // ดึง element <mark> ทุกตัวในข้อความนี้เก็บไว้ในคลัง
-        const marks = msg.querySelectorAll('.chat-highlight');
-        marks.forEach(mark => matchedElements.push(mark));
-
-        const matchesCount = original.split(keyword).length - 1;
-        totalFound += matchesCount;
-      }
-    }
-  });
-
-  // 3. แสดงจำนวนและโฟกัสไปที่ข้อความแรกทันทีที่เจอ
-  if (keyword.trim() !== '' && totalFound > 0) {
-    currentHighlightIndex = 0;
-    focusHighlightedMessage(currentHighlightIndex);
-    countDisplay.innerText = `${currentHighlightIndex + 1}/${totalFound}`;
-  } else if (keyword.trim() !== '') {
-    countDisplay.innerText = 'ไม่พบ';
-  } else {
-    countDisplay.innerText = '';
-  }
-}
-
-// ฟังก์ชันเลื่อนหน้าจอไปยังตำแหน่งข้อความที่เลือก
-function focusHighlightedMessage(index) {
-  if (matchedElements.length === 0 || index < 0 || index >= matchedElements.length) return;
-
-  // เอาเน้นสีส้มออกจากอันเดิมก่อน
-  matchedElements.forEach(el => el.classList.remove('active-search-highlight'));
-
-  // ไฮไลต์สีส้มให้อันปัจจุบันที่กำลังดูอยู่
-  const activeEl = matchedElements[index];
-  activeEl.classList.add('active-search-highlight');
-
-  // เลื่อนหน้าจอไปหาข้อความแบบนุ่มนวล (Smooth Scroll)
-  activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-  // อัปเดตตัวเลขบอกตำแหน่ง เช่น (1/5)
-  const countDisplay = document.getElementById('searchResultCount');
-  if (countDisplay) {
-    countDisplay.innerText = `${index + 1}/${matchedElements.length}`;
-  }
-}
-
-// ฟังก์ชันเลื่อนไปข้อความถัดไป (Next)
-function nextSearchResult() {
-  if (matchedElements.length === 0) return;
-  currentHighlightIndex = (currentHighlightIndex + 1) % matchedElements.length;
-  focusHighlightedMessage(currentHighlightIndex);
-}
-
-// ฟังก์ชันเลื่อนย้อนกลับ (Previous)
-function prevSearchResult() {
-  if (matchedElements.length === 0) return;
-  currentHighlightIndex = (currentHighlightIndex - 1 + matchedElements.length) % matchedElements.length;
-  focusHighlightedMessage(currentHighlightIndex);
-}
-
-// เพิ่ม Event Listener ให้กด Enter หรือปุ่ม ลูกศรขึ้น-ลง บนคีย์บอร์ดในช่องค้นหาได้
-document.getElementById('chatSearchInput')?.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' || e.key === 'ArrowDown') {
-    e.preventDefault();
-    nextSearchResult(); // กด Enter หรือ ลูกศรลง = ไปข้อความถัดไป
-  } else if (e.key === 'ArrowUp') {
-    e.preventDefault();
-    prevSearchResult(); // กด ลูกศรขึ้น = ย้อนกลับข้อความก่อนหน้า
-  }
-});
-
-  // ดักจับการคลิกกล่องอ้างอิง/ตอบกลับ เพื่อวาร์ปไปยังข้อความต้นฉบับ
-document.addEventListener('click', function(e) {
-  // หา element กล่องตอบกลับ
-  const replyBox = e.target.closest('.msg-reply, .msg-reply-box, .reply-preview');
-  
-  if (replyBox) {
-    // ดึง ID ข้อความต้นฉบับจาก attribute
-    const targetId = replyBox.getAttribute('data-reply-id') || replyBox.dataset.replyId;
-
-    if (targetId) {
-      // หาตัวกล่องข้อความต้นฉบับในหน้าแชท (ค้นหาจาก id หรือ data-msg-id)
-      const targetMessage = document.getElementById(targetId) || document.querySelector(`[data-msg-id="${targetId}"]`);
-
-      if (targetMessage) {
-        // เลื่อนจอไปหาข้อความต้นฉบับแบบนุ่มนวล
-        targetMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-        // กะพริบเน้นข้อความให้เห็นชัดๆ
-        targetMessage.classList.add('highlight-target-msg');
-        setTimeout(() => {
-          targetMessage.classList.remove('highlight-target-msg');
-        }, 1500);
+      // 3. แสดงจำนวนและโฟกัสไปที่ข้อความแรกทันทีที่เจอ
+      if (keyword.trim() !== '' && totalFound > 0) {
+        currentHighlightIndex = 0;
+        focusHighlightedMessage(currentHighlightIndex);
+        countDisplay.innerText = `${currentHighlightIndex + 1}/${totalFound}`;
+      } else if (keyword.trim() !== '') {
+        countDisplay.innerText = 'ไม่พบ';
       } else {
-        console.log('หาข้อความต้นฉบับไม่เจอ ID:', targetId);
+        countDisplay.innerText = '';
       }
     }
-  }
-});
+
+    // ฟังก์ชันเลื่อนหน้าจอไปยังตำแหน่งข้อความที่เลือก
+    function focusHighlightedMessage(index) {
+      if (matchedElements.length === 0 || index < 0 || index >= matchedElements.length) return;
+      matchedElements.forEach(el => el.classList.remove('active-search-highlight'));
+      const activeEl = matchedElements[index];
+      activeEl.classList.add('active-search-highlight');
+      activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const countDisplay = document.getElementById('searchResultCount');
+      if (countDisplay) {
+        countDisplay.innerText = `${index + 1}/${matchedElements.length}`;
+      }
+    }
+
+    // ฟังก์ชันเลื่อนไปข้อความถัดไป (Next)
+    function nextSearchResult() {
+      if (matchedElements.length === 0) return;
+      currentHighlightIndex = (currentHighlightIndex + 1) % matchedElements.length;
+      focusHighlightedMessage(currentHighlightIndex);
+    }
+
+    // ฟังก์ชันเลื่อนไปข้อความก่อนหน้า (Previous)
+    function prevSearchResult() {
+      if (matchedElements.length === 0) return;
+      currentHighlightIndex = (currentHighlightIndex - 1 + matchedElements.length) % matchedElements.length;
+      focusHighlightedMessage(currentHighlightIndex);
+    }
   </script>
 </body>
 </html>
