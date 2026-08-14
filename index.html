@@ -5,17 +5,17 @@
   <!-- PWA Meta Tags สำหรับ Android & iOS -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#0084ff">
-
+  
   <!-- iOS / Safari PWA Config -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="1Chat">
   <link rel="apple-touch-icon" href="icon.png">
-
+  
   <!-- Link Manifest -->
   <link rel="manifest" href="manifest.json">
   <title>1Chat</title>
-
+  
   <!-- Firebase SDK v8 -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -45,80 +45,6 @@
       --chat-bg: #18191a;
       --msg-them-bg: #3a3b3c;
       --msg-them-text: #e4e6eb;
-    }
-    body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #0f172a, #1e293b, #0284c7);
-      font-family: 'Kanit', sans-serif, system-ui;
-    }
-    #auth-box {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 40px 30px;
-      width: 100%;
-      max-width: 360px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    #auth-box h2 {
-      color: #ffffff;
-      font-size: 22px;
-      text-align: center;
-      margin: 0 0 10px 0;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-    #auth-box input {
-      width: 100%;
-      padding: 12px 16px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
-      color: #ffffff;
-      font-size: 14px;
-      outline: none;
-      box-sizing: border-box;
-      transition: all 0.3s ease;
-    }
-    #auth-box input:focus {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: #38bdf8;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
-    }
-    #auth-box input::placeholder {
-      color: #94a3b8;
-    }
-    #auth-box button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: bold;
-      color: #ffffff;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    #auth-box button:first-of-type {
-      background: linear-gradient(135deg, #0284c7, #0ea5e9);
-      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
-    }
-    #auth-box button:hover {
-      transform: translateY(-2px);
-      opacity: 0.9;
-    }
-    #auth-box button:active {
-      transform: translateY(0);
     }
     /* จัดให้อยู่ตรงกลางจอ และใส่รูป/สีพื้นหลัง */
 body {
@@ -206,7 +132,6 @@ body {
       margin: 0; 
       padding: 0;
       width: 100vw; 
-      height: 100dvh;
       height: 100dvh; /* ใช้ความสูงหน้าจอแบบไดนามิกพอดีเป๊ะ */
       overflow: hidden;
       background: var(--bg-main);
@@ -235,7 +160,6 @@ body {
       width: 100vw; 
       height: 100vh;
       background: var(--bg-card);
-      flex-direction: column;
       flex-direction: column; /* ล็อคให้บนกับล่างเรียงต่อกัน ไม่แยกซ้ายขวา[cite: 1] */
     }
     /* ==========================================
@@ -248,8 +172,6 @@ body {
       display: flex; 
       justify-content: space-between; 
       align-items: center;
-      height: 60px;
-      margin-top: 0;
       height: 60px; /* ความสูงปกติบนคอม/แอนดรอยด์ */
       margin-top: 0; /* ชิดขอบบนปกติ */
       flex-shrink: 0;
@@ -277,7 +199,6 @@ body {
     .chat-body {
       display: flex;
       flex: 1;
-      height: calc(100vh - 60px);
       height: calc(100vh - 60px); /* หักลบความสูงปกติ */
       position: relative;
       overflow: hidden;
@@ -289,20 +210,16 @@ body {
     @supports (-webkit-touch-callout: none) {
       @media all and (max-width: 768px) {
         .chat-header {
-          height: 70px;
-          margin-top: 45px;
           height: 70px;     /* ขยายความสูงสำหรับไอโฟน */
           margin-top: 45px; /* ดันลงมาหลบติ่งสำหรับไอโฟน */
         }
 
         .chat-body {
-          height: calc(100vh - 115px);
           height: calc(100vh - 115px); /* หักลบระยะดันของไอโฟน */
         }
       }
     }
     .chat-footer {
-      padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)) 10px;
       padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)) 10px; /* เซ็ตแนบชิดขอบพอดี */
       background: var(--bg-card);
       border-top: 1px solid var(--border-color);
@@ -439,8 +356,6 @@ body {
     }
     button:active { opacity: 0.8; }
     .chat-target-header {
-      padding: 4px 15px;
-      height: 45px;
       padding: 4px 15px; /* <--- ของเดิมคือ 10px 15px ลองลดเหลือ 4px 15px */
       height: 45px;      /* <--- เพิ่มความสูงคงที่ตรงนี้ได้เลย (เช่น 35px หรือ 40px) */
       background: var(--bg-card);
@@ -459,7 +374,6 @@ body {
       align-items: flex-end; 
       gap: 8px;
       padding: 8px 12px; 
-      margin: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)) 12px;
       margin: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)) 12px; /* เว้นระยะขอบล่างให้พอดีขอบจอ */
       background: var(--bg-card); 
       border: 1px solid var(--border-color);
@@ -475,7 +389,6 @@ body {
       color: var(--text-color); 
       font-size: 15px; 
       line-height: 1.35;
-      resize: none !important;
       resize: none !important; /* ปิดปุ่มลูกศรยืดขยายมุมขวา */
       max-height: 120px; 
       min-height: 22px; 
@@ -553,57 +466,6 @@ body {
       box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: center;
       max-height: 90vh; overflow-y: auto;
     }
-    
-    /* MODAL ดูรูปภาพเต็มจอ พร้อมรองรับ Touch Zoom และ Mouse Wheel Zoom */
-    .image-viewer-modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.9);
-      z-index: 10000;
-      overflow: hidden;
-      touch-action: none;
-      justify-content: center;
-      align-items: center;
-    }
-    .viewer-close-btn {
-      position: absolute;
-      top: 20px; right: 20px;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 40px; height: 40px;
-      font-size: 20px;
-      cursor: pointer;
-      z-index: 10001;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(4px);
-    }
-    .viewer-img-container {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: grab;
-    }
-    .viewer-img-container:active {
-      cursor: grabbing;
-    }
-    #full-size-img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      transform-origin: center center;
-      transition: transform 0.05s ease-out;
-      user-select: none;
-      -webkit-user-drag: none;
-    }
-
     .image-editor-content { max-width: 850px !important; width: 95% !important; }
     .canvas-wrapper { display: flex; justify-content: center; align-items: center; background: #000; border-radius: 8px; padding: 10px; margin-bottom: 12px; max-height: 60vh; overflow: hidden; }
     #editor-canvas { max-width: 100%; max-height: 55vh; cursor: default; border-radius: 4px; }
@@ -644,7 +506,6 @@ body {
     }
     #searchResultCount {
       font-size: 11px;
-      color: #ffd700;
       color: #ffd700; /* สีเหลืองแสดงจำนวนที่เจอ */
       font-weight: bold;
     }
@@ -655,80 +516,6 @@ body {
       border-radius: 3px;
       padding: 0 2px;
       font-weight: bold;
-    }
-    .chat-highlight {
-      background-color: #ffeb3b;
-      color: #000;
-      border-radius: 2px;
-      padding: 0 2px;
-    }
-    .chat-highlight.active-search-highlight {
-      background-color: #ff9800;
-      color: #fff;
-      font-weight: bold;
-      outline: 2px solid #e65100;
-      transition: all 0.2s ease-in-out;
-    }
-    .chat-search-box {
-      display: flex;
-      align-items: center;
-      background-color: #383838;
-      border-radius: 20px;
-      padding: 4px 10px;
-      height: 36px;
-      box-sizing: border-box;
-      gap: 8px;
-    }
-    .chat-search-box input {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: #fff;
-      font-size: 13px;
-      width: 80px;
-    }
-    .search-count {
-      color: #ffeb3b;
-      font-size: 12px;
-      font-weight: bold;
-      white-space: nowrap;
-    }
-    .search-nav-btns {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 4px;
-    }
-    .search-nav-btns button {
-      background: rgba(255, 255, 255, 0.1);
-      border: none;
-      border-radius: 50%;
-      color: #ddd;
-      font-size: 12px;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      padding: 0;
-      transition: all 0.2s ease;
-    }
-    .search-nav-btns button:hover {
-      background: rgba(255, 255, 255, 0.25);
-      color: #fff;
-    }
-    .search-nav-btns button:active {
-      transform: scale(0.9);
-    }
-    @keyframes highlightFlash {
-      0% { background-color: rgba(255, 152, 0, 0.6); }
-      50% { background-color: rgba(255, 152, 0, 0.3); }
-      100% { background-color: transparent; }
-    }
-    .highlight-target-msg {
-      animation: highlightFlash 1.5s ease-in-out;
-      border-radius: 8px;
     }
     /* ไฮไลต์คำค้นหาทั่วไป (สีเหลือง) */
 .chat-highlight {
@@ -864,7 +651,7 @@ body {
         </div>
       </div>
       <div id="resizer" class="resizer"></div>
-
+      
       <!-- ฝั่งแช็ตหลัก -->
       <div class="main-chat" id="drop-zone">
         <div id="target-name" class="chat-target-header">
@@ -873,12 +660,6 @@ body {
             <span id="target-text">เลือกเพื่อนเปิดห้องแช็ต</span>
           </div>
           <div class="chat-search-box">
-            <input type="text" id="chatSearchInput" placeholder="ค้นหา..." oninput="searchChatMessages()">
-            <span id="searchResultCount" class="search-count"></span>
-            <div class="search-nav-btns">
-              <button type="button" onclick="prevSearchResult()" title="ข้อความก่อนหน้า">▲</button>
-              <button type="button" onclick="nextSearchResult()" title="ข้อความถัดไป">▼</button>
-            </div>
           <input type="text" id="chatSearchInput" placeholder="ค้นหา..." oninput="searchChatMessages()">
           <span id="searchResultCount" class="search-count"></span>
           <div class="search-nav-btns">
@@ -892,7 +673,7 @@ body {
           <div id="chat-bg-layer" class="chat-bg-layer"></div>
           <div id="msg-list" class="messages"></div>
         </div>
-
+        
         <!-- Reply Preview -->
         <div id="reply-preview-bar" style="display:none; justify-content: space-between; align-items:center; background: var(--bg-card); border-left: 4px solid var(--theme-color, #0084ff); padding:6px 12px; margin: 0 12px; border-radius: 8px; font-size:13px;">
           <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:85%;">
@@ -901,7 +682,7 @@ body {
           </div>
           <span onclick="cancelReply()" style="cursor:pointer; font-weight:bold; padding:0 4px; opacity:0.6;">X</span>
         </div>
-
+        
         <!-- แถบพิมพ์ข้อความแบบลอย -->
         <div class="floating-input-bar">
           <button class="img-btn" style="background: #f39c12;" onclick="toggleEmojiPicker()">😊</button>
@@ -909,7 +690,7 @@ body {
           <input type="file" id="img-input" accept="image/*" style="display:none" onchange="sendImage(this)">
           <textarea id="msg-input" class="chat-textarea" placeholder="พิมพ์ข้อความหรือวางรูปที่นี่" rows="1" oninput="autoExpandTextarea(this); handleTyping();" onkeydown="handleEnterKey(event)"></textarea>
           <button class="btn-send" onclick="sendMsg()">⬆️</button>
-
+          
           <!-- Pop-up เลือก Sticker / Emoji -->
           <div id="picker-panel" class="picker-panel">
             <div class="picker-tabs">
@@ -923,7 +704,6 @@ body {
       </div>
     </div>
   </div>
-  
   <!-- Modal หน้าต่างโปรไฟล์ -->
   <div id="profile-modal" class="modal">
     <div class="modal-content">
@@ -966,8 +746,6 @@ body {
       </div>
     </div>
   </div>
-
-  <!-- Modal ตัวอย่างรูปภาพก่อนส่งแช็ต -->
   <!-- Modal ตัวอย่างรูปภาพส่งแช็ต -->
   <div id="image-preview-modal" class="modal">
     <div class="modal-content">
@@ -981,12 +759,6 @@ body {
       </div>
     </div>
   </div>
-
-  <!-- MODAL : หน้าต่างดูรูปภาพเต็มจอ + ซูมเข้าออก (ซูมมือถือ & เมาส์คอม) -->
-  <div id="image-viewer-modal" class="image-viewer-modal">
-    <button class="viewer-close-btn" onclick="closeImageViewer()">✕</button>
-    <div class="viewer-img-container" id="viewer-container">
-      <img id="full-size-img" src="" alt="Full view">
   <!-- MODAL : ดูรูป ขยายรูป และเครื่องมือแต่งรูป -->
   <div id="image-editor-modal" class="modal">
     <div class="modal-content image-editor-content">
@@ -1030,14 +802,12 @@ body {
       </div>
     </div>
   </div>
-
   <!-- Context Menu -->
   <div id="context-menu" style="display: none; position:fixed; z-index:9999; background: var(--bg-card, #fff); border-radius: 10px; padding:6px 0; min-width:150px; box-shadow:0 4px 16px rgba(0,0,0,0.2); border:1px solid var(--border-color, #eee);">
     <div id="ctx-reply" onclick="triggerReply()" style="padding:10px 16px; cursor:pointer; font-size:14px; display: flex; align-items:center; gap:8px;">ตอบกลับ</div>
     <div id="ctx-copy" onclick="copyMessageText()" style="padding: 10px 16px; cursor:pointer; font-size:14px; display: flex; align-items:center; gap:8px;">คัดลอกข้อความ</div>
     <div id="ctx-delete" onclick="triggerDelete()" style="padding:10px 16px; cursor:pointer; font-size:14px; color: #ff4d4d; display: flex; align-items:center; gap: 8px;">ลบข้อความ</div>
   </div>
-
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
@@ -1099,7 +869,6 @@ body {
       "🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘",
       "💝","💯"
     ];
-
     function formatTime(timestamp) {
       if (!timestamp) return '';
       const date = new Date(timestamp);
@@ -1151,7 +920,7 @@ body {
     function renderStickerPicker() {
       const container = document.getElementById('picker-sticker-view');
       container.innerHTML = '';
-
+      
       const addBox = document.createElement('div');
       addBox.className = 'sticker-add-box';
       addBox.innerHTML = `
@@ -1208,8 +977,6 @@ body {
         urlInput.value = '';
       });
     }
-    
-    /* อัปโหลดสติกเกอร์ (บีบอัดรูปเหลือ 80%) */
     function uploadStickerFile(input) {
       const file = input.files[0];
       if (!file) return;
@@ -1332,198 +1099,6 @@ body {
         initChatScreen();
       }
     }
-    
-    /* แสดงตัวอย่างรูปภาพก่อนส่ง */
-    function showImagePreview(file) {
-      pendingImageFile = file;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById('img-preview-target').src = e.target.result;
-        document.getElementById('image-preview-modal').style.display = 'flex';
-      };
-      reader.readAsDataURL(file);
-    }
-    function closeImagePreview() {
-      pendingImageFile = null;
-      document.getElementById('image-preview-modal').style.display = 'none';
-      document.getElementById('img-input').value = '';
-    }
-    function confirmSendImage() {
-      if (pendingImageFile) {
-        processAndSendImage(pendingImageFile);
-        closeImagePreview();
-      }
-    }
-    
-    /* ส่งรูปภาพ + บีบอัดเป็น 80% ของขนาดจริง (Quality 0.8) */
-    function processAndSendImage(file) {
-      if (!activeFriend) return alert('เลือกเพื่อนก่อนส่งรูปค่ะ!');
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const img = new Image();
-        img.src = e.target.result;
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          let width = img.width;
-          let height = img.height;
-          
-          // ปรับสเกลสูงสุดถ้ากว้างเกินไป
-          const maxDim = 1200;
-          if (width > maxDim || height > maxDim) {
-            if (width > height) {
-              height = Math.round((height * maxDim) / width);
-              width = maxDim;
-            } else {
-              width = Math.round((width * maxDim) / height);
-              height = maxDim;
-            }
-          }
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          
-          // บีบอัดรูปภาพเป็น 80% (0.8)
-          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
-          
-          const roomId = getRoomId(currentUser.username, activeFriend);
-          const newMsgRef = db.ref('chats/' + roomId).push();
-          const payload = {
-            sender: currentUser.username,
-            msg: compressedBase64,
-            type: 'image',
-            timestamp: Date.now(),
-            read: false
-          };
-          if (replyMsgData) {
-            payload.replyTo = replyMsgData;
-            cancelReply();
-          }
-          newMsgRef.set(payload);
-        };
-      };
-      reader.readAsDataURL(file);
-    }
-    function sendImage(input) {
-      if (input.files && input.files[0]) {
-        showImagePreview(input.files[0]);
-      }
-    }
-
-    /* ระบบดูรูปภาพเต็มจอ + ซูมเข้า/ออก (Pinch to zoom / Mouse Wheel / Double Click) */
-    let imgScale = 1;
-    let imgPanX = 0;
-    let imgPanY = 0;
-    let isDraggingImg = false;
-    let startX = 0, startY = 0;
-    let initialPinchDist = null;
-
-    function openImageViewer(imgSrc) {
-      const modal = document.getElementById('image-viewer-modal');
-      const img = document.getElementById('full-size-img');
-      img.src = imgSrc;
-      imgScale = 1;
-      imgPanX = 0;
-      imgPanY = 0;
-      updateImgTransform();
-      modal.style.display = 'flex';
-    }
-
-    function closeImageViewer() {
-      document.getElementById('image-viewer-modal').style.display = 'none';
-    }
-
-    function updateImgTransform() {
-      const img = document.getElementById('full-size-img');
-      img.style.transform = `translate(${imgPanX}px, ${imgPanY}px) scale(${imgScale})`;
-    }
-
-    function initImageViewerEvents() {
-      const container = document.getElementById('viewer-container');
-      const img = document.getElementById('full-size-img');
-
-      // ซูมด้วยเมาส์บนคอม (Mouse Wheel)
-      container.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        const zoomFactor = e.deltaY < 0 ? 1.15 : 0.85;
-        imgScale = Math.min(Math.max(1, imgScale * zoomFactor), 5);
-        if (imgScale === 1) { imgPanX = 0; imgPanY = 0; }
-        updateImgTransform();
-      }, { passive: false });
-
-      // ดับเบิลคลิกเพื่อซูม / รีเซ็ต
-      container.addEventListener('dblclick', function(e) {
-        if (imgScale > 1) {
-          imgScale = 1;
-          imgPanX = 0;
-          imgPanY = 0;
-        } else {
-          imgScale = 2.5;
-        }
-        updateImgTransform();
-      });
-
-      // ลากรูปภาพ (Drag)
-      container.addEventListener('mousedown', function(e) {
-        if (imgScale > 1) {
-          isDraggingImg = true;
-          startX = e.clientX - imgPanX;
-          startY = e.clientY - imgPanY;
-        }
-      });
-
-      window.addEventListener('mousemove', function(e) {
-        if (isDraggingImg && imgScale > 1) {
-          imgPanX = e.clientX - startX;
-          imgPanY = e.clientY - startY;
-          updateImgTransform();
-        }
-      });
-
-      window.addEventListener('mouseup', function() {
-        isDraggingImg = false;
-      });
-
-      // รองรับสองนิ้วซูมบนโทรศัพท์ (Touch / Pinch Zoom)
-      container.addEventListener('touchstart', function(e) {
-        if (e.touches.length === 2) {
-          initialPinchDist = Math.hypot(
-            e.touches[0].clientX - e.touches[1].clientX,
-            e.touches[0].clientY - e.touches[1].clientY
-          );
-        } else if (e.touches.length === 1 && imgScale > 1) {
-          isDraggingImg = true;
-          startX = e.touches[0].clientX - imgPanX;
-          startY = e.touches[0].clientY - imgPanY;
-        }
-      });
-
-      container.addEventListener('touchmove', function(e) {
-        if (e.touches.length === 2 && initialPinchDist) {
-          e.preventDefault();
-          const currentDist = Math.hypot(
-            e.touches[0].clientX - e.touches[1].clientX,
-            e.touches[0].clientY - e.touches[1].clientY
-          );
-          const zoomFactor = currentDist / initialPinchDist;
-          imgScale = Math.min(Math.max(1, imgScale * zoomFactor), 5);
-          initialPinchDist = currentDist;
-          if (imgScale === 1) { imgPanX = 0; imgPanY = 0; }
-          updateImgTransform();
-        } else if (e.touches.length === 1 && isDraggingImg && imgScale > 1) {
-          e.preventDefault();
-          imgPanX = e.touches[0].clientX - startX;
-          imgPanY = e.touches[0].clientY - startY;
-          updateImgTransform();
-        }
-      }, { passive: false });
-
-      container.addEventListener('touchend', function(e) {
-        if (e.touches.length < 2) initialPinchDist = null;
-        if (e.touches.length === 0) isDraggingImg = false;
-      });
-    }
-
     function initPasteAndDragEvents() {
       document.addEventListener('paste', function(e) {
         if (!currentUser || !activeFriend) return;
@@ -1567,14 +1142,12 @@ body {
         }
       });
     }
-
     window.onload = function() {
       setupResizer();
-      initImageViewerEvents();
       initImageEditorEvents();
       initPasteAndDragEvents();
       initNotiToggleState();
-
+      
       const isDark = localStorage.getItem('mj_chat_dark') === 'true';
       if (isDark) {
         document.body.classList.add('dark-mode');
@@ -1582,7 +1155,6 @@ body {
       }
       checkAndRestoreLogin();
     };
-
     function toggleDarkMode() {
       const body = document.body;
       const btn = document.getElementById('dark-toggle-btn');
@@ -1676,20 +1248,17 @@ body {
     }
     function initChatScreen() {
       document.getElementById('auth-box').style.display = 'none';
-      document.getElementById('chat-box').style.display = 'flex';
       document.getElementById('chat-box').style.display = 'flex'; /* เปลี่ยนจาก block เป็น flex */
       initNotiToggleState();
       db.ref('users/' + currentUser.username).on('value', snapshot => {
         if (snapshot.exists()) {
           const data = snapshot.val();
           currentUser.name = data.name;
-          currentUser.avatar = data.avatar || DEFAULT_AVATAR;
           currentUser.bio = data.bio || '';
           currentUser.theme = data.theme || '#0084ff';
           currentUser.avatar = data.avatar || DEFAULT_AVATAR;
           currentUser.bgImage = data.bgImage || '';
           currentUser.bgOpacity = data.bgOpacity !== undefined ? data.bgOpacity : 0.5;
-          
           saveUserSession(currentUser);
           document.getElementById('my-name').innerText = currentUser.name;
           document.getElementById('my-avatar').src = currentUser.avatar;
@@ -1697,7 +1266,6 @@ body {
           applyChatBackground(currentUser.bgImage, currentUser.bgOpacity);
         }
       });
-      loadFriendList();
       loadFriendsRealtime();
       listenUserStickers();
     }
@@ -1815,8 +1383,6 @@ body {
       clearUserSession();
       location.reload();
     }
-    function getRoomId(u1, u2) {
-      return u1 < u2 ? `${u1}_${u2}` : `${u2}_${u1}`;
     function addFriend() {
       const fu = document.getElementById('friend-u').value.trim().toLowerCase();
       if (!fu) return;
@@ -1831,14 +1397,6 @@ body {
         }
       });
     }
-    function loadFriendList() {
-      if (friendListener) db.ref('friends/' + currentUser.username).off('value', friendListener);
-      friendListener = db.ref('friends/' + currentUser.username).on('value', snapshot => {
-        const listContainer = document.getElementById('friend-list');
-        listContainer.innerHTML = '';
-        const friends = snapshot.val();
-        if (!friends) {
-          listContainer.innerHTML = '<div style="padding:10px; color:var(--text-sub); text-align:center;">ยังไม่มีเพื่อน</div>';
     function loadFriendsRealtime() {
       db.ref('friends/' + currentUser.username).on('value', snapshot => {
         const el = document.getElementById('friend-list');
@@ -1848,19 +1406,6 @@ body {
           el.innerHTML = '<small style="color:var(--text-sub);">ยังไม่มีเพื่อน ให้พิมพ์ User เพิ่มด้านล่าง</small>';
           return;
         }
-        Object.keys(friends).forEach(fUser => {
-          db.ref('users/' + fUser).once('value', uSnap => {
-            const fData = uSnap.val() || { name: fUser, avatar: DEFAULT_AVATAR };
-            usersCache[fUser] = fData;
-            const item = document.createElement('div');
-            item.className = 'friend-item' + (activeFriend === fUser ? ' active' : '');
-            item.style.setProperty('--bg-avatar', `url('${fData.avatar || DEFAULT_AVATAR}')`);
-            item.onclick = () => selectFriend(fUser, fData);
-            item.innerHTML = `
-              <img class="avatar" src="${fData.avatar || DEFAULT_AVATAR}">
-              <div>
-                <div style="font-weight:bold; font-size:14px;">${fData.name}</div>
-                <div style="font-size:11px; opacity:0.7;">@${fUser}</div>
         Object.keys(data).forEach(f => {
           db.ref('users/' + f).get().then(fSnap => {
             const fData = fSnap.exists() ? fSnap.val() : {};
@@ -1877,38 +1422,12 @@ body {
                 <small style="opacity:0.8;">@${f}</small>
               </div>
             `;
-            listContainer.appendChild(item);
             div.onclick = () => selectFriend(f, div);
             el.appendChild(div);
           });
         });
       });
     }
-    function selectFriend(fUser, fData) {
-      activeFriend = fUser;
-      activeFriendData = fData;
-      document.getElementById('target-avatar').src = fData.avatar || DEFAULT_AVATAR;
-      document.getElementById('target-avatar').style.display = 'block';
-      document.getElementById('target-text').innerText = fData.name;
-      document.getElementById('view-friend-btn').style.display = 'inline-block';
-      
-      document.querySelectorAll('.friend-item').forEach(el => el.classList.remove('active'));
-      loadFriendList();
-      loadMessages();
-    }
-    function addFriend() {
-      const fInput = document.getElementById('friend-u');
-      const fUser = fInput.value.trim().toLowerCase();
-      if (!fUser) return;
-      if (fUser === currentUser.username) return alert('ไม่สามารถเพิ่มตัวเองเป็นเพื่อนได้ค่ะ!');
-      db.ref('users/' + fUser).get().then(snap => {
-        if (snap.exists()) {
-          db.ref('friends/' + currentUser.username + '/' + fUser).set(true);
-          db.ref('friends/' + fUser + '/' + currentUser.username).set(true);
-          fInput.value = '';
-          alert('เพิ่มเพื่อนเรียบร้อยค่ะ!');
-        } else {
-          alert('ไม่พบผู้ใช้งานนี้ในระบบค่ะ');
     function selectFriend(f, elem) {
       activeFriend = f;
       isFirstLoad = true;
@@ -1928,63 +1447,12 @@ body {
       listenMessages(f);
       listenTypingStatus();
     }
-
-    /* โหลดข้อความและเรียกเปิดรูปภาพใน Viewer */
-    function loadMessages() {
     function getRoomId(u1, u2) {
       return u1 < u2 ? `${u1}_${u2}` : `${u2}_${u1}`;
     }
     function handleTyping() {
       if (!activeFriend) return;
       const roomId = getRoomId(currentUser.username, activeFriend);
-      if (msgListener) db.ref('chats/' + roomId).off('value', msgListener);
-      
-      msgListener = db.ref('chats/' + roomId).on('value', snapshot => {
-        const msgList = document.getElementById('msg-list');
-        msgList.innerHTML = '';
-        const data = snapshot.val();
-        if (data) {
-          Object.keys(data).forEach(msgId => {
-            const m = data[msgId];
-            m.id = msgId;
-            const isMe = m.sender === currentUser.username;
-            const row = document.createElement('div');
-            row.className = 'msg-row ' + (isMe ? 'me-row' : '');
-            
-            const msgBox = document.createElement('div');
-            msgBox.className = 'msg ' + (isMe ? 'me' : 'them');
-            
-            if (m.type === 'image') {
-              msgBox.classList.add('is-image');
-              const img = document.createElement('img');
-              img.className = 'chat-img';
-              img.src = m.msg;
-              // คลิกที่รูปภาพในแชทเพื่อเปิดดูรูปเต็มจอ + ซูมได้
-              img.onclick = () => openImageViewer(m.msg);
-              msgBox.appendChild(img);
-            } else if (m.type === 'sticker') {
-              msgBox.classList.add('is-sticker');
-              const img = document.createElement('img');
-              img.className = 'sticker-img';
-              img.src = m.msg;
-              msgBox.appendChild(img);
-            } else {
-              msgBox.innerText = m.msg;
-            }
-            
-            const meta = document.createElement('div');
-            meta.className = 'msg-meta-box';
-            meta.innerHTML = `<span>${formatTime(m.timestamp)}</span>`;
-            msgBox.appendChild(meta);
-
-            msgBox.oncontextmenu = (e) => {
-              e.preventDefault();
-              showContextMenu(e, m);
-            };
-
-            row.appendChild(msgBox);
-            msgList.appendChild(row);
-          });
       db.ref('typing/' + roomId + '/' + currentUser.username).set(true);
       if (typingTimeout) clearTimeout(typingTimeout);
       typingTimeout = setTimeout(() => {
@@ -2014,7 +1482,6 @@ body {
         }
       });
     }
-
     function showImagePreview(file) {
       if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
       pendingImageFile = file;
@@ -2073,9 +1540,6 @@ body {
     }
     function sendMsg() {
       const input = document.getElementById('msg-input');
-      const text = input.value.trim();
-      if (!text || !activeFriend) return;
-      
       const val = input.value.trim();
       if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
       if (!val) return;
@@ -2083,15 +1547,12 @@ body {
       db.ref('typing/' + roomId + '/' + currentUser.username).set(false);
       const payload = {
         sender: currentUser.username,
-        msg: text,
         msg: val,
         type: 'text',
         timestamp: Date.now(),
         read: false
       };
       if (replyMsgData) {
-        payload.replyTo = replyMsgData;
-        cancelReply();
         payload.replyTo = {
           sender: replyMsgData.sender === currentUser.username ? 'ตัวเอง' : (activeFriendData ? activeFriendData.name : replyMsgData.sender),
           msg: replyMsgData.type === 'image' ? 'รูปภาพ' : (replyMsgData.type === 'sticker' ? 'สติกเกอร์' : replyMsgData.msg)
@@ -2140,8 +1601,6 @@ body {
         const lastMsg = data[lastKey];
         const isNotiEnabled = localStorage.getItem('mj_chat_noti_enabled') === 'true';
 
-    function showContextMenu(e, msgData) {
-      selectedMsgData = msgData;
         if (!isFirstLoad && lastMsg && lastMsg.sender === activeFriend && isNotiEnabled) {
           const currentMsgId = lastKey;
           if (lastNotiId !== currentMsgId) {
@@ -2223,8 +1682,6 @@ body {
       menu.style.left = posX + 'px';
       menu.style.top = posY + 'px';
       menu.style.display = 'block';
-      menu.style.left = e.clientX + 'px';
-      menu.style.top = e.clientY + 'px';
       document.addEventListener('click', function closeMenu(e) {
         if (menu) menu.style.display = 'none';
         const picker = document.getElementById('picker-panel');
@@ -2240,41 +1697,23 @@ body {
       if (!selectedMsgData || selectedMsgData.type !== 'text') return;
       navigator.clipboard.writeText(selectedMsgData.msg).then(() => alert('คัดลอกข้อความแล้วค่ะ!'));
     }
-
-    document.addEventListener('click', function() {
-      const menu = document.getElementById('context-menu');
-      if (menu) menu.style.display = 'none';
-    });
-
     function triggerReply() {
       if (!selectedMsgData) return;
       replyMsgData = selectedMsgData;
-      document.getElementById('reply-target-name').innerText = selectedMsgData.sender === currentUser.username ? 'ตอบกลับตัวเอง :' : `ตอบกลับ ${activeFriendData.name} :`;
-      document.getElementById('reply-target-text').innerText = selectedMsgData.type === 'image' ? '[รูปภาพ]' : selectedMsgData.type === 'sticker' ? '[สติกเกอร์]' : selectedMsgData.msg;
       const senderName = replyMsgData.sender === currentUser.username ? 'ตัวเอง' : (activeFriendData ? activeFriendData.name : replyMsgData.sender);
       document.getElementById('reply-target-name').innerText = 'ตอบกลับ ' + senderName + ':';
       document.getElementById('reply-target-text').innerText = replyMsgData.type === 'image' ? 'รูปภาพ' : (replyMsgData.type === 'sticker' ? 'สติกเกอร์' : replyMsgData.msg);
       document.getElementById('reply-preview-bar').style.display = 'flex';
       document.getElementById('msg-input').focus();
     }
-
     function cancelReply() {
       replyMsgData = null;
       document.getElementById('reply-preview-bar').style.display = 'none';
     }
-
-    function copyMessageText() {
-      if (selectedMsgData && selectedMsgData.type === 'text') {
-        navigator.clipboard.writeText(selectedMsgData.msg);
-      }
-    }
-
     function triggerDelete() {
-      if (!selectedMsgData || !activeFriend) return;
       if (!selectedMsgData) return;
       if (confirm('ต้องการลบข้อความนี้ใช่ไหมคะ?')) {
         const roomId = getRoomId(currentUser.username, activeFriend);
-        db.ref('chats/' + roomId + '/' + selectedMsgData.id).remove();
         db.ref('chats/' + roomId + '/' + selectedMsgData.key).remove();
       }
     }
@@ -2288,9 +1727,6 @@ body {
     let isFlipped = false;
     let currentScale = 1;
 
-    /* Modal โปรไฟล์ */
-    function openProfileModal(isSelf) {
-      const modal = document.getElementById('profile-modal');
     function initImageEditorEvents() {
       editorCanvas = document.getElementById('editor-canvas');
       editorCtx = editorCanvas.getContext('2d');
@@ -2322,14 +1758,6 @@ body {
     function openImageEditor(src) {
       const modal = document.getElementById('image-editor-modal');
       modal.style.display = 'flex';
-      if (isSelf) {
-        document.getElementById('modal-title').innerText = 'ตั้งค่าโปรไฟล์';
-        document.getElementById('modal-avatar-preview').src = currentUser.avatar || DEFAULT_AVATAR;
-        document.getElementById('prof-name').value = currentUser.name || '';
-        document.getElementById('prof-bio').value = currentUser.bio || '';
-        document.getElementById('prof-theme').value = currentUser.theme || '#0084ff';
-        document.getElementById('bg-opacity-slider').value = (currentUser.bgOpacity || 0.5) * 100;
-        document.getElementById('bg-opacity-val').innerText = `${(currentUser.bgOpacity || 0.5) * 100}%`;
       originalImage = new Image();
       originalImage.crossOrigin = 'anonymous';
       originalImage.src = src;
@@ -2368,9 +1796,6 @@ body {
         editorCtx.putImageData(canvasHistory[canvasHistory.length - 1], 0, 0);
       }
     }
-
-    function closeProfileModal() {
-      document.getElementById('profile-modal').style.display = 'none';
     function redrawCanvas() {
       editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height);
       editorCtx.save();
@@ -2394,15 +1819,6 @@ body {
       }
       updateToolButtonsUI();
     }
-
-    function processAvatarUpload(input) {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          tempAvatarBase64 = e.target.result;
-          document.getElementById('modal-avatar-preview').src = tempAvatarBase64;
-        };
-        reader.readAsDataURL(input.files[0]);
     function updateToolButtonsUI() {
       const drawBtn = document.getElementById('btn-mode-draw');
       const blurBtn = document.getElementById('btn-mode-blur');
@@ -2414,16 +1830,6 @@ body {
         editorCanvas.style.cursor = currentEditMode ? 'crosshair' : 'default';
       }
     }
-
-    function processBgUpload(input) {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          tempBgBase64 = e.target.result;
-          isBgCleared = false;
-          document.getElementById('bg-status-text').innerText = 'เลือกรูปภาพแล้ว (กดบันทึกเพื่อใช้งาน)';
-        };
-        reader.readAsDataURL(input.files[0]);
     function getCanvasCoords(e) {
       const rect = editorCanvas.getBoundingClientRect();
       return {
@@ -2454,11 +1860,6 @@ body {
         applyPixelateArea(coords.x, coords.y, size * 2);
       }
     }
-
-    function clearBgImage() {
-      tempBgBase64 = '';
-      isBgCleared = true;
-      document.getElementById('bg-status-text').innerText = 'ลบรูปพื้นหลังเรียบร้อย (กดบันทึกเพื่อใช้งาน)';
     function stopDrawing() {
       if (isDrawing) {
         isDrawing = false;
@@ -2537,28 +1938,15 @@ body {
 let currentHighlightIndex = -1;
 let matchedElements = [];
 
-    function saveProfile() {
-      const name = document.getElementById('prof-name').value.trim();
-      const bio = document.getElementById('prof-bio').value.trim();
-      const theme = document.getElementById('prof-theme').value;
-      const opacity = document.getElementById('bg-opacity-slider').value / 100;
 function searchChatMessages() {
   const keyword = document.getElementById('chatSearchInput').value;
   const messages = document.querySelectorAll('.msg:not(.is-sticker):not(.is-image) > div:not(.msg-meta-box)'); 
   const countDisplay = document.getElementById('searchResultCount');
 
-      const updates = { name, bio, theme, bgOpacity: opacity };
-      if (tempAvatarBase64) updates.avatar = tempAvatarBase64;
-      if (isBgCleared) updates.bgImage = '';
-      else if (tempBgBase64) updates.bgImage = tempBgBase64;
   let totalFound = 0;
   matchedElements = [];
   currentHighlightIndex = -1;
 
-      db.ref('users/' + currentUser.username).update(updates).then(() => {
-        alert('บันทึกโปรไฟล์เรียบร้อยค่ะ!');
-        closeProfileModal();
-      });
   messages.forEach(msg => {
     // 1. ล้างไฮไลต์เก่าออก
     if (msg.dataset.originalText !== undefined) {
@@ -2640,11 +2028,6 @@ document.addEventListener('click', function(e) {
     // ดึง ID ข้อความต้นฉบับจาก attribute
     const targetId = replyBox.getAttribute('data-reply-id') || replyBox.dataset.replyId;
 
-    function handleTyping() {}
-    function searchChatMessages() {}
-    function prevSearchResult() {}
-    function nextSearchResult() {}
-    function viewFriendProfile() {}
     if (targetId) {
       // หาตัวกล่องข้อความต้นฉบับในหน้าแชท (ค้นหาจาก id หรือ data-msg-id)
       const targetMessage = document.getElementById(targetId) || document.querySelector(`[data-msg-id="${targetId}"]`);
