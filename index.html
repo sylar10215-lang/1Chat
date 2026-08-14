@@ -72,16 +72,14 @@
       margin: 100px auto 0;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    /* 1. คลาสครอบทั้งหมด: ล็อคให้เต็มจอ และเว้นระยะขอบบนหลบติ่งไอโฟนทีเดียวจบ */
+    /* 1. คืนค่าตัวครอบหลักให้เต็มจอปกติ */
     .chat-container {
       display: none;
       width: 100vw; 
       height: 100vh;
       background: var(--bg-card);
-      padding-top: 35px; /* <--- ตัวนี้แหละค่ะที่จะดันทุกอย่างลงมาจากขอบบนไอโฟนแบบพอดีๆ */
-     box-sizing: border-box;
     }
-    /* 2. แถบบนสุด: คืนค่าความสูงปกติ ไม่ต้องดันเพิ่มแล้ว */
+    /* 2. แถบบนสุด: ดันเฉพาะ "เนื้อหาข้างใน" ลงมา หลบติ่งไอโฟน (ไม่ดันตัวกล่อง) */
     .chat-header {
       background: var(--theme-color);
       color: white;
@@ -89,8 +87,13 @@
       display: flex; 
       justify-content: space-between; 
       align-items: center;
-      height: 50px; /* ความสูงแถบบนแบบกำลังสวย */
+      height: 60px; /* คืนค่า 60px เท่าโค้ดเดิมของ MJ */
+      box-sizing: border-box;
       transition: background 0.3s;
+    }
+    /* ดันเฉพาะปุ่ม/รูปข้างใน header ลงมานิดเดียว */
+    .chat-header > div {
+      margin-top: 10px; 
     }
     .avatar {
       width: 38px; height: 38px;
@@ -106,10 +109,10 @@
       background: #eee;
       border: 2px solid var(--theme-color);
     }
-   /* 3. ส่วนเนื้อหาแชท: คำนวณความสูงใหม่ให้พอดีจอ */
+   /* 3. คืนค่าส่วน body ตามโค้ดเดิมเป๊ะๆ */
     .chat-body {
       display: flex;
-      height: calc(100vh - 85px); /* (100vh หักลบ padding-top 35px + header 50px) */
+      height: calc(100vh - 60px); /* คืนค่า 60px เท่าโค้ดเดิม */
       position: relative;
     }
     .chat-footer {
