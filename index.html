@@ -2056,30 +2056,30 @@ document.getElementById('chatSearchInput')?.addEventListener('keydown', function
   }
 });
 
-  // เมื่อมีการคลิกที่กล่องข้อความตอบกลับ (Reply Preview)
+  // ดักจับการคลิกกล่องอ้างอิง/ตอบกลับ เพื่อวาร์ปไปยังข้อความต้นฉบับ
 document.addEventListener('click', function(e) {
-  // ค้นหา element กล่องตอบกลับ (ปรับคลาส .msg-reply-box หรือ .reply-preview ให้ตรงกับที่มีในโปรเจกต์)
-  const replyBox = e.target.closest('.msg-reply-box, .reply-preview, [data-reply-id]');
+  // หา element กล่องตอบกลับ
+  const replyBox = e.target.closest('.msg-reply, .msg-reply-box, .reply-preview');
   
   if (replyBox) {
-    // 1. ดึง ID ของข้อความต้นฉบับ (เช่น msg-12345 หรือจาก attribute data-reply-id)
-    const targetId = replyBox.getAttribute('data-reply-id') || replyBox.dataset.targetId;
+    // ดึง ID ข้อความต้นฉบับจาก attribute
+    const targetId = replyBox.getAttribute('data-reply-id') || replyBox.dataset.replyId;
 
     if (targetId) {
-      // 2. ค้นหา element ข้อความต้นฉบับในหน้าแชท
+      // หาตัวกล่องข้อความต้นฉบับในหน้าแชท (ค้นหาจาก id หรือ data-msg-id)
       const targetMessage = document.getElementById(targetId) || document.querySelector(`[data-msg-id="${targetId}"]`);
 
       if (targetMessage) {
-        // 3. เลื่อนหน้าจอไปยังข้อความต้นฉบับแบบนุ่มนวล (Smooth Scroll)
+        // เลื่อนจอไปหาข้อความต้นฉบับแบบนุ่มนวล
         targetMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-        // 4. (แถม) ใส่เอฟเฟกต์กะพริบ/ไฮไลต์สี ให้รู้ว่าเลื่อนมาเจอข้อความไหน
+        // กะพริบเน้นข้อความให้เห็นชัดๆ
         targetMessage.classList.add('highlight-target-msg');
         setTimeout(() => {
           targetMessage.classList.remove('highlight-target-msg');
-        }, 1500); // กะพริบเน้น 1.5 วินาทีแล้วจางหายไป
+        }, 1500);
       } else {
-        console.log('ไม่พบข้อความต้นฉบับ (อาจจะโดนลบไปแล้ว)');
+        console.log('หาข้อความต้นฉบับไม่เจอ ID:', targetId);
       }
     }
   }
