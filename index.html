@@ -83,12 +83,17 @@
     .chat-header {
       background: var(--theme-color);
       color: white;
-      padding: 0 15px;
+      padding-left: 15px;
+      padding-right: 15px;
+  
+      /* ดันเนื้อหาลงมาหลบ Notch ของไอโฟนแบบเป๊ะๆ */
+      padding-top: calc(env(safe-area-inset-top) + 8px); 
+      padding-bottom: 8px;
+  
       display: flex; 
       justify-content: space-between; 
       align-items: center;
-      height: 60px; /* คืนค่า 60px เท่าโค้ดเดิมของ MJ */
-      box-sizing: border-box;
+      height: auto; /* ให้ความสูงยืดตาม padding ที่ดันลงมา */
       transition: background 0.3s;
     }
     /* ดันเฉพาะปุ่ม/รูปข้างใน header ลงมานิดเดียว */
