@@ -439,6 +439,22 @@
       padding: 0 2px;
       font-weight: bold;
     }
+    /* ไฮไลต์คำค้นหาทั่วไป (สีเหลือง) */
+.chat-highlight {
+  background-color: #ffeb3b;
+  color: #000;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+/* ไฮไลต์คำที่เรากำลังเลื่อนไปดูอยู่ (สีส้มเด่นๆ + เด้งนิดๆ) */
+.chat-highlight.active-search-highlight {
+  background-color: #ff9800;
+  color: #fff;
+  font-weight: bold;
+  outline: 2px solid #e65100;
+  transition: all 0.2s ease-in-out;
+}
   </style>
 </head>
 <body>
@@ -1862,44 +1878,103 @@
       }
     }
 
-    function searchChatMessages() {
-      const keyword = document.getElementById('chatSearchInput').value;
-      // แก้ไข: ดึงเฉพะกล่องข้อความที่เป็นข้อความตัวหนังสือจริง (ไม่รวมรูปภาพ/สติกเกอร์)
-      const messages = document.querySelectorAll('.msg:not(.is-sticker):not(.is-image) > div:not(.msg-meta-box)'); 
-      const countDisplay = document.getElementById('searchResultCount');
+    // ตัวแปรสำหรับระบบ เลื่อนไปยังข้อความที่ค้นพบ (Scroll to search result)
+let currentHighlightIndex = -1;
+let matchedElements = [];
 
-      let totalFound = 0;
-      messages.forEach(msg => {
-        // 1. ล้างไฮไลต์เก่าออกก่อน
-        if (msg.dataset.originalText !== undefined) {
-          msg.innerHTML = msg.dataset.originalText;
-        } else {
-          msg.dataset.originalText = msg.innerHTML; // จำข้อความเดิมไว้
-        }
+function searchChatMessages() {
+  const keyword = document.getElementById('chatSearchInput').value;
+  const messages = document.querySelectorAll('.msg:not(.is-sticker):not(.is-image) > div:not(.msg-meta-box)'); 
+  const countDisplay = document.getElementById('searchResultCount');
 
-        // 2. ถ้าใส่คำค้นหา ให้เริ่มจับข้อความเป๊ะๆ
-        if (keyword.trim() !== '') {
-          const original = msg.dataset.originalText;
+  let totalFound = 0;
+  matchedElements = [];
+  currentHighlightIndex = -1;
 
-          if (original.includes(keyword)) {
-            // เปลี่ยนเฉพาะคำที่พิมพ์ตรงเป๊ะเป็นแท็ก <mark>
-            const highlighted = original.split(keyword).join(`<mark class="chat-highlight">${keyword}</mark>`);
-            msg.innerHTML = highlighted;
+  messages.forEach(msg => {
+    // 1. ล้างไฮไลต์เก่าออก
+    if (msg.dataset.originalText !== undefined) {
+      msg.innerHTML = msg.dataset.originalText;
+    } else {
+      msg.dataset.originalText = msg.innerHTML;
+    }
 
-            // นับจำนวนคำที่เจอทั้งหมด
-            const matchesCount = original.split(keyword).length - 1;
-            totalFound += matchesCount;
-          }
-        }
-      });
+    // 2. ค้นหาและทำไฮไลต์
+    if (keyword.trim() !== '') {
+      const original = msg.dataset.originalText;
 
-      // 3. แสดงจำนวนที่ค้นพบ
-      if (keyword.trim() !== '') {
-        countDisplay.innerText = totalFound > 0 ? `พบ ${totalFound}` : 'ไม่พบ';
-      } else {
-        countDisplay.innerText = '';
+      if (original.includes(keyword)) {
+        // เปลี่ยนคำที่เจอให้มีคลาสไฮไลต์
+        const highlighted = original.split(keyword).join(`<mark class="chat-highlight">${keyword}</mark>`);
+        msg.innerHTML = highlighted;
+
+        // ดึง element <mark> ทุกตัวในข้อความนี้เก็บไว้ในคลัง
+        const marks = msg.querySelectorAll('.chat-highlight');
+        marks.forEach(mark => matchedElements.push(mark));
+
+        const matchesCount = original.split(keyword).length - 1;
+        totalFound += matchesCount;
       }
     }
+  });
+
+  // 3. แสดงจำนวนและโฟกัสไปที่ข้อความแรกทันทีที่เจอ
+  if (keyword.trim() !== '' && totalFound > 0) {
+    currentHighlightIndex = 0;
+    focusHighlightedMessage(currentHighlightIndex);
+    countDisplay.innerText = `${currentHighlightIndex + 1}/${totalFound}`;
+  } else if (keyword.trim() !== '') {
+    countDisplay.innerText = 'ไม่พบ';
+  } else {
+    countDisplay.innerText = '';
+  }
+}
+
+// ฟังก์ชันเลื่อนหน้าจอไปยังตำแหน่งข้อความที่เลือก
+function focusHighlightedMessage(index) {
+  if (matchedElements.length === 0 || index < 0 || index >= matchedElements.length) return;
+
+  // เอาเน้นสีส้มออกจากอันเดิมก่อน
+  matchedElements.forEach(el => el.classList.remove('active-search-highlight'));
+
+  // ไฮไลต์สีส้มให้อันปัจจุบันที่กำลังดูอยู่
+  const activeEl = matchedElements[index];
+  activeEl.classList.add('active-search-highlight');
+
+  // เลื่อนหน้าจอไปหาข้อความแบบนุ่มนวล (Smooth Scroll)
+  activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  // อัปเดตตัวเลขบอกตำแหน่ง เช่น (1/5)
+  const countDisplay = document.getElementById('searchResultCount');
+  if (countDisplay) {
+    countDisplay.innerText = `${index + 1}/${matchedElements.length}`;
+  }
+}
+
+// ฟังก์ชันเลื่อนไปข้อความถัดไป (Next)
+function nextSearchResult() {
+  if (matchedElements.length === 0) return;
+  currentHighlightIndex = (currentHighlightIndex + 1) % matchedElements.length;
+  focusHighlightedMessage(currentHighlightIndex);
+}
+
+// ฟังก์ชันเลื่อนย้อนกลับ (Previous)
+function prevSearchResult() {
+  if (matchedElements.length === 0) return;
+  currentHighlightIndex = (currentHighlightIndex - 1 + matchedElements.length) % matchedElements.length;
+  focusHighlightedMessage(currentHighlightIndex);
+}
+
+// เพิ่ม Event Listener ให้กด Enter หรือปุ่ม ลูกศรขึ้น-ลง บนคีย์บอร์ดในช่องค้นหาได้
+document.getElementById('chatSearchInput')?.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' || e.key === 'ArrowDown') {
+    e.preventDefault();
+    nextSearchResult(); // กด Enter หรือ ลูกศรลง = ไปข้อความถัดไป
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    prevSearchResult(); // กด ลูกศรขึ้น = ย้อนกลับข้อความก่อนหน้า
+  }
+});
   </script>
 </body>
 </html>
