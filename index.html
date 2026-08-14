@@ -57,7 +57,6 @@ body {
     background: linear-gradient(135deg, #0f172a, #1e293b, #0284c7); /* โทนน้ำเงินเข้ม-ฟ้าสวยๆ */
     font-family: 'Kanit', sans-serif, system-ui;
 }
-
 /* กล่อง Auth Box - สไตล์กระจกฝ้า */
 #auth-box {
     background: rgba(255, 255, 255, 0.05); /* กล่องโปร่งแสง */
@@ -73,7 +72,6 @@ body {
     flex-direction: column;
     gap: 15px; /* จัดระยะห่างระหว่างช่องกรอกแบบอัตโนมัติ */
 }
-
 /* หัวข้อ */
 #auth-box h2 {
     color: #ffffff;
@@ -83,7 +81,6 @@ body {
     font-weight: 600;
     letter-spacing: 0.5px;
 }
-
 /* ช่องกรอกข้อมูล (Input) */
 #auth-box input {
     width: 100%;
@@ -97,18 +94,15 @@ body {
     box-sizing: border-box; /* กันไม่ให้ขนาดล้น */
     transition: all 0.3s ease;
 }
-
 /* เอฟเฟกต์ตอนกดพิมพ์ที่ช่อง Input */
 #auth-box input:focus {
     background: rgba(255, 255, 255, 0.15);
     border-color: #38bdf8; /* สีฟ้าเรืองแสง */
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
 }
-
 #auth-box input::placeholder {
     color: #94a3b8;
 }
-
 /* ปุ่มกด (Buttons) */
 #auth-box button {
     width: 100%;
@@ -121,19 +115,16 @@ body {
     cursor: pointer;
     transition: all 0.2s ease;
 }
-
 /* ปุ่มเข้าสู่ระบบ (ปุ่มหลัก) */
 #auth-box button:first-of-type {
     background: linear-gradient(135deg, #0284c7, #0ea5e9);
     box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
 }
-
 /* เอฟเฟกต์ตอนเอาเมาส์ชี้ปุ่ม */
 #auth-box button:hover {
     transform: translateY(-2px); /* ลอยขึ้นนิดนึง */
     opacity: 0.9;
 }
-
 #auth-box button:active {
     transform: translateY(0);
 }
@@ -163,13 +154,13 @@ body {
       margin: 100px auto 0;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    /* 1. คืนค่าตัวครอบหลัก ให้จัดเรียงแนวตั้งแบบถูกต้อง[cite: 1] */
+    /* 1. คืนค่าตัวครอบหลัก ให้จัดเรียงแนวตั้งแบบถูกต้อง */
     .chat-container {
       display: none;
       width: 100vw; 
       height: 100vh;
       background: var(--bg-card);
-      flex-direction: column; /* ล็อคให้บนกับล่างเรียงต่อกัน ไม่แยกซ้ายขวา[cite: 1] */
+      flex-direction: column; /* ล็อคให้บนกับล่างเรียงต่อกัน ไม่แยกซ้ายขวา */
     }
     /* ==========================================
    1. ค่ามาตรฐาน (สำหรับ คอมพิวเตอร์ / แอนดรอยด์)
@@ -204,7 +195,7 @@ body {
       background: #eee;
       border: 2px solid var(--theme-color);
     }
-      /* 3. ส่วนเนื้อหาแชท คืนค่าให้กินพื้นที่ที่เหลือทั้งหมด[cite: 1] */
+      /* 3. ส่วนเนื้อหาแชท คืนค่าให้กินพื้นที่ที่เหลือทั้งหมด */
     .chat-body {
       display: flex;
       flex: 1;
@@ -222,8 +213,6 @@ body {
           height: 70px;     /* ขยายความสูงสำหรับไอโฟน */
           margin-top: 45px; /* ดันลงมาหลบติ่งสำหรับไอโฟน */
         }
-
-
         .chat-body {
           height: calc(100vh - 115px); /* หักลบระยะดันของไอโฟน */
         }
@@ -476,10 +465,49 @@ body {
       box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: center;
       max-height: 90vh; overflow-y: auto;
     }
-    .image-editor-content { max-width: 850px !important; width: 95% !important; }
-    .canvas-wrapper { display: flex; justify-content: center; align-items: center; background: #000; border-radius: 8px; padding: 10px; margin-bottom: 12px; max-height: 60vh; overflow: hidden; }
-    #editor-canvas { max-width: 100%; max-height: 55vh; cursor: default; border-radius: 4px; }
-    .editor-toolbar { display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.05); padding: 10px; border-radius: 8px; }
+    
+    /* ปรับแต่งหน้าต่างดูรูปและแก้ไขรูปให้เต็มจอ 100% */
+    .image-editor-content {
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: 100vw !important;
+      max-height: 100vh !important;
+      border-radius: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      padding: 15px !important;
+      box-sizing: border-box !important;
+      margin: 0 !important;
+    }
+    .canvas-wrapper { 
+      flex: 1 !important;
+      display: flex !important; 
+      justify-content: center !important; 
+      align-items: center !important; 
+      background: #000 !important; 
+      border-radius: 8px !important; 
+      padding: 10px !important; 
+      margin-bottom: 12px !important; 
+      max-height: none !important;
+      height: 100 % !important;
+      overflow: hidden !important; 
+    }
+    #editor-canvas { 
+      max-width: 100 % !important; 
+      max-height: 100 % !important; 
+      cursor: default; 
+      border-radius: 4px; 
+      object-fit: contain;
+    }
+    .editor-toolbar { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 8px; 
+      background: rgba(0,0,0,0.05); 
+      padding: 10px; 
+      border-radius: 8px; 
+      flex-shrink: 0;
+    }
     .toolbar-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
     .editor-btn { width: auto !important; padding: 6px 12px !important; font-size: 12px !important; border-radius: 6px !important; margin: 0 !important; }
     #context-menu { background: var(--bg-card) !important; border: 1px solid var(--border-color) !important; }
@@ -503,8 +531,6 @@ body {
       padding: 4px 10px;
       border-radius: 20px;
     }
-
-
     .search-box input {
       background: transparent;
       border: none;
@@ -513,20 +539,14 @@ body {
       font-size: 13px;
       width: 130px;
     }
-
-
     .search-box input::placeholder {
       color: rgba(255, 255, 255, 0.7);
     }
-
-
     #searchResultCount {
       font-size: 11px;
       color: #ffd700; /* สีเหลืองแสดงจำนวนที่เจอ */
       font-weight: bold;
     }
-
-
     /* สีไฮไลต์ข้อความที่ค้นหาเจอ (ตรงตัวเป๊ะๆ) */
     mark.chat-highlight {
       background-color: #f1c40f;
@@ -542,8 +562,6 @@ body {
   border-radius: 2px;
   padding: 0 2px;
 }
-
-
 /* ไฮไลต์คำที่เรากำลังเลื่อนไปดูอยู่ (สีส้มเด่นๆ + เด้งนิดๆ) */
 .chat-highlight.active-search-highlight {
   background-color: #ff9800;
@@ -563,8 +581,6 @@ body {
   box-sizing: border-box;
   gap: 8px;
 }
-
-
 /* ช่องพิมพ์ข้อความ */
 .chat-search-box input {
   background: transparent;
@@ -574,8 +590,6 @@ body {
   font-size: 13px;
   width: 80px;
 }
-
-
 /* ตัวเลขบอกตำแหน่ง เช่น 7/19 */
 .search-count {
   color: #ffeb3b;
@@ -583,8 +597,6 @@ body {
   font-weight: bold;
   white-space: nowrap;
 }
-
-
 /* กลุ่มปุ่มกด - เปลี่ยนเป็นเรียงซ้าย-ขวา (flex-direction: row) */
 .search-nav-btns {
   display: flex;
@@ -592,8 +604,6 @@ body {
   align-items: center;
   gap: 4px;
 }
-
-
 /* ปุ่ม ▲ และ ▼ แบบใหญ่กดง่าย */
 .search-nav-btns button {
   background: rgba(255, 255, 255, 0.1);
@@ -610,15 +620,11 @@ body {
   padding: 0;
   transition: all 0.2s ease;
 }
-
-
 /* โฮเวอร์แล้วปุ่มสว่างขึ้น */
 .search-nav-btns button:hover {
   background: rgba(255, 255, 255, 0.25);
   color: #fff;
 }
-
-
 /* เวลาคลิกปุ่ม ยุบลงนิดนึงเพิ่มฟีลลิ่งการกด */
 .search-nav-btns button:active {
   transform: scale(0.9);
@@ -629,38 +635,10 @@ body {
   50% { background-color: rgba(255, 152, 0, 0.3); }
   100% { background-color: transparent; }
 }
-
-
 .highlight-target-msg {
   animation: highlightFlash 1.5s ease-in-out;
   border-radius: 8px;
 }
-    /* ปุ่มเลื่อนรูปภาพ ซ้าย-ขวา สไตล์ Telegram/LINE */
-.img-nav-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 45px;
-  height: 45px;
-  font-size: 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(4px);
-}
-.img-nav-btn:hover {
-  background: rgba(0, 0, 0, 0.8);
-  transform: translateY(-50%) scale(1.1);
-}
-.img-nav-btn.prev { left: 15px; }
-.img-nav-btn.next { right: 15px; }
   </style>
 </head>
 <body>
@@ -673,8 +651,6 @@ body {
       <button onclick="login()">เข้าสู่ระบบ</button>
       <button onclick="register()" style="background: linear-gradient(135deg, #22c55e, #16a34a);">สมัครสมาชิก</button>
     </div>
-
-
   <!-- Chat UI -->
   <div id="chat-box" class="chat-container">
     <div class="chat-header">
@@ -766,8 +742,6 @@ body {
       </div>
     </div>
   </div>
-
-
   <!-- Modal หน้าต่างโปรไฟล์ -->
   <div id="profile-modal" class="modal">
     <div class="modal-content">
@@ -810,8 +784,6 @@ body {
       </div>
     </div>
   </div>
-
-
   <!-- Modal ตัวอย่างรูปภาพส่งแช็ต -->
   <div id="image-preview-modal" class="modal">
     <div class="modal-content">
@@ -825,67 +797,55 @@ body {
       </div>
     </div>
   </div>
-
-
-  <!-- MODAL : ดูรูป ขยายรูป เลื่อนรูป และเครื่องมือแต่งรูป -->
-<div id="image-editor-modal" class="modal">
-  <div class="modal-content image-editor-content" style="position: relative;">
-    
-    <!-- ปุ่มเลื่อนรูป ซ้าย - ขวา แบบ Telegram -->
-    <button class="img-nav-btn prev" onclick="navigateImage(-1)" title="รูปก่อนหน้า">❮</button>
-    <button class="img-nav-btn next" onclick="navigateImage(1)" title="รูปถัดไป">❯</button>
-
-    <div style="display: flex; justify-content: space-between; align-items:center; margin-bottom: 10px;">
-      <h3 style="margin:0;" id="editor-image-title">ดูรูปภาพ</h3>
-      <button onclick="closeImageEditor()" style="width:auto; padding: 4px 10px; background:#888;">X</button>
-    </div>
-    
-    <div class="canvas-wrapper" id="canvas-container">
-      <canvas id="editor-canvas"></canvas>
-    </div>
-    
-    <div class="editor-toolbar">
-      <div class="toolbar-row">
-        <!-- ปุ่มเปิด/ปิด เครื่องมือ -->
-        <button class="editor-btn" id="btn-mode-draw" onclick="toggleEditMode('draw')" style="background:#666;">✏️วาด</button>
-        <button class="editor-btn" id="btn-mode-blur" onclick="toggleEditMode('blur')" style="background:#666;">💧เบลอจุด</button>
-        <input type="color" id="editor-color" value="#ff0000" title="เลือกสีแปรง">
-        <label style="font-size: 12px;">ขนาดแปรง :
-          <input type="range" id="editor-brush-size" min="2" max="50" value="10" style="width: 70px; vertical-align:middle;">
-        </label>
-        <label style="font-size: 12px; margin-left:5px;">ความเบลอ :
-          <input type="range" id="blur-pixel-size" min="2" max="30" value="8" style="width: 70px; vertical-align:middle;">
-        </label>
+  <!-- MODAL : ดูรูป ขยายรูป และเครื่องมือแต่งรูป -->
+  <div id="image-editor-modal" class="modal">
+    <div class="modal-content image-editor-content">
+      <div style="display: flex; justify-content: space-between; align-items:center; margin-bottom: 10px;">
+        <h3 style="margin:0;">ดูรูป/แก้ไขรูป</h3>
+        <button onclick="closeImageEditor()" style="width:auto; padding: 4px 10px; background:#888;">X</button>
       </div>
-      <div class="toolbar-row">
-        <label style="font-size:12px;">เบลอทั้งรูป :
-          <input type="range" id="global-blur-slider" min="0" max="20" value="0" oninput="applyGlobalBlur(this.value)" style="width:80px; vertical-align:middle;">
-        </label>
-        <!-- เครื่องมือขยายรูป / หมุน / ย้อนกลับ -->
-        <button class="editor-btn" onclick="zoomImage(0.2)" title="ขยายรูป">🔍+</button>
-        <button class="editor-btn" onclick="zoomImage(-0.2)" title="ย่อรูป">🔍-</button>
-        <button class="editor-btn" onclick="rotateCanvas()"> 🔄 </button>
-        <button class="editor-btn" onclick="flipCanvas()"> ↔️ </button>
-        <button class="editor-btn" onclick="undoEditorStep()"> ↩️ </button>
+      <div class="canvas-wrapper" id="canvas-container">
+        <canvas id="editor-canvas"></canvas>
       </div>
-      <div class="toolbar-row" style="margin-top:8px;">
-        <button class="editor-btn" style="background: #28a745; flex:1;" onclick="copyEditorImage()">คัดลอกรูป</button>
-        <button class="editor-btn" style="background: #e74c3c; flex:1;" onclick="resetEditorCanvas()">ยกเลิกแก้ไข</button>
-        <button class="editor-btn" style="background: #0084ff; flex:1;" onclick="downloadEditorImage()">เซฟลงเครื่อง</button>
+      <div class="editor-toolbar">
+        <div class="toolbar-row">
+          <!-- ปุ่มเปิด/ปิด เครื่องมือ -->
+          <button class="editor-btn" id="btn-mode-draw" onclick="toggleEditMode('draw')" style="background:#666;">✏️วาด</button>
+          <button class="editor-btn" id="btn-mode-blur" onclick="toggleEditMode('blur')" style="background:#666;">💧เบลอจุด</button>
+          <input type="color" id="editor-color" value="#ff0000" title="เลือกสีแปรง">
+          <label style="font-size: 12px;">ขนาดแปรง :
+            <input type="range" id="editor-brush-size" min="2" max="50" value="10" style="width: 70px; vertical-align:middle;">
+          </label>
+          <label style="font-size: 12px; margin-left:5px;">ความเบลอ :
+            <input type="range" id="blur-pixel-size" min="2" max="30" value="8" style="width: 70px; vertical-align:middle;">
+          </label>
+        </div>
+        <div class="toolbar-row">
+          <label style="font-size:12px;">เบลอทั้งรูป :
+            <input type="range" id="global-blur-slider" min="0" max="20" value="0" oninput="applyGlobalBlur(this.value)" style="width:80px; vertical-align:middle;">
+          </label>
+          <!-- เครื่องมือขยายรูป / หมุน / ย้อนกลับ -->
+          <button class="editor-btn" onclick="zoomImage(0.2)" title="ขยายรูป">🔍+</button>
+          <button class="editor-btn" onclick="zoomImage(-0.2)" title="ย่อรูป">🔍-</button>
+          <button class="editor-btn" onclick="rotateCanvas()"> 🔄 </button>
+          <button class="editor-btn" onclick="flipCanvas()"> ↔️ </button>
+          <button class="editor-btn" onclick="undoEditorStep()"> ↩️ </button>
+        </div>
+        <div class="toolbar-row" style="margin-top:8px;">
+          <button class="editor-btn" style="background: #28a745; flex:1;" onclick="copyEditorImage()">คัดลอกรูป</button>
+          <!-- ปุ่มยกเลิกแก้ไข -->
+          <button class="editor-btn" style="background: #e74c3c; flex:1;" onclick="resetEditorCanvas()">ยกเลิกแก้ไข</button>
+          <button class="editor-btn" style="background: #0084ff; flex:1;" onclick="downloadEditorImage()">เซฟลงเครื่อง</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-
   <!-- Context Menu -->
   <div id="context-menu" style="display: none; position:fixed; z-index:9999; background: var(--bg-card, #fff); border-radius: 10px; padding:6px 0; min-width:150px; box-shadow:0 4px 16px rgba(0,0,0,0.2); border:1px solid var(--border-color, #eee);">
     <div id="ctx-reply" onclick="triggerReply()" style="padding:10px 16px; cursor:pointer; font-size:14px; display: flex; align-items:center; gap:8px;">ตอบกลับ</div>
     <div id="ctx-copy" onclick="copyMessageText()" style="padding: 10px 16px; cursor:pointer; font-size:14px; display: flex; align-items:center; gap:8px;">คัดลอกข้อความ</div>
     <div id="ctx-delete" onclick="triggerDelete()" style="padding:10px 16px; cursor:pointer; font-size:14px; color: #ff4d4d; display: flex; align-items:center; gap: 8px;">ลบข้อความ</div>
   </div>
-
-
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
@@ -898,8 +858,6 @@ body {
           });
       });
     }
-
-
     const firebaseConfig = {
       apiKey: "AIzaSyDbMaGhHmPTReldMPckDk0G_Vk2gqiRjs",
       authDomain: "chat01-bd6fd.firebaseapp.com",
@@ -909,14 +867,10 @@ body {
       messagingSenderId: "120948633141",
       appId: "1:120948633141:web:36ae2459dda98164094b7c"
     };
-
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const messaging = firebase.messaging();
     const DEFAULT_AVATAR = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-
-
     let currentUser = null;
     let activeFriend = null;
     let activeFriendData = null;
@@ -935,8 +889,6 @@ body {
     let selectedMsgData = null;
     let replyMsgData = null;
     let userStickers = {};
-
-
     const emojiList = [
       "😀","😃","😄","😁","😆","😅","😂","🤣","🥲","☺️",
       "😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗",
@@ -953,30 +905,22 @@ body {
       "🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘",
       "💝","💯"
     ];
-
-
     function formatTime(timestamp) {
       if (!timestamp) return '';
       const date = new Date(timestamp);
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
-
-
     function autoExpandTextarea(element) {
       element.style.height = '22px';
       const scrollH = element.scrollHeight;
       element.style.height = Math.min(scrollH, 120) + 'px';
     }
-
-
     function handleEnterKey(e) {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         sendMsg();
       }
     }
-
-
     function toggleEmojiPicker() {
       const panel = document.getElementById('picker-panel');
       if (panel.style.display === 'flex') {
@@ -987,16 +931,12 @@ body {
         renderStickerPicker();
       }
     }
-
-
     function switchPickerTab(tab) {
       document.getElementById('tab-emoji').classList.toggle('active', tab === 'emoji');
       document.getElementById('tab-sticker').classList.toggle('active', tab === 'sticker');
       document.getElementById('picker-emoji-view').style.display = tab === 'emoji' ? 'grid' : 'none';
       document.getElementById('picker-sticker-view').style.display = tab === 'sticker' ? 'flex' : 'none';
     }
-
-
     function renderEmojiPicker() {
       const container = document.getElementById('picker-emoji-view');
       container.innerHTML = "";
@@ -1013,8 +953,6 @@ body {
         container.appendChild(span);
       });
     }
-
-
     function renderStickerPicker() {
       const container = document.getElementById('picker-sticker-view');
       container.innerHTML = '';
@@ -1028,8 +966,6 @@ body {
         <input type="file" id="sticker-file-input" accept="image/*" style="display:none" onchange="uploadStickerFile(this)">
       `;
       container.appendChild(addBox);
-
-
       const grid = document.createElement('div');
       grid.className = 'sticker-custom-grid';
       const keys = Object.keys(userStickers);
@@ -1044,8 +980,6 @@ body {
           img.className = 'sticker-item';
           img.src = itemUrl;
           img.onclick = () => sendSticker(itemUrl);
-
-
           const delBtn = document.createElement('button');
           delBtn.className = 'sticker-del-btn';
           delBtn.innerText = 'x';
@@ -1053,8 +987,6 @@ body {
             e.stopPropagation();
             deleteSticker(key);
           };
-
-
           wrapper.appendChild(img);
           wrapper.appendChild(delBtn);
           grid.appendChild(wrapper);
@@ -1062,8 +994,6 @@ body {
       }
       container.appendChild(grid);
     }
-
-
     function listenUserStickers() {
       if (!currentUser) return;
       if (stickerListener) db.ref('stickers/' + currentUser.username).off('value', stickerListener);
@@ -1073,8 +1003,6 @@ body {
         if (panel && panel.style.display === 'flex') renderStickerPicker();
       });
     }
-
-
     function addStickerByUrl() {
       const urlInput = document.getElementById('sticker-url-input');
       const url = urlInput.value.trim();
@@ -1083,8 +1011,6 @@ body {
         urlInput.value = '';
       });
     }
-
-
     function uploadStickerFile(input) {
       const file = input.files[0];
       if (!file) return;
@@ -1102,22 +1028,18 @@ body {
           canvas.width = width; canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
-          const resizedBase64 = canvas.toDataURL('image/png', 0.9);
+          const resizedBase64 = canvas.toDataURL('image/png', 0.8);
           db.ref('stickers/' + currentUser.username).push(resizedBase64);
           input.value = '';
         }
       };
       reader.readAsDataURL(file);
     }
-
-
     function deleteSticker(key) {
       if (confirm('ต้องการลบสติกเกอร์นี้ใช่ไหมคะ?')) {
         db.ref('stickers/' + currentUser.username + '/' + key).remove();
       }
     }
-
-
     function sendSticker(stickerUrl) {
       if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
       const roomId = getRoomId(currentUser.username, activeFriend);
@@ -1130,16 +1052,12 @@ body {
       });
       document.getElementById('picker-panel').style.display = 'none';
     }
-
-
     function saveUserSession(userData) {
       const dataStr = JSON.stringify(userData);
       localStorage.setItem('mj_chat_user', dataStr);
       sessionStorage.setItem('mj_chat_user', dataStr);
       document.cookie = "mj_chat_user=" + encodeURIComponent(dataStr) + "; path=/; max-age=31536000; SameSite=Lax";
     }
-
-
     function getUserSession() {
       let saved = localStorage.getItem('mj_chat_user') || sessionStorage.getItem('mj_chat_user');
       if (!saved) {
@@ -1148,22 +1066,16 @@ body {
       }
       return saved ? JSON.parse(saved) : null;
     }
-
-
     function clearUserSession() {
       localStorage.removeItem('mj_chat_user');
       sessionStorage.removeItem('mj_chat_user');
       document.cookie = "mj_chat_user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     }
-
-
     function triggerVibrate() {
       if ("vibrate" in navigator) {
         try { navigator.vibrate(30); } catch(e) {}
       }
     }
-
-
     function toggleNotificationSetting(toggleElem) {
       if (toggleElem.checked) {
         if (!('Notification' in window)) {
@@ -1191,8 +1103,6 @@ body {
         alert('ปิดการแจ้งเตือนเรียบร้อยแล้วค่ะ');
       }
     }
-
-
     function initNotiToggleState() {
       const isEnabled = localStorage.getItem('mj_chat_noti_enabled') === 'true';
       const toggleElem = document.getElementById('noti-toggle');
@@ -1200,8 +1110,6 @@ body {
         toggleElem.checked = isEnabled && ('Notification' in window) && (Notification.permission === 'granted');
       }
     }
-
-
     function playNotificationSound() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1218,8 +1126,6 @@ body {
         osc.stop(ctx.currentTime + 0.15);
       } catch (e) {}
     }
-
-
     function checkAndRestoreLogin() {
       const savedUser = getUserSession();
       if (savedUser && savedUser.username) {
@@ -1227,8 +1133,6 @@ body {
         initChatScreen();
       }
     }
-
-
     function initPasteAndDragEvents() {
       document.addEventListener('paste', function(e) {
         if (!currentUser || !activeFriend) return;
@@ -1243,8 +1147,6 @@ body {
           }
         }
       });
-
-
       const dropZone = document.getElementById('drop-zone');
       if (dropZone) {
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -1261,8 +1163,6 @@ body {
           }
         });
       }
-
-
       document.addEventListener('keydown', function(e) {
         const previewModal = document.getElementById('image-preview-modal');
         if (previewModal && previewModal.style.display === 'flex') {
@@ -1276,8 +1176,6 @@ body {
         }
       });
     }
-
-
     window.onload = function() {
       setupResizer();
       initImageEditorEvents();
@@ -1291,8 +1189,6 @@ body {
       }
       checkAndRestoreLogin();
     };
-
-
     function toggleDarkMode() {
       const body = document.body;
       const btn = document.getElementById('dark-toggle-btn');
@@ -1301,13 +1197,9 @@ body {
       localStorage.setItem('mj_chat_dark', isDark);
       btn.innerText = isDark ? '☀️' : '🌙';
     }
-
-
     function applyTheme(color) {
       if (color) document.documentElement.style.setProperty('--theme-color', color);
     }
-
-
     function applyChatBackground(bgUrl, opacity = 0.5) {
       const bgLayer = document.getElementById('chat-bg-layer');
       if (!bgLayer) return;
@@ -1318,15 +1210,11 @@ body {
         bgLayer.style.backgroundImage = 'none';
       }
     }
-
-
     function updateOpacityPreview(val) {
       document.getElementById('bg-opacity-val').innerText = val + '%';
       const bgLayer = document.getElementById('chat-bg-layer');
       if (bgLayer) bgLayer.style.opacity = val / 100;
     }
-
-
     function toggleSidebar() {
       const sb = document.getElementById('sidebar');
       const resizer = document.getElementById('resizer');
@@ -1337,8 +1225,6 @@ body {
         if (window.innerWidth > 768) resizer.style.display = 'block';
       }
     }
-
-
     function setupResizer() {
       const resizer = document.getElementById('resizer');
       const sidebar = document.getElementById('sidebar');
@@ -1362,8 +1248,6 @@ body {
       };
       if (resizer) resizer.addEventListener('mousedown', mouseDownHandler);
     }
-
-
     function register() {
       const u = document.getElementById('u').value.trim().toLowerCase();
       const p = document.getElementById('p').value.trim();
@@ -1379,8 +1263,6 @@ body {
         }
       });
     }
-
-
     function login() {
       const u = document.getElementById('u').value.trim().toLowerCase();
       const p = document.getElementById('p').value.trim();
@@ -1398,8 +1280,6 @@ body {
         }
       });
     }
-
-
     function initChatScreen() {
       document.getElementById('auth-box').style.display = 'none';
       document.getElementById('chat-box').style.display = 'flex'; /* เปลี่ยนจาก block เป็น flex */
@@ -1423,8 +1303,6 @@ body {
       loadFriendsRealtime();
       listenUserStickers();
     }
-
-
     function processAvatarUpload(input) {
       const file = input.files[0];
       if (!file) return;
@@ -1446,8 +1324,6 @@ body {
       };
       reader.readAsDataURL(file);
     }
-
-
     function processBgUpload(input) {
       const file = input.files[0];
       if (!file) return;
@@ -1472,15 +1348,11 @@ body {
       };
       reader.readAsDataURL(file);
     }
-
-
     function clearBgImage() {
       tempBgBase64 = '';
       isBgCleared = true;
       applyChatBackground('');
     }
-
-
     function openProfileModal(isSelf = true) {
       const modal = document.getElementById('profile-modal');
       tempAvatarBase64 = null; tempBgBase64 = null; isBgCleared = false;
@@ -1504,14 +1376,10 @@ body {
         document.getElementById('save-prof-btn').style.display = 'none';
       }
     }
-
-
     function closeProfileModal() {
       document.getElementById('profile-modal').style.display = 'none';
       applyChatBackground(currentUser.bgImage, currentUser.bgOpacity);
     }
-
-
     function saveProfile() {
       const newName = document.getElementById('prof-name').value.trim();
       const newBio = document.getElementById('prof-bio').value.trim();
@@ -1536,8 +1404,6 @@ body {
         closeProfileModal();
       });
     }
-
-
     function viewFriendProfile() {
       if (!activeFriend) return;
       db.ref('users/' + activeFriend).get().then(snapshot => {
@@ -1547,14 +1413,10 @@ body {
         }
       });
     }
-
-
     function logout() {
       clearUserSession();
       location.reload();
     }
-
-
     function addFriend() {
       const fu = document.getElementById('friend-u').value.trim().toLowerCase();
       if (!fu) return;
@@ -1569,8 +1431,6 @@ body {
         }
       });
     }
-
-
     function loadFriendsRealtime() {
       db.ref('friends/' + currentUser.username).on('value', snapshot => {
         const el = document.getElementById('friend-list');
@@ -1602,8 +1462,6 @@ body {
         });
       });
     }
-
-
     function selectFriend(f, elem) {
       activeFriend = f;
       isFirstLoad = true;
@@ -1623,13 +1481,9 @@ body {
       listenMessages(f);
       listenTypingStatus();
     }
-
-
     function getRoomId(u1, u2) {
       return u1 < u2 ? `${u1}_${u2}` : `${u2}_${u1}`;
     }
-
-
     function handleTyping() {
       if (!activeFriend) return;
       const roomId = getRoomId(currentUser.username, activeFriend);
@@ -1639,8 +1493,6 @@ body {
         db.ref('typing/' + roomId + '/' + currentUser.username).set(false);
       }, 2000);
     }
-
-
     function listenTypingStatus() {
       if (!activeFriend) return;
       const roomId = getRoomId(currentUser.username, activeFriend);
@@ -1664,8 +1516,6 @@ body {
         }
       });
     }
-
-
     function showImagePreview(file) {
       if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
       pendingImageFile = file;
@@ -1676,22 +1526,16 @@ body {
       };
       reader.readAsDataURL(file);
     }
-
-
     function closeImagePreview() {
       pendingImageFile = null;
       document.getElementById('img-preview-target').src = '';
       document.getElementById('image-preview-modal').style.display = 'none';
     }
-
-
     function confirmSendImage() {
       if (!pendingImageFile) return;
       processAndSendImage(pendingImageFile);
       closeImagePreview();
     }
-
-
     function processAndSendImage(file) {
       if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
       const reader = new FileReader();
@@ -1708,7 +1552,7 @@ body {
           canvas.width = width; canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
-          const resizedBase64 = canvas.toDataURL('image/jpeg', 0.9);
+          const resizedBase64 = canvas.toDataURL('image/jpeg', 0.7);
           const roomId = getRoomId(currentUser.username, activeFriend);
           db.ref('chats/' + roomId).push({
             sender: currentUser.username,
@@ -1721,8 +1565,6 @@ body {
       };
       reader.readAsDataURL(file);
     }
-
-
     function sendImage(input) {
       const file = input.files[0];
       if (file) {
@@ -1730,8 +1572,6 @@ body {
         input.value = '';
       }
     }
-
-
     function sendMsg() {
       const input = document.getElementById('msg-input');
       const val = input.value.trim();
@@ -1758,8 +1598,6 @@ body {
       cancelReply();
       document.getElementById('picker-panel').style.display = 'none';
     }
-
-
     function markMessagesAsRead(roomId) {
       db.ref('chats/' + roomId).once('value', snapshot => {
         const data = snapshot.val();
@@ -1775,8 +1613,6 @@ body {
         }
       });
     }
-
-
     function listenMessages(targetFriend) {
       const currentChatFriend = targetFriend || activeFriend;
       if (!currentChatFriend) return;
@@ -1798,8 +1634,6 @@ body {
         const lastKey = msgKeys[msgKeys.length - 1];
         const lastMsg = data[lastKey];
         const isNotiEnabled = localStorage.getItem('mj_chat_noti_enabled') === 'true';
-
-
         if (!isFirstLoad && lastMsg && lastMsg.sender === activeFriend && isNotiEnabled) {
           const currentMsgId = lastKey;
           if (lastNotiId !== currentMsgId) {
@@ -1816,8 +1650,6 @@ body {
             }
           }
         }
-
-
         markMessagesAsRead(roomId);
         isFirstLoad = false;
         msgKeys.forEach(key => {
@@ -1857,8 +1689,6 @@ body {
         el.scrollTop = el.scrollHeight;
       });
     }
-
-
     function attachContextMenuToMsg(el, msgKey, msgSender, msgText, msgType) {
       el.addEventListener('contextmenu', (e) => {
         e.preventDefault();
@@ -1874,8 +1704,6 @@ body {
       el.addEventListener('touchend', () => clearTimeout(touchTimer));
       el.addEventListener('touchmove', () => clearTimeout(touchTimer));
     }
-
-
     function openContextMenu(x, y, msgKey, msgSender, msgText, msgType) {
       triggerVibrate();
       selectedMsgData = { key: msgKey, sender: msgSender, msg: msgText, type: msgType };
@@ -1898,14 +1726,10 @@ body {
         document.removeEventListener('click', closeMenu);
       });
     }
-
-
     function copyMessageText() {
       if (!selectedMsgData || selectedMsgData.type !== 'text') return;
       navigator.clipboard.writeText(selectedMsgData.msg).then(() => alert('คัดลอกข้อความแล้วค่ะ!'));
     }
-
-
     function triggerReply() {
       if (!selectedMsgData) return;
       replyMsgData = selectedMsgData;
@@ -1915,14 +1739,10 @@ body {
       document.getElementById('reply-preview-bar').style.display = 'flex';
       document.getElementById('msg-input').focus();
     }
-
-
     function cancelReply() {
       replyMsgData = null;
       document.getElementById('reply-preview-bar').style.display = 'none';
     }
-
-
     function triggerDelete() {
       if (!selectedMsgData) return;
       if (confirm('ต้องการลบข้อความนี้ใช่ไหมคะ?')) {
@@ -1930,8 +1750,6 @@ body {
         db.ref('chats/' + roomId + '/' + selectedMsgData.key).remove();
       }
     }
-
-
     /* CANVAS IMAGE EDITOR */
     let editorCanvas, editorCtx;
     let originalImage = new Image();
@@ -1941,8 +1759,6 @@ body {
     let currentRotation = 0;
     let isFlipped = false;
     let currentScale = 1;
-
-
     function initImageEditorEvents() {
       editorCanvas = document.getElementById('editor-canvas');
       editorCtx = editorCanvas.getContext('2d');
@@ -1950,8 +1766,6 @@ body {
       editorCanvas.addEventListener('mousemove', draw);
       editorCanvas.addEventListener('mouseup', stopDrawing);
       editorCanvas.addEventListener('mouseleave', stopDrawing);
-
-
       editorCanvas.addEventListener('touchstart', (e) => { 
         if (currentEditMode) e.preventDefault(); 
         startDrawing(e.touches[0]); 
@@ -1963,8 +1777,6 @@ body {
       }, { passive: false });
       
       editorCanvas.addEventListener('touchend', stopDrawing);
-
-
       const container = document.getElementById('canvas-container');
       if (container) {
         container.addEventListener('wheel', (e) => {
@@ -1974,8 +1786,6 @@ body {
         }, { passive: false });
       }
     }
-
-
     function openImageEditor(src) {
       const modal = document.getElementById('image-editor-modal');
       modal.style.display = 'flex';
@@ -1994,16 +1804,13 @@ body {
         saveCanvasState();
       };
     }
-
-
     function closeImageEditor() {
       document.getElementById('image-editor-modal').style.display = 'none';
     }
-
-
     function resetCanvasDimensions() {
-      const maxW = Math.min(window.innerWidth * 0.85, 800);
-      const maxH = Math.min(window.innerHeight * 0.55, 600);
+      const container = document.getElementById('canvas-container');
+      const maxW = container.clientWidth - 20;
+      const maxH = container.clientHeight - 20;
       let w = originalImage.width;
       let h = originalImage.height;
       const ratio = Math.min(maxW / w, maxH / h);
@@ -2011,22 +1818,16 @@ body {
       editorCanvas.height = h * ratio;
       redrawCanvas();
     }
-
-
     function saveCanvasState() {
       if (canvasHistory.length > 10) canvasHistory.shift();
       canvasHistory.push(editorCtx.getImageData(0, 0, editorCanvas.width, editorCanvas.height));
     }
-
-
     function undoEditorStep() {
       if (canvasHistory.length > 1) {
         canvasHistory.pop();
         editorCtx.putImageData(canvasHistory[canvasHistory.length - 1], 0, 0);
       }
     }
-
-
     function redrawCanvas() {
       editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height);
       editorCtx.save();
@@ -2036,16 +1837,12 @@ body {
       editorCtx.drawImage(originalImage, -editorCanvas.width / 2, -editorCanvas.height / 2, editorCanvas.width, editorCanvas.height);
       editorCtx.restore();
     }
-
-
     function zoomImage(amount) {
       currentScale += amount;
       if (currentScale < 0.5) currentScale = 0.5;
       if (currentScale > 4) currentScale = 4;
       redrawCanvas();
     }
-
-
     function toggleEditMode(mode) {
       if (currentEditMode === mode) {
         currentEditMode = null;
@@ -2054,8 +1851,6 @@ body {
       }
       updateToolButtonsUI();
     }
-
-
     function updateToolButtonsUI() {
       const drawBtn = document.getElementById('btn-mode-draw');
       const blurBtn = document.getElementById('btn-mode-blur');
@@ -2067,8 +1862,6 @@ body {
         editorCanvas.style.cursor = currentEditMode ? 'crosshair' : 'default';
       }
     }
-
-
     function getCanvasCoords(e) {
       const rect = editorCanvas.getBoundingClientRect();
       return {
@@ -2076,8 +1869,6 @@ body {
         y: e.clientY - rect.top
       };
     }
-
-
     function startDrawing(e) {
       if (!currentEditMode) return;
       isDrawing = true;
@@ -2085,8 +1876,6 @@ body {
       editorCtx.beginPath();
       editorCtx.moveTo(coords.x, coords.y);
     }
-
-
     function draw(e) {
       if (!isDrawing || !currentEditMode) return;
       const coords = getCanvasCoords(e);
@@ -2103,8 +1892,6 @@ body {
         applyPixelateArea(coords.x, coords.y, size * 2);
       }
     }
-
-
     function stopDrawing() {
       if (isDrawing) {
         isDrawing = false;
@@ -2112,8 +1899,6 @@ body {
         saveCanvasState();
       }
     }
-
-
     function applyPixelateArea(x, y, size) {
       const sampleSize = parseInt(document.getElementById('blur-pixel-size').value) || 8;
       const startX = Math.max(0, x - size / 2);
@@ -2137,8 +1922,6 @@ body {
       }
       editorCtx.putImageData(imgData, startX, startY);
     }
-
-
     function applyGlobalBlur(val) {
       redrawCanvas();
       if (val > 0) {
@@ -2147,22 +1930,16 @@ body {
         editorCtx.filter = 'none';
       }
     }
-
-
     function rotateCanvas() {
       currentRotation = (currentRotation + 90) % 360;
       redrawCanvas();
       saveCanvasState();
     }
-
-
     function flipCanvas() {
       isFlipped = !isFlipped;
       redrawCanvas();
       saveCanvasState();
     }
-
-
     function resetEditorCanvas() {
       currentRotation = 0;
       isFlipped = false;
@@ -2173,16 +1950,12 @@ body {
       redrawCanvas();
       saveCanvasState();
     }
-
-
     function downloadEditorImage() {
       const link = document.createElement('a');
       link.download = 'mj-edited-image.jpg';
       link.href = editorCanvas.toDataURL('image/jpeg', 0.9);
       link.click();
     }
-
-
     async function copyEditorImage() {
       try {
         editorCanvas.toBlob(async (blob) => {
@@ -2193,24 +1966,16 @@ body {
         alert('คัดลอกไม่สำเร็จ (เบราว์เซอร์ไม่รองรับค่ะ)');
       }
     }
-
-
     // ตัวแปรสำหรับระบบ เลื่อนไปยังข้อความที่ค้นพบ (Scroll to search result)
 let currentHighlightIndex = -1;
 let matchedElements = [];
-
-
 function searchChatMessages() {
   const keyword = document.getElementById('chatSearchInput').value;
   const messages = document.querySelectorAll('.msg:not(.is-sticker):not(.is-image) > div:not(.msg-meta-box)'); 
   const countDisplay = document.getElementById('searchResultCount');
-
-
   let totalFound = 0;
   matchedElements = [];
   currentHighlightIndex = -1;
-
-
   messages.forEach(msg => {
     // 1. ล้างไฮไลต์เก่าออก
     if (msg.dataset.originalText !== undefined) {
@@ -2218,31 +1983,21 @@ function searchChatMessages() {
     } else {
       msg.dataset.originalText = msg.innerHTML;
     }
-
-
     // 2. ค้นหาและทำไฮไลต์
     if (keyword.trim() !== '') {
       const original = msg.dataset.originalText;
-
-
       if (original.includes(keyword)) {
         // เปลี่ยนคำที่เจอให้มีคลาสไฮไลต์
         const highlighted = original.split(keyword).join(`<mark class="chat-highlight">${keyword}</mark>`);
         msg.innerHTML = highlighted;
-
-
         // ดึง element <mark> ทุกตัวในข้อความนี้เก็บไว้ในคลัง
         const marks = msg.querySelectorAll('.chat-highlight');
         marks.forEach(mark => matchedElements.push(mark));
-
-
         const matchesCount = original.split(keyword).length - 1;
         totalFound += matchesCount;
       }
     }
   });
-
-
   // 3. แสดงจำนวนและโฟกัสไปที่ข้อความแรกทันทีที่เจอ
   if (keyword.trim() !== '' && totalFound > 0) {
     currentHighlightIndex = 0;
@@ -2254,50 +2009,34 @@ function searchChatMessages() {
     countDisplay.innerText = '';
   }
 }
-
-
 // ฟังก์ชันเลื่อนหน้าจอไปยังตำแหน่งข้อความที่เลือก
 function focusHighlightedMessage(index) {
   if (matchedElements.length === 0 || index < 0 || index >= matchedElements.length) return;
-
-
   // เอาเน้นสีส้มออกจากอันเดิมก่อน
   matchedElements.forEach(el => el.classList.remove('active-search-highlight'));
-
-
   // ไฮไลต์สีส้มให้อันปัจจุบันที่กำลังดูอยู่
   const activeEl = matchedElements[index];
   activeEl.classList.add('active-search-highlight');
-
-
   // เลื่อนหน้าจอไปหาข้อความแบบนุ่มนวล (Smooth Scroll)
   activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-
   // อัปเดตตัวเลขบอกตำแหน่ง เช่น (1/5)
   const countDisplay = document.getElementById('searchResultCount');
   if (countDisplay) {
     countDisplay.innerText = `${index + 1}/${matchedElements.length}`;
   }
 }
-
-
 // ฟังก์ชันเลื่อนไปข้อความถัดไป (Next)
 function nextSearchResult() {
   if (matchedElements.length === 0) return;
   currentHighlightIndex = (currentHighlightIndex + 1) % matchedElements.length;
   focusHighlightedMessage(currentHighlightIndex);
 }
-
-
 // ฟังก์ชันเลื่อนย้อนกลับ (Previous)
 function prevSearchResult() {
   if (matchedElements.length === 0) return;
   currentHighlightIndex = (currentHighlightIndex - 1 + matchedElements.length) % matchedElements.length;
   focusHighlightedMessage(currentHighlightIndex);
 }
-
-
 // เพิ่ม Event Listener ให้กด Enter หรือปุ่ม ลูกศรขึ้น-ลง บนคีย์บอร์ดในช่องค้นหาได้
 document.getElementById('chatSearchInput')?.addEventListener('keydown', function(e) {
   if (e.key === 'Enter' || e.key === 'ArrowDown') {
@@ -2308,8 +2047,6 @@ document.getElementById('chatSearchInput')?.addEventListener('keydown', function
     prevSearchResult(); // กด ลูกศรขึ้น = ย้อนกลับข้อความก่อนหน้า
   }
 });
-
-
   // ดักจับการคลิกกล่องอ้างอิง/ตอบกลับ เพื่อวาร์ปไปยังข้อความต้นฉบับ
 document.addEventListener('click', function(e) {
   // หา element กล่องตอบกลับ
@@ -2318,18 +2055,12 @@ document.addEventListener('click', function(e) {
   if (replyBox) {
     // ดึง ID ข้อความต้นฉบับจาก attribute
     const targetId = replyBox.getAttribute('data-reply-id') || replyBox.dataset.replyId;
-
-
     if (targetId) {
       // หาตัวกล่องข้อความต้นฉบับในหน้าแชท (ค้นหาจาก id หรือ data-msg-id)
       const targetMessage = document.getElementById(targetId) || document.querySelector(`[data-msg-id="${targetId}"]`);
-
-
       if (targetMessage) {
         // เลื่อนจอไปหาข้อความต้นฉบับแบบนุ่มนวล
         targetMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-
         // กะพริบเน้นข้อความให้เห็นชัดๆ
         targetMessage.classList.add('highlight-target-msg');
         setTimeout(() => {
@@ -2338,91 +2069,6 @@ document.addEventListener('click', function(e) {
       } else {
         console.log('หาข้อความต้นฉบับไม่เจอ ID:', targetId);
       }
-    }
-  }
-});
-    // ตัวแปรสำหรับระบบคลังรูปภาพในแชท (เลื่อนดูรูป)
-let currentChatImages = [];
-let currentImageIndex = -1;
-
-// ปรับปรุงฟังก์ชันฟังข้อความ ให้เก็บสะสม URL รูปภาพทั้งหมดในห้องแชทไว้
-// (ตรงนี้จะถูกดึงอัตโนมัติเมื่อรูปในแชทแสดงผล)
-function updateChatImagesList() {
-  currentChatImages = [];
-  const imgElems = document.querySelectorAll('.msg.is-image img.chat-img');
-  imgElems.forEach((img, idx) => {
-    currentChatImages.push(img.src);
-    // ผูก index รูปภาพไว้กับตัวรูป
-    img.dataset.imgIndex = idx;
-  });
-}
-
-// ฟังก์ชันเปิดดูรูปภาพเต็มจอ (อัปเดตใหม่ให้รู้ตำแหน่ง index รูป)
-function openImageEditor(src) {
-  updateChatImagesList();
-  currentImageIndex = currentChatImages.indexOf(src);
-  if (currentImageIndex === -1) {
-    currentChatImages = [src];
-    currentImageIndex = 0;
-  }
-  
-  loadImageToEditor(src);
-}
-
-// ฟังก์ชันโหลดรูปเข้า Editor Canvas
-function loadImageToEditor(src) {
-  const modal = document.getElementById('image-editor-modal');
-  modal.style.display = 'flex';
-  
-  // แสดงตำแหน่งรูป เช่น ( 2 / 5 )
-  const titleEl = document.getElementById('editor-image-title');
-  if (titleEl && currentChatImages.length > 1) {
-    titleEl.innerText = `ดูรูปภาพ (${currentImageIndex + 1} / ${currentChatImages.length})`;
-  } else if (titleEl) {
-    titleEl.innerText = 'ดูรูปภาพ';
-  }
-
-  originalImage = new Image();
-  originalImage.crossOrigin = 'anonymous';
-  originalImage.src = src;
-  originalImage.onload = function() {
-    currentRotation = 0;
-    isFlipped = false;
-    currentScale = 1;
-    currentEditMode = null;
-    updateToolButtonsUI();
-    canvasHistory = [];
-    document.getElementById('global-blur-slider').value = 0;
-    resetCanvasDimensions();
-    saveCanvasState();
-  };
-}
-
-// ฟังก์ชันกดปุ่มเลื่อนรูป ซ้าย (-1) / ขวา (+1)
-function navigateImage(direction) {
-  if (currentChatImages.length <= 1) return;
-  
-  currentImageIndex += direction;
-  // วนลูปรูปภาพ (ถ้านิ้วปัดเกินรูปสุดท้ายให้วนกลับมารูปแรก)
-  if (currentImageIndex < 0) {
-    currentImageIndex = currentChatImages.length - 1;
-  } else if (currentImageIndex >= currentChatImages.length) {
-    currentImageIndex = 0;
-  }
-  
-  loadImageToEditor(currentChatImages[currentImageIndex]);
-}
-
-// เพิ่มการกดปุ่มคีย์บอร์ด ◄ และ ► เพื่อเลื่อนดูรูปภาพได้ด้วย
-document.addEventListener('keydown', function(e) {
-  const editorModal = document.getElementById('image-editor-modal');
-  if (editorModal && editorModal.style.display === 'flex') {
-    if (e.key === 'ArrowLeft') {
-      navigateImage(-1); // ปุ่มลูกศรซ้าย = รูปก่อนหน้า
-    } else if (e.key === 'ArrowRight') {
-      navigateImage(1);  // ปุ่มลูกศรขวา = รูปถัดไป
-    } else if (e.key === 'Escape') {
-      closeImageEditor(); // กด ESC เพื่อปิดหน้าต่างดูรูป
     }
   }
 });
