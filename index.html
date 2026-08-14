@@ -72,29 +72,24 @@
       margin: 100px auto 0;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
+    /* 1. คลาสครอบทั้งหมด: ล็อคให้เต็มจอ และเว้นระยะขอบบนหลบติ่งไอโฟนทีเดียวจบ */
     .chat-container {
       display: none;
       width: 100vw; 
-      height: 100dvh;
+      height: 100vh;
       background: var(--bg-card);
-      flex-direction: column; /* เรียงจากบนลงล่าง */
+      padding-top: 35px; /* <--- ตัวนี้แหละค่ะที่จะดันทุกอย่างลงมาจากขอบบนไอโฟนแบบพอดีๆ */
+     box-sizing: border-box;
     }
+    /* 2. แถบบนสุด: คืนค่าความสูงปกติ ไม่ต้องดันเพิ่มแล้ว */
     .chat-header {
       background: var(--theme-color);
       color: white;
-  
-      /* ดันขอบบนลงมาเพิ่มอีก ให้พ้นติ่งและ Status Bar ชัดๆ ค่ะ */
-      padding-top: max(45px, env(safe-area-inset-top)); 
-      padding-bottom: 12px;
-      padding-left: 15px;
-      padding-right: 15px;
-  
+      padding: 0 15px;
       display: flex; 
       justify-content: space-between; 
       align-items: center;
-  
-      height: auto;
-      min-height: 50px;
+      height: 50px; /* ความสูงแถบบนแบบกำลังสวย */
       transition: background 0.3s;
     }
     .avatar {
@@ -111,10 +106,10 @@
       background: #eee;
       border: 2px solid var(--theme-color);
     }
-   .chat-body {
+   /* 3. ส่วนเนื้อหาแชท: คำนวณความสูงใหม่ให้พอดีจอ */
+    .chat-body {
       display: flex;
-      flex: 1;
-      height: auto; /* ให้สูงพอดีพื้นที่เหลือ */
+      height: calc(100vh - 85px); /* (100vh หักลบ padding-top 35px + header 50px) */
       position: relative;
     }
     .chat-footer {
