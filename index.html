@@ -218,8 +218,8 @@
     }
     .msg img.chat-img {
       width: auto !important;
-      max-width: 260px !important;
-      max-height: 320px !important;
+      max-width: 480px !important;
+      max-height: 720px !important;
       height: auto !important;
       border-radius: 16px !important;
       object-fit: cover !important;
@@ -276,7 +276,7 @@
     button:active { opacity: 0.8; }
     .chat-target-header {
       padding: 4px 15px; /* <--- ของเดิมคือ 10px 15px ลองลดเหลือ 4px 15px */
-      height: 40px;      /* <--- เพิ่มความสูงคงที่ตรงนี้ได้เลย (เช่น 35px หรือ 40px) */
+      height: 45px;      /* <--- เพิ่มความสูงคงที่ตรงนี้ได้เลย (เช่น 35px หรือ 40px) */
       background: var(--bg-card);
       border-bottom: 1px solid var(--border-color);
       font-size: 14px; font-weight: bold; color: var(--text-color);
@@ -661,30 +661,30 @@
         <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="processAvatarUpload(this)">
       </div>
       <div style="text-align:left;">
-        <label style="font-size:12px; font-weight:bold;">ชื่อที่แสดง: </label>
+        <label style="font-size:12px; font-weight:bold;">ชื่อที่แสดง : </label>
         <input id="prof-name">
         <label style="font-size:12px; font-weight:bold; margin-top:10px; display:block;">Bio (คำอธิบายตัวเอง) : </label>
         <textarea id="prof-bio" rows="2" placeholder="เขียนอะไรสั้นๆ เกี่ยวกับตัวเอง..."></textarea>
         <div id="theme-selector-box">
-          <label style="font-size: 12px; font-weight:bold; margin-top:10px; display: block; ">สีธีมแอปโปรด: </label>
+          <label style="font-size: 12px; font-weight:bold; margin-top:10px; display: block; ">สีธีมแอปโปรด : </label>
           <div style="display: flex; gap:10px; margin-top: 5px;">
             <input type="color" id="prof-theme" value="#0084ff" style="height:40px; width:60px; padding:2px; cursor:pointer;">
             <span style="font-size:12px; opacity:0.7; align-self: center;">คลิกเลือกสีธีม</span>
           </div>
           <label style="font-size:12px; font-weight:bold; margin-top:10px; display: block; ">รูปพื้นหลังห้องแช็ต : </label>
           <div style="display: flex; gap: 5px; margin-top: 5px;">
-            <button class="toggle-btn" style="background: #0084ff; flex:1;" onclick="document.getElementById('bg-file-input').click()">เลือกรูปภาพ</button>
+            <button class="toggle-btn" style="background: #0084ff; flex:1;" onclick="document.getElementById('bg-file-input').click()">เลือกรูปภาพที่ต้องการใช้เป็นพื้นหลัง</button>
             <button class="toggle-btn" style="background: #e74c3c; width:auto;" onclick="clearBgImage()">x ลบรูป</button>
             <input type="file" id="bg-file-input" accept="image/*" style="display:none" onchange="processBgUpload(this)">
           </div>
           <div style="margin-top:12px;">
             <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight:bold;">
-              <span>ความจางพื้นหลัง: </span>
+              <span>ความจางพื้นหลัง : </span>
               <span id="bg-opacity-val">50%</span>
             </div>
             <input type="range" id="bg-opacity-slider" min="10" max="100" value="50" oninput="updateOpacityPreview(this.value)" style="padding:0; margin-top:4px;">
           </div>
-          <small id="bg-status-text" style="font-size:11px; opacity:0.7; display:block; margin-top:3px;">ใช้พื้นหลังเริ่มต้น</small>
+          <small id="bg-status-text" style="font-size:11px; opacity:0.7; display:block; margin-top:3px;">ใช้พื้นหลังค่าเริ่มต้น</small>
         </div>
       </div>
       <div style="display: flex; gap:10px; margin-top: 20px;">
@@ -726,23 +726,23 @@
           <button class="editor-btn" id="btn-mode-draw" onclick="toggleEditMode('draw')" style="background:#666;">✏️วาด</button>
           <button class="editor-btn" id="btn-mode-blur" onclick="toggleEditMode('blur')" style="background:#666;">💧เบลอจุด</button>
           <input type="color" id="editor-color" value="#ff0000" title="เลือกสีแปรง">
-          <label style="font-size: 12px;">ขนาดแปรง:
+          <label style="font-size: 12px;">ขนาดแปรง :
             <input type="range" id="editor-brush-size" min="2" max="50" value="10" style="width: 70px; vertical-align:middle;">
           </label>
-          <label style="font-size: 12px; margin-left:5px;">ความเบลอ:
+          <label style="font-size: 12px; margin-left:5px;">ความเบลอ :
             <input type="range" id="blur-pixel-size" min="2" max="30" value="8" style="width: 70px; vertical-align:middle;">
           </label>
         </div>
         <div class="toolbar-row">
-          <label style="font-size:12px;">เบลอทั้งรูป:
+          <label style="font-size:12px;">เบลอทั้งรูป :
             <input type="range" id="global-blur-slider" min="0" max="20" value="0" oninput="applyGlobalBlur(this.value)" style="width:80px; vertical-align:middle;">
           </label>
           <!-- เครื่องมือขยายรูป / หมุน / ย้อนกลับ -->
           <button class="editor-btn" onclick="zoomImage(0.2)" title="ขยายรูป">🔍+</button>
           <button class="editor-btn" onclick="zoomImage(-0.2)" title="ย่อรูป">🔍-</button>
-          <button class="editor-btn" onclick="rotateCanvas()">🔄หมุน</button>
-          <button class="editor-btn" onclick="flipCanvas()">↔️กลับด้าน</button>
-          <button class="editor-btn" onclick="undoEditorStep()">↩️ย้อนกลับ</button>
+          <button class="editor-btn" onclick="rotateCanvas()"> 🔄 </button>
+          <button class="editor-btn" onclick="flipCanvas()"> ↔️ </button>
+          <button class="editor-btn" onclick="undoEditorStep()"> ↩️ </button>
         </div>
         <div class="toolbar-row" style="margin-top:8px;">
           <button class="editor-btn" style="background: #28a745; flex:1;" onclick="copyEditorImage()">คัดลอกรูป</button>
