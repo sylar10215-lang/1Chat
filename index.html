@@ -2317,6 +2317,54 @@ document.getElementById('msg-list')?.addEventListener('click', (e) => {
         openEditorModal(e.target.src);
     }
 });
+    <style>
+/* บังคับเปิด/ซ่อน Modal ให้ถูกต้องตรงตาม CSS ของ MJ */
+#image-editor-modal {
+    display: none;
+}
+#image-editor-modal.active {
+    display: flex !important;
+}
+</style>
+
+<script>
+// 1. ดักจับการคลิกที่รูปภาพในช่องแช็ต
+document.addEventListener('click', function(e) {
+    // เช็คว่ากดโดนรูปภาพในแช็ตหรือไม่
+    if (e.target && e.target.classList.contains('chat-img')) {
+        const imgSrc = e.target.src;
+        if (imgSrc) {
+            // เรียกฟังก์ชันเปิด Modal แก้ไขรูปที่มีอยู่แล้วในโค้ดของ MJ
+            openImageEditor(imgSrc);
+        }
+    }
+});
+
+// 2. ปรับแต่งฟังก์ชันเปิดรูปเดิม ให้สั่งเปิด Modal ขึ้นมาแสดง
+const originalOpenImageEditor = window.openImageEditor;
+window.openImageEditor = function(src) {
+    if (typeof originalOpenImageEditor === 'function') {
+        originalOpenImageEditor(src);
+    }
+    const modal = document.getElementById('image-editor-modal');
+    if (modal) {
+        modal.classList.add('active');
+        modal.style.display = 'flex';
+    }
+};
+
+// 3. ปรับแต่งฟังก์ชันปิดรูป ให้สั่งซ่อน Modal
+const originalCloseImageEditor = window.closeImageEditor;
+window.closeImageEditor = function() {
+    if (typeof originalCloseImageEditor === 'function') {
+        originalCloseImageEditor();
+    }
+    const modal = document.getElementById('image-editor-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        modal.style.display = 'none';
+    }
+};
   </script>
 </body>
 </html>
