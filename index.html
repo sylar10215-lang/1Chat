@@ -46,267 +46,78 @@
       --msg-them-bg: #3a3b3c;
       --msg-them-text: #e4e6eb;
     }
-    /* จัดให้อยู่ตรงกลางจอ และใส่รูป/สีพื้นหลัง */
-body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #0f172a, #1e293b, #0284c7); /* โทนน้ำเงินเข้ม-ฟ้าสวยๆ */
-    font-family: 'Kanit', sans-serif, system-ui;
-}
-/* กล่อง Auth Box - สไตล์กระจกฝ้า */
-#auth-box {
-    background: rgba(255, 255, 255, 0.05); /* กล่องโปร่งแสง */
-    backdrop-filter: blur(16px);            /* เบลอฉากหลัง */
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 40px 30px;
-    width: 100%;
-    max-width: 360px; /* คุมไม่ให้กล่องกว้างเกินไป */
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* จัดระยะห่างระหว่างช่องกรอกแบบอัตโนมัติ */
-}
-/* หัวข้อ */
-#auth-box h2 {
-    color: #ffffff;
-    font-size: 22px;
-    text-align: center;
-    margin: 0 0 10px 0;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
-/* ช่องกรอกข้อมูล (Input) */
-#auth-box input {
-    width: 100%;
-    padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    color: #ffffff;
-    font-size: 14px;
-    outline: none;
-    box-sizing: border-box; /* กันไม่ให้ขนาดล้น */
-    transition: all 0.3s ease;
-}
-/* เอฟเฟกต์ตอนกดพิมพ์ที่ช่อง Input */
-#auth-box input:focus {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: #38bdf8; /* สีฟ้าเรืองแสง */
-    box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
-}
-#auth-box input::placeholder {
-    color: #94a3b8;
-}
-/* ปุ่มกด (Buttons) */
-#auth-box button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: bold;
-    color: #ffffff;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-/* ปุ่มเข้าสู่ระบบ (ปุ่มหลัก) */
-#auth-box button:first-of-type {
-    background: linear-gradient(135deg, #0284c7, #0ea5e9);
-    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
-}
-/* เอฟเฟกต์ตอนเอาเมาส์ชี้ปุ่ม */
-#auth-box button:hover {
-    transform: translateY(-2px); /* ลอยขึ้นนิดนึง */
-    opacity: 0.9;
-}
-#auth-box button:active {
-    transform: translateY(0);
-}
-    /* Telegram-Style Image Editor CSS */
-.editor-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100dvh;
-    background-color: rgba(0, 0, 0, 0.92);
-    z-index: 10000;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    user-select: none;
-}
-
-.editor-modal-overlay.hidden,
-.editor-sub-panel.hidden {
-    display: none !important;
-}
-
-/* Header Bar */
-.editor-header {
-    width: 100%;
-    height: 60px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 16px;
-    box-sizing: border-box;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
-}
-
-.editor-title {
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.editor-icon-btn {
-    background: none;
-    border: none;
-    color: #ffffff;
-    font-size: 20px;
-    cursor: pointer;
-    padding: 8px;
-    transition: opacity 0.2s;
-}
-
-.editor-text-btn {
-    background: #2AABEE; /* สีฟ้า Telegram */
-    border: none;
-    color: #ffffff;
-    padding: 8px 18px;
-    border-radius: 20px;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 14px;
-    transition: transform 0.1s, background-color 0.2s;
-}
-
-.editor-text-btn:active {
-    transform: scale(0.95);
-    background: #229ED9;
-}
-
-/* Canvas Workspace */
-.editor-workspace {
-    flex: 1;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    position: relative;
-    padding: 15px;
-    box-sizing: border-box;
-}
-
-#editor-canvas {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-    border-radius: 12px;
-    cursor: crosshair;
-}
-
-/* Sub Panels (Floating Toolbar แบบ Telegram) */
-.editor-sub-panel {
-    position: absolute;
-    bottom: 85px;
-    background: rgba(30, 30, 30, 0.85);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-radius: 30px;
-    padding: 8px 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    z-index: 10001;
-}
-
-/* Color Picker & Sliders */
-.color-picker-wrapper input[type="color"] {
-    -webkit-appearance: none;
-    border: 2px solid #ffffff;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    cursor: pointer;
-    background: none;
-}
-.color-picker-wrapper input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-.color-picker-wrapper input[type="color"]::-webkit-color-swatch { border: none; border-radius: 50%; }
-
-.slider-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #8e8e93;
-}
-
-.slider-wrapper input[type="range"] {
-    accent-color: #2AABEE;
-    cursor: pointer;
-}
-
-.editor-sub-btn {
-    background: rgba(255, 255, 255, 0.12);
-    border: none;
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 16px;
-    cursor: pointer;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-/* Bottom Bar */
-.editor-bottom-bar {
-    width: 100%;
-    height: 70px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    padding-bottom: env(safe-area-inset-bottom);
-}
-
-.editor-tab-btn {
-    background: none;
-    border: none;
-    color: #8e8e93;
-    font-size: 20px;
-    padding: 12px;
-    cursor: pointer;
-    border-radius: 50%;
-    transition: all 0.2s ease;
-}
-
-.editor-tab-btn:hover,
-.editor-tab-btn.active {
-    color: #2AABEE;
-    transform: scale(1.15);
-}
-    html, body {
-      margin: 0; 
+    body {
+      margin: 0;
       padding: 0;
-      width: 100vw; 
-      height: 100dvh; /* ใช้ความสูงหน้าจอแบบไดนามิกพอดีเป๊ะ */
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #0f172a, #1e293b, #0284c7);
+      font-family: 'Kanit', sans-serif, system-ui;
+    }
+    /* Auth Box */
+    #auth-box {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px 30px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    #auth-box h2 {
+      color: #ffffff;
+      font-size: 22px;
+      text-align: center;
+      margin: 0 0 10px 0;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    #auth-box input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      color: #ffffff;
+      font-size: 14px;
+      outline: none;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+    #auth-box input:focus {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #38bdf8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+    }
+    #auth-box input::placeholder { color: #94a3b8; }
+    #auth-box button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: bold;
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    #auth-box button:first-of-type {
+      background: linear-gradient(135deg, #0284c7, #0ea5e9);
+      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+    }
+    #auth-box button:hover { transform: translateY(-2px); opacity: 0.9; }
+    #auth-box button:active { transform: translateY(0); }
+
+    html, body {
+      margin: 0; padding: 0;
+      width: 100vw; height: 100dvh;
       overflow: hidden;
       background: var(--bg-main);
       color: var(--text-color);
@@ -328,17 +139,13 @@ body {
       margin: 100px auto 0;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    /* 1. คืนค่าตัวครอบหลัก ให้จัดเรียงแนวตั้งแบบถูกต้อง[cite: 1] */
     .chat-container {
       display: none;
       width: 100vw; 
       height: 100vh;
       background: var(--bg-card);
-      flex-direction: column; /* ล็อคให้บนกับล่างเรียงต่อกัน ไม่แยกซ้ายขวา[cite: 1] */
+      flex-direction: column;
     }
-    /* ==========================================
-   1. ค่ามาตรฐาน (สำหรับ คอมพิวเตอร์ / แอนดรอยด์)
-   ========================================== */
     .chat-header {
       background: var(--theme-color);
       color: white;
@@ -346,15 +153,12 @@ body {
       display: flex; 
       justify-content: space-between; 
       align-items: center;
-      height: 60px; /* ความสูงปกติบนคอม/แอนดรอยด์ */
-      margin-top: 0; /* ชิดขอบบนปกติ */
+      height: 60px;
+      margin-top: 0;
       flex-shrink: 0;
       transition: background 0.3s;
     }
-    /* ดันเฉพาะปุ่มข้างในให้ต่ำลงมาหลบติ่งไอโฟนนิดนึง */
-    .chat-header > div {
-      transform: translateY(10px); 
-    }
+    .chat-header > div { transform: translateY(10px); }
     .avatar {
       width: 38px; height: 38px;
       border-radius: 50%;
@@ -369,32 +173,21 @@ body {
       background: #eee;
       border: 2px solid var(--theme-color);
     }
-      /* 3. ส่วนเนื้อหาแชท คืนค่าให้กินพื้นที่ที่เหลือทั้งหมด[cite: 1] */
     .chat-body {
       display: flex;
       flex: 1;
-      height: calc(100vh - 60px); /* หักลบความสูงปกติ */
+      height: calc(100vh - 60px);
       position: relative;
       overflow: hidden;
     }
-    /* ==========================================
-   2. คำสั่งพิเศษ (วางต่อท้ายได้เลย) 
-   จะทำงานเฉพาะเมื่อเปิดใน iPhone / iPad เท่านั้น
-   ========================================== */
     @supports (-webkit-touch-callout: none) {
       @media all and (max-width: 768px) {
-        .chat-header {
-          height: 70px;     /* ขยายความสูงสำหรับไอโฟน */
-          margin-top: 45px; /* ดันลงมาหลบติ่งสำหรับไอโฟน */
-        }
-
-        .chat-body {
-          height: calc(100vh - 115px); /* หักลบระยะดันของไอโฟน */
-        }
+        .chat-header { height: 70px; margin-top: 45px; }
+        .chat-body { height: calc(100vh - 115px); }
       }
     }
     .chat-footer {
-      padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)) 10px; /* เซ็ตแนบชิดขอบพอดี */
+      padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)) 10px;
       background: var(--bg-card);
       border-top: 1px solid var(--border-color);
       flex-shrink: 0;
@@ -456,6 +249,7 @@ body {
       user-select: text; -webkit-user-select: text;
       font-size: 15px; line-height: 1.4;
       display: flex; flex-direction: column;
+      transition: background-color 0.3s ease;
     }
     .msg.is-sticker {
       background: transparent !important;
@@ -497,6 +291,21 @@ body {
     .msg.them .msg-meta-box { color: var(--text-sub) !important; }
     .me { background: var(--theme-color); color: white; transition: background 0.3s; }
     .them { background: var(--msg-them-bg); color: var(--msg-them-text); }
+    
+    .msg-reply-box {
+      background: rgba(0, 0, 0, 0.12);
+      border-left: 3px solid var(--theme-color, #0084ff);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      margin-bottom: 5px;
+      cursor: pointer;
+      opacity: 0.9;
+      transition: background 0.2s;
+    }
+    .msg-reply-box:hover { background: rgba(0, 0, 0, 0.22); }
+    .dark-mode .msg-reply-box { background: rgba(255, 255, 255, 0.15); }
+
     .friend-item {
       position: relative; padding: 10px; cursor: pointer;
       border-bottom: 1px solid var(--border-color);
@@ -530,8 +339,8 @@ body {
     }
     button:active { opacity: 0.8; }
     .chat-target-header {
-      padding: 4px 15px; /* <--- ของเดิมคือ 10px 15px ลองลดเหลือ 4px 15px */
-      height: 45px;      /* <--- เพิ่มความสูงคงที่ตรงนี้ได้เลย (เช่น 35px หรือ 40px) */
+      padding: 4px 15px;
+      height: 45px;
       background: var(--bg-card);
       border-bottom: 1px solid var(--border-color);
       font-size: 14px; font-weight: bold; color: var(--text-color);
@@ -548,7 +357,7 @@ body {
       align-items: flex-end; 
       gap: 8px;
       padding: 8px 12px; 
-      margin: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)) 12px; /* เว้นระยะขอบล่างให้พอดีขอบจอ */
+      margin: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)) 12px;
       background: var(--bg-card); 
       border: 1px solid var(--border-color);
       border-radius: 24px; 
@@ -563,7 +372,7 @@ body {
       color: var(--text-color); 
       font-size: 15px; 
       line-height: 1.35;
-      resize: none !important; /* ปิดปุ่มลูกศรยืดขยายมุมขวา */
+      resize: none !important;
       max-height: 120px; 
       min-height: 22px; 
       height: 22px;
@@ -658,151 +467,92 @@ body {
       .floating-input-bar { margin: 6px 8px 8px 8px; padding: 6px 10px; }
       .picker-panel { width: 290px; bottom: 65px; }
     }
-    /* ช่องค้นหาข้อความ */
-    .search-box {
+    .chat-highlight {
+      background-color: #ffeb3b;
+      color: #000;
+      border-radius: 2px;
+      padding: 0 2px;
+    }
+    .chat-highlight.active-search-highlight {
+      background-color: #ff9800;
+      color: #fff;
+      font-weight: bold;
+      outline: 2px solid #e65100;
+      transition: all 0.2s ease-in-out;
+    }
+    .chat-search-box {
       display: flex;
       align-items: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.15);
-      padding: 4px 10px;
+      background-color: #383838;
       border-radius: 20px;
+      padding: 4px 10px;
+      height: 36px;
+      box-sizing: border-box;
+      gap: 8px;
     }
-    .search-box input {
+    .chat-search-box input {
       background: transparent;
       border: none;
-      color: white;
       outline: none;
+      color: #fff;
       font-size: 13px;
-      width: 130px;
+      width: 80px;
     }
-    .search-box input::placeholder {
-      color: rgba(255, 255, 255, 0.7);
-    }
-    #searchResultCount {
-      font-size: 11px;
-      color: #ffd700; /* สีเหลืองแสดงจำนวนที่เจอ */
+    .search-count {
+      color: #ffeb3b;
+      font-size: 12px;
       font-weight: bold;
+      white-space: nowrap;
     }
-    /* สีไฮไลต์ข้อความที่ค้นหาเจอ (ตรงตัวเป๊ะๆ) */
-    mark.chat-highlight {
-      background-color: #f1c40f;
-      color: #000;
-      border-radius: 3px;
-      padding: 0 2px;
-      font-weight: bold;
+    .search-nav-btns {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 4px;
     }
-    /* ไฮไลต์คำค้นหาทั่วไป (สีเหลือง) */
-.chat-highlight {
-  background-color: #ffeb3b;
-  color: #000;
-  border-radius: 2px;
-  padding: 0 2px;
-}
-/* ไฮไลต์คำที่เรากำลังเลื่อนไปดูอยู่ (สีส้มเด่นๆ + เด้งนิดๆ) */
-.chat-highlight.active-search-highlight {
-  background-color: #ff9800;
-  color: #fff;
-  font-weight: bold;
-  outline: 2px solid #e65100;
-  transition: all 0.2s ease-in-out;
-}
-/* กล่องค้นหาหลัก - ความสูงและความมนเท่ากล่องแจ้งเตือน */
-.chat-search-box {
-  display: flex;
-  align-items: center;
-  background-color: #383838;
-  border-radius: 20px;
-  padding: 4px 10px;
-  height: 36px;
-  box-sizing: border-box;
-  gap: 8px;
-}
-/* ช่องพิมพ์ข้อความ */
-.chat-search-box input {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #fff;
-  font-size: 13px;
-  width: 80px;
-}
-/* ตัวเลขบอกตำแหน่ง เช่น 7/19 */
-.search-count {
-  color: #ffeb3b;
-  font-size: 12px;
-  font-weight: bold;
-  white-space: nowrap;
-}
-/* กลุ่มปุ่มกด - เปลี่ยนเป็นเรียงซ้าย-ขวา (flex-direction: row) */
-.search-nav-btns {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 4px;
-}
-/* ปุ่ม ▲ และ ▼ แบบใหญ่กดง่าย */
-.search-nav-btns button {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 50%;
-  color: #ddd;
-  font-size: 12px;       /* ปรับตัวอักษรปุ่มให้ใหญ่ขึ้น */
-  width: 24px;           /* ความกว้างปุ่มวงกลม */
-  height: 24px;          /* ความสูงปุ่มวงกลม */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
-  transition: all 0.2s ease;
-}
-/* โฮเวอร์แล้วปุ่มสว่างขึ้น */
-.search-nav-btns button:hover {
-  background: rgba(255, 255, 255, 0.25);
-  color: #fff;
-}
-/* เวลาคลิกปุ่ม ยุบลงนิดนึงเพิ่มฟีลลิ่งการกด */
-.search-nav-btns button:active {
-  transform: scale(0.9);
-}
-/* เอฟเฟกต์กะพริบเน้นข้อความต้นฉบับเมื่อวาร์ปไปหา */
-@keyframes highlightFlash {
-  0% { background-color: rgba(255, 152, 0, 0.6); }
-  50% { background-color: rgba(255, 152, 0, 0.3); }
-  100% { background-color: transparent; }
-}
-.highlight-target-msg {
-  animation: highlightFlash 1.5s ease-in-out;
-  border-radius: 8px;
-}
-/* กฎข้อที่ 1: ถ้าสั่งซ่อน (ติด hidden) ให้หายไปทันที */
-#editor-modal.hidden {
-    display: none !important;
-}
-
-/* กฎข้อที่ 2: ถ้าป้าย hidden ถูกถอดออก ให้เด้งขึ้นมาเต็มจอสไตล์ Telegram */
-#editor-modal {
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 9999; /* ลอยทับทุกอย่างบนหน้าจอ */
-    background-color: rgba(0, 0, 0, 0.9); /* พื้นหลังดำโปร่งแสง */
-}
+    .search-nav-btns button {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: 50%;
+      color: #ddd;
+      font-size: 12px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.2s ease;
+    }
+    .search-nav-btns button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
+    }
+    .search-nav-btns button:active { transform: scale(0.9); }
+    
+    @keyframes highlightFlash {
+      0% { background-color: rgba(255, 152, 0, 0.8); transform: scale(1.02); }
+      50% { background-color: rgba(255, 152, 0, 0.4); }
+      100% { background-color: transparent; transform: scale(1); }
+    }
+    .highlight-target-msg {
+      animation: highlightFlash 1.5s ease-in-out;
+      border-radius: 8px;
+    }
   </style>
 </head>
 <body>
-    <!-- Login/Register -->
-    <div id="auth-box" class="box">
-      <h2>1Chat</h2>
-      <input id="u" placeholder="Username (ไอดี)">
-      <input id="p" type="password" placeholder="Password">
-      <input id="n" placeholder="ชื่อเล่น (สำหรับสมัคร)">
-      <button onclick="login()">เข้าสู่ระบบ</button>
-      <button onclick="register()" style="background: linear-gradient(135deg, #22c55e, #16a34a);">สมัครสมาชิก</button>
-    </div>
+  <!-- Login/Register -->
+  <div id="auth-box" class="box">
+    <h2>1Chat</h2>
+    <input id="u" placeholder="Username (ไอดี)">
+    <input id="p" type="password" placeholder="Password">
+    <input id="n" placeholder="ชื่อเล่น (สำหรับสมัคร)">
+    <button onclick="login()">เข้าสู่ระบบ</button>
+    <button onclick="register()" style="background: linear-gradient(135deg, #22c55e, #16a34a);">สมัครสมาชิก</button>
+  </div>
+
   <!-- Chat UI -->
   <div id="chat-box" class="chat-container">
     <div class="chat-header">
@@ -850,13 +600,13 @@ body {
             <span id="target-text">เลือกเพื่อนเปิดห้องแช็ต</span>
           </div>
           <div class="chat-search-box">
-          <input type="text" id="chatSearchInput" placeholder="ค้นหา..." oninput="searchChatMessages()">
-          <span id="searchResultCount" class="search-count"></span>
-          <div class="search-nav-btns">
-            <button type="button" onclick="prevSearchResult()" title="ข้อความก่อนหน้า">▲</button>
-            <button type="button" onclick="nextSearchResult()" title="ข้อความถัดไป">▼</button>
+            <input type="text" id="chatSearchInput" placeholder="ค้นหา..." oninput="searchChatMessages()">
+            <span id="searchResultCount" class="search-count"></span>
+            <div class="search-nav-btns">
+              <button type="button" onclick="prevSearchResult()" title="ข้อความก่อนหน้า">▲</button>
+              <button type="button" onclick="nextSearchResult()" title="ข้อความถัดไป">▼</button>
+            </div>
           </div>
-        </div>
           <button id="view-friend-btn" class="toggle-btn" style="display:none; background: #0084ff;" onclick="viewFriendProfile()">โปรไฟล์</button>
         </div>
         <div class="messages-wrapper">
@@ -894,7 +644,8 @@ body {
       </div>
     </div>
   </div>
-  <!-- Modal หน้าต่างโปรไฟล์ -->
+
+  <!-- Modal ตั้งค่าโปรไฟล์ -->
   <div id="profile-modal" class="modal">
     <div class="modal-content">
       <h3 id="modal-title" style="margin-top:0;">ตั้งค่าโปรไฟล์</h3>
@@ -936,7 +687,8 @@ body {
       </div>
     </div>
   </div>
-  <!-- Modal ตัวอย่างรูปภาพส่งแช็ต -->
+
+  <!-- Modal ตัวอย่างรูปภาพก่อนส่ง -->
   <div id="image-preview-modal" class="modal">
     <div class="modal-content">
       <h3 style="margin-top:0;">ตัวอย่างรูปภาพ</h3>
@@ -949,54 +701,55 @@ body {
       </div>
     </div>
   </div>
-  <!-- Telegram-Style Image Editor Modal -->
-<div id="image-editor-modal" class="editor-modal-overlay hidden">
-    <!-- Top Bar Header -->
-    <div class="editor-header">
-        <button id="editor-close-btn" class="editor-icon-btn" title="ปิด"><i class="fas fa-times"></i></button>
-        <span class="editor-title">แก้ไขรูปภาพ</span>
-        <button id="editor-save-btn" class="editor-text-btn"><i class="fas fa-check"></i> เสร็จสิ้น</button>
-    </div>
 
-    <!-- Main Workspace (Canvas Container) -->
-    <div class="editor-workspace">
+  <!-- Modal เครื่องมือแต่งรูป -->
+  <div id="image-editor-modal" class="modal">
+    <div class="modal-content image-editor-content">
+      <div style="display: flex; justify-content: space-between; align-items:center; margin-bottom: 10px;">
+        <h3 style="margin:0;">ดูรูป/แก้ไขรูป</h3>
+        <button onclick="closeImageEditor()" style="width:auto; padding: 4px 10px; background:#888;">X</button>
+      </div>
+      <div class="canvas-wrapper" id="canvas-container">
         <canvas id="editor-canvas"></canvas>
-    </div>
-
-    <!-- Sub Panels (แถบเครื่องมือย่อยแบบลอย) -->
-    <!-- แถบปรับแปรงวาด/ขนาดเบลอ -->
-    <div id="editor-brush-panel" class="editor-sub-panel">
-        <div class="color-picker-wrapper">
-            <input type="color" id="editor-color-picker" value="#ff0000">
+      </div>
+      <div class="editor-toolbar">
+        <div class="toolbar-row">
+          <button class="editor-btn" id="btn-mode-draw" onclick="toggleEditMode('draw')" style="background:#666;">✏️วาด</button>
+          <button class="editor-btn" id="btn-mode-blur" onclick="toggleEditMode('blur')" style="background:#666;">💧เบลอจุด</button>
+          <input type="color" id="editor-color" value="#ff0000" title="เลือกสีแปรง">
+          <label style="font-size: 12px;">ขนาดแปรง :
+            <input type="range" id="editor-brush-size" min="2" max="50" value="10" style="width: 70px; vertical-align:middle;">
+          </label>
+          <label style="font-size: 12px; margin-left:5px;">ความเบลอ :
+            <input type="range" id="blur-pixel-size" min="2" max="30" value="8" style="width: 70px; vertical-align:middle;">
+          </label>
         </div>
-        <div class="slider-wrapper">
-            <i class="fas fa-circle" style="font-size: 8px;"></i>
-            <input type="range" id="editor-brush-size" min="2" max="50" value="10">
-            <i class="fas fa-circle" style="font-size: 18px;"></i>
+        <div class="toolbar-row">
+          <label style="font-size:12px;">เบลอทั้งรูป :
+            <input type="range" id="global-blur-slider" min="0" max="20" value="0" oninput="applyGlobalBlur(this.value)" style="width:80px; vertical-align:middle;">
+          </label>
+          <button class="editor-btn" onclick="zoomImage(0.2)" title="ขยายรูป">🔍+</button>
+          <button class="editor-btn" onclick="zoomImage(-0.2)" title="ย่อรูป">🔍-</button>
+          <button class="editor-btn" onclick="rotateCanvas()"> 🔄 </button>
+          <button class="editor-btn" onclick="flipCanvas()"> ↔️ </button>
+          <button class="editor-btn" onclick="undoEditorStep()"> ↩️ </button>
         </div>
+        <div class="toolbar-row" style="margin-top:8px;">
+          <button class="editor-btn" style="background: #28a745; flex:1;" onclick="copyEditorImage()">คัดลอกรูป</button>
+          <button class="editor-btn" style="background: #e74c3c; flex:1;" onclick="resetEditorCanvas()">ยกเลิกแก้ไข</button>
+          <button class="editor-btn" style="background: #0084ff; flex:1;" onclick="downloadEditorImage()">เซฟลงเครื่อง</button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- แถบหมุน / กลับด้าน -->
-    <div id="editor-transform-panel" class="editor-sub-panel hidden">
-        <button id="editor-rotate-btn" class="editor-sub-btn"><i class="fas fa-redo"></i> หมุน 90°</button>
-        <button id="editor-flip-btn" class="editor-sub-btn"><i class="fas fa-exchange-alt"></i> กลับซ้าย-ขวา</button>
-    </div>
-
-    <!-- Bottom Main Navigation Toolbar (สไตล์ Telegram) -->
-    <div class="editor-bottom-bar">
-        <button id="tool-transform-btn" class="editor-tab-btn" title="หมุน/กลับด้าน"><i class="fas fa-crop-alt"></i></button>
-        <button id="tool-draw-btn" class="editor-tab-btn active" title="วาดภาพ"><i class="fas fa-pen"></i></button>
-        <button id="tool-blur-btn" class="editor-tab-btn" title="เบลอภาพ"><i class="fas fa-braille"></i></button>
-        <button id="editor-undo-btn" class="editor-tab-btn" title="ย้อนกลับ"><i class="fas fa-undo"></i></button>
-        <button id="editor-copy-btn" class="editor-tab-btn" title="คัดลอกรูป"><i class="fas fa-copy"></i></button>
-    </div>
-</div>
   <!-- Context Menu -->
   <div id="context-menu" style="display: none; position:fixed; z-index:9999; background: var(--bg-card, #fff); border-radius: 10px; padding:6px 0; min-width:150px; box-shadow:0 4px 16px rgba(0,0,0,0.2); border:1px solid var(--border-color, #eee);">
     <div id="ctx-reply" onclick="triggerReply()" style="padding:10px 16px; cursor:pointer; font-size:14px; display: flex; align-items:center; gap:8px;">ตอบกลับ</div>
     <div id="ctx-copy" onclick="copyMessageText()" style="padding: 10px 16px; cursor:pointer; font-size:14px; display: flex; align-items:center; gap:8px;">คัดลอกข้อความ</div>
     <div id="ctx-delete" onclick="triggerDelete()" style="padding:10px 16px; cursor:pointer; font-size:14px; color: #ff4d4d; display: flex; align-items:center; gap: 8px;">ลบข้อความ</div>
   </div>
+
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
@@ -1009,6 +762,7 @@ body {
           });
       });
     }
+
     const firebaseConfig = {
       apiKey: "AIzaSyDbMaGhHmPTReldMPckDk0G_Vk2gqiRjs",
       authDomain: "chat01-bd6fd.firebaseapp.com",
@@ -1018,6 +772,7 @@ body {
       messagingSenderId: "120948633141",
       appId: "1:120948633141:web:36ae2459dda98164094b7c"
     };
+
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const messaging = firebase.messaging();
@@ -1058,22 +813,26 @@ body {
       "🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘",
       "💝","💯"
     ];
+
     function formatTime(timestamp) {
       if (!timestamp) return '';
       const date = new Date(timestamp);
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
+
     function autoExpandTextarea(element) {
       element.style.height = '22px';
       const scrollH = element.scrollHeight;
       element.style.height = Math.min(scrollH, 120) + 'px';
     }
+
     function handleEnterKey(e) {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         sendMsg();
       }
     }
+
     function toggleEmojiPicker() {
       const panel = document.getElementById('picker-panel');
       if (panel.style.display === 'flex') {
@@ -1084,12 +843,14 @@ body {
         renderStickerPicker();
       }
     }
+
     function switchPickerTab(tab) {
       document.getElementById('tab-emoji').classList.toggle('active', tab === 'emoji');
       document.getElementById('tab-sticker').classList.toggle('active', tab === 'sticker');
       document.getElementById('picker-emoji-view').style.display = tab === 'emoji' ? 'grid' : 'none';
       document.getElementById('picker-sticker-view').style.display = tab === 'sticker' ? 'flex' : 'none';
     }
+
     function renderEmojiPicker() {
       const container = document.getElementById('picker-emoji-view');
       container.innerHTML = "";
@@ -1106,6 +867,7 @@ body {
         container.appendChild(span);
       });
     }
+
     function renderStickerPicker() {
       const container = document.getElementById('picker-sticker-view');
       container.innerHTML = '';
@@ -1134,7 +896,6 @@ body {
           img.className = 'sticker-item';
           img.src = itemUrl;
           img.onclick = () => sendSticker(itemUrl);
-
           const delBtn = document.createElement('button');
           delBtn.className = 'sticker-del-btn';
           delBtn.innerText = 'x';
@@ -1149,6 +910,7 @@ body {
       }
       container.appendChild(grid);
     }
+
     function listenUserStickers() {
       if (!currentUser) return;
       if (stickerListener) db.ref('stickers/' + currentUser.username).off('value', stickerListener);
@@ -1158,6 +920,7 @@ body {
         if (panel && panel.style.display === 'flex') renderStickerPicker();
       });
     }
+
     function addStickerByUrl() {
       const urlInput = document.getElementById('sticker-url-input');
       const url = urlInput.value.trim();
@@ -1166,6 +929,7 @@ body {
         urlInput.value = '';
       });
     }
+
     function uploadStickerFile(input) {
       const file = input.files[0];
       if (!file) return;
@@ -1190,11 +954,13 @@ body {
       };
       reader.readAsDataURL(file);
     }
+
     function deleteSticker(key) {
       if (confirm('ต้องการลบสติกเกอร์นี้ใช่ไหมคะ?')) {
         db.ref('stickers/' + currentUser.username + '/' + key).remove();
       }
     }
+
     function sendSticker(stickerUrl) {
       if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
       const roomId = getRoomId(currentUser.username, activeFriend);
@@ -1207,12 +973,14 @@ body {
       });
       document.getElementById('picker-panel').style.display = 'none';
     }
+
     function saveUserSession(userData) {
       const dataStr = JSON.stringify(userData);
       localStorage.setItem('mj_chat_user', dataStr);
       sessionStorage.setItem('mj_chat_user', dataStr);
       document.cookie = "mj_chat_user=" + encodeURIComponent(dataStr) + "; path=/; max-age=31536000; SameSite=Lax";
     }
+
     function getUserSession() {
       let saved = localStorage.getItem('mj_chat_user') || sessionStorage.getItem('mj_chat_user');
       if (!saved) {
@@ -1221,16 +989,19 @@ body {
       }
       return saved ? JSON.parse(saved) : null;
     }
+
     function clearUserSession() {
       localStorage.removeItem('mj_chat_user');
       sessionStorage.removeItem('mj_chat_user');
       document.cookie = "mj_chat_user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     }
+
     function triggerVibrate() {
       if ("vibrate" in navigator) {
         try { navigator.vibrate(30); } catch(e) {}
       }
     }
+
     function toggleNotificationSetting(toggleElem) {
       if (toggleElem.checked) {
         if (!('Notification' in window)) {
@@ -1258,6 +1029,7 @@ body {
         alert('ปิดการแจ้งเตือนเรียบร้อยแล้วค่ะ');
       }
     }
+
     function initNotiToggleState() {
       const isEnabled = localStorage.getItem('mj_chat_noti_enabled') === 'true';
       const toggleElem = document.getElementById('noti-toggle');
@@ -1265,6 +1037,7 @@ body {
         toggleElem.checked = isEnabled && ('Notification' in window) && (Notification.permission === 'granted');
       }
     }
+
     function playNotificationSound() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1281,6 +1054,7 @@ body {
         osc.stop(ctx.currentTime + 0.15);
       } catch (e) {}
     }
+
     function checkAndRestoreLogin() {
       const savedUser = getUserSession();
       if (savedUser && savedUser.username) {
@@ -1288,6 +1062,7 @@ body {
         initChatScreen();
       }
     }
+
     function initPasteAndDragEvents() {
       document.addEventListener('paste', function(e) {
         if (!currentUser || !activeFriend) return;
@@ -1302,6 +1077,7 @@ body {
           }
         }
       });
+
       const dropZone = document.getElementById('drop-zone');
       if (dropZone) {
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -1318,6 +1094,7 @@ body {
           }
         });
       }
+
       document.addEventListener('keydown', function(e) {
         const previewModal = document.getElementById('image-preview-modal');
         if (previewModal && previewModal.style.display === 'flex') {
@@ -1331,6 +1108,7 @@ body {
         }
       });
     }
+
     window.onload = function() {
       setupResizer();
       initImageEditorEvents();
@@ -1344,6 +1122,7 @@ body {
       }
       checkAndRestoreLogin();
     };
+
     function toggleDarkMode() {
       const body = document.body;
       const btn = document.getElementById('dark-toggle-btn');
@@ -1352,9 +1131,11 @@ body {
       localStorage.setItem('mj_chat_dark', isDark);
       btn.innerText = isDark ? '☀️' : '🌙';
     }
+
     function applyTheme(color) {
       if (color) document.documentElement.style.setProperty('--theme-color', color);
     }
+
     function applyChatBackground(bgUrl, opacity = 0.5) {
       const bgLayer = document.getElementById('chat-bg-layer');
       if (!bgLayer) return;
@@ -1365,11 +1146,13 @@ body {
         bgLayer.style.backgroundImage = 'none';
       }
     }
+
     function updateOpacityPreview(val) {
       document.getElementById('bg-opacity-val').innerText = val + '%';
       const bgLayer = document.getElementById('chat-bg-layer');
       if (bgLayer) bgLayer.style.opacity = val / 100;
     }
+
     function toggleSidebar() {
       const sb = document.getElementById('sidebar');
       const resizer = document.getElementById('resizer');
@@ -1380,299 +1163,497 @@ body {
         if (window.innerWidth > 768) resizer.style.display = 'block';
       }
     }
+
     function setupResizer() {
       const resizer = document.getElementById('resizer');
       const sidebar = document.getElementById('sidebar');
-      let x = 0, w = 0;
-      const mouseDownHandler = function(e) {
-        x = e.clientX;
-        w = sidebar.getBoundingClientRect().width;
+      let isResizing = false;
+
+      resizer.addEventListener('mousedown', (e) => {
+        isResizing = true;
         resizer.classList.add('resizing');
-        document.addEventListener('mousemove', mouseMoveHandler);
-        document.addEventListener('mouseup', mouseUpHandler);
-      };
-      const mouseMoveHandler = function(e) {
-        const dx = e.clientX - x;
-        const newW = w + dx;
-        if (newW >= 180 && newW <= 500) sidebar.style.width = `${newW}px`;
-      };
-      const mouseUpHandler = function() {
-        resizer.classList.remove('resizing');
-        document.removeEventListener('mousemove', mouseMoveHandler);
-        document.removeEventListener('mouseup', mouseUpHandler);
-      };
-      if (resizer) resizer.addEventListener('mousedown', mouseDownHandler);
-    }
-    function register() {
-      const u = document.getElementById('u').value.trim().toLowerCase();
-      const p = document.getElementById('p').value.trim();
-      const n = document.getElementById('n').value.trim();
-      if (!u || !p || !n) return alert('กรอกข้อมูลให้ครบค่ะ!');
-      db.ref('users/' + u).get().then(snapshot => {
-        if (snapshot.exists()) {
-          alert('User นี้มีคนใช้แล้วค่ะ MJ!');
-        } else {
-          db.ref('users/' + u).set({
-            password: p, name: n, bio: 'สวัสดี! ฉันใช้ MJ Chat App', theme: '#0084ff', avatar: DEFAULT_AVATAR, bgImage: '', bgOpacity: 0.5
-          }).then(() => alert('สมัครสมาชิกเรียบร้อย!'));
+        document.body.style.cursor = 'col-resize';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isResizing) return;
+        let newWidth = e.clientX;
+        if (newWidth >= 180 && newWidth <= 500) {
+          sidebar.style.width = newWidth + 'px';
+        }
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (isResizing) {
+          isResizing = false;
+          resizer.classList.remove('resizing');
+          document.body.style.cursor = 'default';
         }
       });
     }
+
+    // --- Auth Section ---
     function login() {
-      const u = document.getElementById('u').value.trim().toLowerCase();
+      const u = document.getElementById('u').value.trim();
       const p = document.getElementById('p').value.trim();
-      db.ref('users/' + u).get().then(snapshot => {
-        if (snapshot.exists() && snapshot.val().password === p) {
-          const userData = snapshot.val();
-          currentUser = {
-            username: u, name: userData.name, bio: userData.bio, theme: userData.theme || '#0084ff', avatar: userData.avatar || DEFAULT_AVATAR,
-            bgImage: userData.bgImage || '', bgOpacity: userData.bgOpacity !== undefined ? userData.bgOpacity : 0.5
-          };
+      if (!u || !p) return alert('กรอกไอดีกับรหัสผ่านก่อนค่ะ!');
+
+      db.ref('users/' + u).once('value').then(snapshot => {
+        const user = snapshot.val();
+        if (user && user.password === p) {
+          currentUser = { username: u, name: user.name, avatar: user.avatar || DEFAULT_AVATAR, theme: user.theme, bg: user.bg, bgOpacity: user.bgOpacity };
           saveUserSession(currentUser);
           initChatScreen();
         } else {
-          alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!');
+          alert('ไอดีหรือรหัสผ่านไม่ถูกต้องค่ะ');
         }
       });
     }
-    function initChatScreen() {
-      document.getElementById('auth-box').style.display = 'none';
-      document.getElementById('chat-box').style.display = 'flex'; /* เปลี่ยนจาก block เป็น flex */
-      initNotiToggleState();
-      db.ref('users/' + currentUser.username).on('value', snapshot => {
+
+    function register() {
+      const u = document.getElementById('u').value.trim();
+      const p = document.getElementById('p').value.trim();
+      const n = document.getElementById('n').value.trim();
+      if (!u || !p || !n) return alert('กรอกข้อมูลให้ครบถ้วนก่อนค่ะ!');
+
+      db.ref('users/' + u).once('value').then(snapshot => {
         if (snapshot.exists()) {
-          const data = snapshot.val();
-          currentUser.name = data.name;
-          currentUser.bio = data.bio || '';
-          currentUser.theme = data.theme || '#0084ff';
-          currentUser.avatar = data.avatar || DEFAULT_AVATAR;
-          currentUser.bgImage = data.bgImage || '';
-          currentUser.bgOpacity = data.bgOpacity !== undefined ? data.bgOpacity : 0.5;
-          saveUserSession(currentUser);
-          document.getElementById('my-name').innerText = currentUser.name;
-          document.getElementById('my-avatar').src = currentUser.avatar;
-          applyTheme(currentUser.theme);
-          applyChatBackground(currentUser.bgImage, currentUser.bgOpacity);
-        }
-      });
-      loadFriendsRealtime();
-      listenUserStickers();
-    }
-    function processAvatarUpload(input) {
-      const file = input.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const img = new Image();
-        img.src = e.target.result;
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          canvas.width = 200; canvas.height = 200;
-          const ctx = canvas.getContext('2d');
-          const minSide = Math.min(img.width, img.height);
-          const sx = (img.width - minSide) / 2;
-          const sy = (img.height - minSide) / 2;
-          ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, 200, 200);
-          tempAvatarBase64 = canvas.toDataURL('image/jpeg', 0.8);
-          document.getElementById('modal-avatar-preview').src = tempAvatarBase64;
-        };
-      };
-      reader.readAsDataURL(file);
-    }
-    function processBgUpload(input) {
-      const file = input.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const img = new Image();
-        img.src = e.target.result;
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          let width = img.width, height = img.height;
-          if (width > 1280) {
-            height = Math.round((height * 1280) / width);
-            width = 1280;
-          }
-          canvas.width = width; canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          tempBgBase64 = canvas.toDataURL('image/jpeg', 0.7);
-          isBgCleared = false;
-          applyChatBackground(tempBgBase64, document.getElementById('bg-opacity-slider').value / 100);
-        };
-      };
-      reader.readAsDataURL(file);
-    }
-    function clearBgImage() {
-      tempBgBase64 = '';
-      isBgCleared = true;
-      applyChatBackground('');
-    }
-    function openProfileModal(isSelf = true) {
-      const modal = document.getElementById('profile-modal');
-      tempAvatarBase64 = null; tempBgBase64 = null; isBgCleared = false;
-      modal.style.display = 'flex';
-      if (isSelf) {
-        document.getElementById('modal-title').innerText = 'ตั้งค่าโปรไฟล์';
-        document.getElementById('prof-name').value = currentUser.name;
-        document.getElementById('prof-bio').value = currentUser.bio;
-        document.getElementById('prof-theme').value = currentUser.theme || '#0084ff';
-        document.getElementById('modal-avatar-preview').src = currentUser.avatar || DEFAULT_AVATAR;
-        document.getElementById('theme-selector-box').style.display = 'block';
-        document.getElementById('upload-avatar-btn').style.display = 'block';
-        document.getElementById('save-prof-btn').style.display = 'block';
-      } else {
-        document.getElementById('modal-title').innerText = 'โปรไฟล์ของ ' + activeFriend;
-        document.getElementById('prof-name').value = activeFriendData ? activeFriendData.name : activeFriend;
-        document.getElementById('prof-bio').value = activeFriendData ? (activeFriendData.bio || 'ไม่มีคำอธิบาย') : '';
-        document.getElementById('modal-avatar-preview').src = (activeFriendData && activeFriendData.avatar) ? activeFriendData.avatar : DEFAULT_AVATAR;
-        document.getElementById('theme-selector-box').style.display = 'none';
-        document.getElementById('upload-avatar-btn').style.display = 'none';
-        document.getElementById('save-prof-btn').style.display = 'none';
-      }
-    }
-    function closeProfileModal() {
-      document.getElementById('profile-modal').style.display = 'none';
-      applyChatBackground(currentUser.bgImage, currentUser.bgOpacity);
-    }
-    function saveProfile() {
-      const newName = document.getElementById('prof-name').value.trim();
-      const newBio = document.getElementById('prof-bio').value.trim();
-      const newTheme = document.getElementById('prof-theme').value;
-      const newOpacity = parseFloat(document.getElementById('bg-opacity-slider').value) / 100;
-      if (!newName) return alert('กรุณากรอกชื่อด้วยค่ะ!');
-      const updateData = { name: newName, bio: newBio, theme: newTheme, bgOpacity: newOpacity };
-      
-      if (tempAvatarBase64) updateData.avatar = tempAvatarBase64;
-      if (isBgCleared) updateData.bgImage = '';
-      else if (tempBgBase64) updateData.bgImage = tempBgBase64;
-      db.ref('users/' + currentUser.username).update(updateData).then(() => {
-        currentUser.name = newName;
-        currentUser.bio = newBio;
-        currentUser.theme = newTheme;
-        currentUser.bgOpacity = newOpacity;
-        if (isBgCleared) currentUser.bgImage = "";
-        else if (tempBgBase64) currentUser.bgImage = tempBgBase64;
-        saveUserSession(currentUser);
-        applyChatBackground(currentUser.bgImage, currentUser.bgOpacity);
-        alert('บันทึกโปรไฟล์เรียบร้อย!');
-        closeProfileModal();
-      });
-    }
-    function viewFriendProfile() {
-      if (!activeFriend) return;
-      db.ref('users/' + activeFriend).get().then(snapshot => {
-        if (snapshot.exists()) {
-          activeFriendData = snapshot.val();
-          openProfileModal(false);
+          alert('ไอดีนี้มีผู้ใช้งานแล้วค่ะ!');
+        } else {
+          const newUser = { username: u, password: p, name: n, avatar: DEFAULT_AVATAR };
+          db.ref('users/' + u).set(newUser).then(() => {
+            alert('สมัครสมาชิกเรียบร้อยแล้วค่ะ!');
+            currentUser = { username: u, name: n, avatar: DEFAULT_AVATAR };
+            saveUserSession(currentUser);
+            initChatScreen();
+          });
         }
       });
     }
+
     function logout() {
       clearUserSession();
       location.reload();
     }
-    function addFriend() {
-      const fu = document.getElementById('friend-u').value.trim().toLowerCase();
-      if (!fu) return;
-      if (fu === currentUser.username) return alert('แอดตัวเองทำไมคะ 555+');
-      db.ref('users/' + fu).get().then(snapshot => {
-        if (!snapshot.exists()) alert('ไม่พบ User เพื่อนคนนี้ค่ะ');
-        else {
-          db.ref('friends/' + currentUser.username + '/' + fu).set(true);
-          db.ref('friends/' + fu + '/' + currentUser.username).set(true);
-          alert('เพิ่มเพื่อนสำเร็จ!');
-          document.getElementById('friend-u').value = '';
+
+    function initChatScreen() {
+      document.getElementById('auth-box').style.display = 'none';
+      document.getElementById('chat-box').style.display = 'flex';
+      
+      db.ref('users/' + currentUser.username).on('value', snapshot => {
+        const data = snapshot.val();
+        if (data) {
+          currentUser.name = data.name;
+          currentUser.avatar = data.avatar || DEFAULT_AVATAR;
+          currentUser.theme = data.theme || '#0084ff';
+          currentUser.bg = data.bg || '';
+          currentUser.bgOpacity = data.bgOpacity || 50;
+
+          document.getElementById('my-name').innerText = currentUser.name;
+          document.getElementById('my-avatar').src = currentUser.avatar;
+          applyTheme(currentUser.theme);
+          applyChatBackground(currentUser.bg, currentUser.bgOpacity / 100);
         }
       });
+
+      listenFriends();
+      listenUserStickers();
+      initContextMenu();
     }
-    function loadFriendsRealtime() {
-      db.ref('friends/' + currentUser.username).on('value', snapshot => {
-        const el = document.getElementById('friend-list');
-        el.innerHTML = '';
-        const data = snapshot.val();
-        if (!data) {
-          el.innerHTML = '<small style="color:var(--text-sub);">ยังไม่มีเพื่อน ให้พิมพ์ User เพิ่มด้านล่าง</small>';
+
+    // --- Friend & Chat Section ---
+    function listenFriends() {
+      if (friendListener) db.ref('friends/' + currentUser.username).off('value', friendListener);
+      friendListener = db.ref('friends/' + currentUser.username).on('value', snapshot => {
+        const friends = snapshot.val() || {};
+        const friendListDiv = document.getElementById('friend-list');
+        friendListDiv.innerHTML = '';
+        const friendKeys = Object.keys(friends);
+
+        if (friendKeys.length === 0) {
+          friendListDiv.innerHTML = '<div style="font-size:12px; color:var(--text-sub); text-align:center; padding:10px;">ยังไม่มีเพื่อน ให้เพิ่มเพื่อนด้านล่างเลยค่ะ</div>';
           return;
         }
-        Object.keys(data).forEach(f => {
-          db.ref('users/' + f).get().then(fSnap => {
-            const fData = fSnap.exists() ? fSnap.val() : {};
-            usersCache[f] = fData;
-            const fAvatar = fData.avatar || DEFAULT_AVATAR;
-            const fName = fData.name || f;
+
+        friendKeys.forEach(fUser => {
+          db.ref('users/' + fUser).once('value').then(uSnap => {
+            const fData = uSnap.val() || { name: fUser, avatar: DEFAULT_AVATAR };
+            usersCache[fUser] = fData;
+
             const div = document.createElement('div');
-            div.className = 'friend-item' + (activeFriend === f ? ' active' : '');
-            div.style.setProperty('--bg-avatar', `url('${fAvatar}')`);
+            div.className = 'friend-item' + (activeFriend === fUser ? ' active' : '');
+            div.id = 'friend-item-' + fUser;
+            div.style.setProperty('--bg-avatar', `url('${fData.avatar || DEFAULT_AVATAR}')`);
+            div.onclick = () => selectFriend(fUser, fData);
+
             div.innerHTML = `
-              <img class="avatar" src="${fAvatar}">
-              <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-                <div style="font-size:14px; font-weight:bold;">${fName}</div>
-                <small style="opacity:0.8;">@${f}</small>
+              <img class="avatar" src="${fData.avatar || DEFAULT_AVATAR}">
+              <div style="flex:1; overflow:hidden;">
+                <div style="font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${fData.name}</div>
+                <div style="font-size:11px; opacity:0.7;">@${fUser}</div>
               </div>
             `;
-            div.onclick = () => selectFriend(f, div);
-            el.appendChild(div);
+            friendListDiv.appendChild(div);
           });
         });
       });
     }
-    function selectFriend(f, elem) {
-      activeFriend = f;
-      isFirstLoad = true;
-      document.querySelectorAll('.friend-item').forEach(e => e.classList.remove('active'));
-      elem.classList.add('active');
-      if (friendListener) db.ref('users/' + activeFriend).off('value', friendListener);
-      friendListener = db.ref('users/' + f).on('value', snapshot => {
-        if (snapshot.exists()) {
-          activeFriendData = snapshot.val();
-          document.getElementById('target-avatar').src = activeFriendData.avatar || DEFAULT_AVATAR;
-          document.getElementById('target-avatar').style.display = 'block';
-          document.getElementById('target-text').innerText = activeFriendData.name + ' (@' + f + ')';
-        }
+
+    function addFriend() {
+      const fUser = document.getElementById('friend-u').value.trim();
+      if (!fUser) return alert('กรอกไอดีเพื่อนก่อนค่ะ!');
+      if (fUser === currentUser.username) return alert('เพิ่มตัวเองไม่ได้นะคะ MJ!');
+
+      db.ref('users/' + fUser).once('value').then(snapshot => {
+        if (!snapshot.exists()) return alert('ไม่พบไอดีผู้ใช้นี้ในระบบค่ะ');
+        
+        db.ref('friends/' + currentUser.username + '/' + fUser).set(true);
+        db.ref('friends/' + fUser + '/' + currentUser.username).set(true);
+        document.getElementById('friend-u').value = '';
+        alert('เพิ่มเพื่อนเรียบร้อยแล้วค่ะ!');
       });
+    }
+
+    function selectFriend(fUser, fData) {
+      activeFriend = fUser;
+      activeFriendData = fData;
+
+      document.querySelectorAll('.friend-item').forEach(el => el.classList.remove('active'));
+      const activeElem = document.getElementById('friend-item-' + fUser);
+      if (activeElem) activeElem.classList.add('active');
+
+      document.getElementById('target-avatar').src = fData.avatar || DEFAULT_AVATAR;
+      document.getElementById('target-avatar').style.display = 'block';
+      document.getElementById('target-text').innerText = fData.name;
       document.getElementById('view-friend-btn').style.display = 'inline-block';
-      if (window.innerWidth <= 768) toggleSidebar();
-      listenMessages(f);
+
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.add('hidden');
+      }
+
+      loadMessages();
       listenTypingStatus();
     }
+
     function getRoomId(u1, u2) {
       return u1 < u2 ? `${u1}_${u2}` : `${u2}_${u1}`;
     }
+
+    // --- Message Handling & Reply Scroll Feature ---
+    function loadMessages() {
+      if (!activeFriend) return;
+      const roomId = getRoomId(currentUser.username, activeFriend);
+
+      if (msgListener) db.ref('chats/' + roomId).off('value', msgListener);
+
+      msgListener = db.ref('chats/' + roomId).on('value', snapshot => {
+        const msgListDiv = document.getElementById('msg-list');
+        msgListDiv.innerHTML = '';
+        const messages = snapshot.val() || {};
+
+        Object.keys(messages).forEach(msgId => {
+          const item = messages[msgId];
+          const isMe = item.sender === currentUser.username;
+          
+          const rowDiv = document.createElement('div');
+          rowDiv.className = 'msg-row ' + (isMe ? 'me-row' : 'them-row');
+
+          const msgDiv = document.createElement('div');
+          msgDiv.className = 'msg ' + (isMe ? 'me' : 'them');
+          
+          // *ใส่ attribute data-msg-id เพื่อใช้อ้างอิงการ Scroll ไปหาข้อความ*
+          msgDiv.setAttribute('data-msg-id', msgId);
+
+          if (item.type === 'sticker') {
+            msgDiv.classList.add('is-sticker');
+          } else if (item.type === 'image') {
+            msgDiv.classList.add('is-image');
+          }
+
+          let contentHtml = '';
+
+          // ส่วนแสดงการตอบกลับ (Reply Preview Box)
+          if (item.replyTo) {
+            const replyText = item.replyTo.type === 'image' ? '📷 [รูปภาพ]' : (item.replyTo.type === 'sticker' ? '🎨 [สติกเกอร์]' : item.replyTo.msg);
+            contentHtml += `
+              <div class="msg-reply-box" onclick="scrollToMessage('${item.replyTo.id}')">
+                <strong style="display:block; font-size:10px;">ตอบกลับ ${item.replyTo.senderName || item.replyTo.sender}:</strong>
+                <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;">${replyText}</span>
+              </div>
+            `;
+          }
+
+          if (item.type === 'image') {
+            contentHtml += `<img src="${item.msg}" class="chat-img" onclick="openImageEditor('${item.msg}')">`;
+          } else if (item.type === 'sticker') {
+            contentHtml += `<img src="${item.msg}" class="sticker-img">`;
+          } else {
+            contentHtml += `<span class="msg-text-content">${escapeHtml(item.msg)}</span>`;
+          }
+
+          contentHtml += `
+            <div class="msg-meta-box">
+              <span>${formatTime(item.timestamp)}</span>
+            </div>
+          `;
+
+          msgDiv.innerHTML = contentHtml;
+
+          // Event กดค้าง/คลิกขวา เพื่อ Reply / Delete
+          msgDiv.oncontextmenu = (e) => {
+            e.preventDefault();
+            openContextMenu(e, item, msgId);
+          };
+
+          rowDiv.appendChild(msgDiv);
+          msgListDiv.appendChild(rowDiv);
+        });
+
+        if (isFirstLoad) {
+          msgListDiv.scrollTop = msgListDiv.scrollHeight;
+          isFirstLoad = false;
+        } else {
+          msgListDiv.scrollTop = msgListDiv.scrollHeight;
+        }
+      });
+    }
+
+    function scrollToMessage(msgId) {
+      if (!msgId) return;
+      const targetElem = document.querySelector(`[data-msg-id="${msgId}"]`);
+      if (targetElem) {
+        targetElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        targetElem.classList.remove('highlight-target-msg');
+        void targetElem.offsetWidth; // Trigger Reflow
+        targetElem.classList.add('highlight-target-msg');
+      } else {
+        alert('ไม่พบข้อความต้นฉบับ (อาจถูกลบไปแล้วค่ะ)');
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text.replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+    }
+
+    function sendMsg() {
+      const input = document.getElementById('msg-input');
+      const text = input.value.trim();
+      if (!text || !activeFriend) return;
+
+      const roomId = getRoomId(currentUser.username, activeFriend);
+      const msgData = {
+        sender: currentUser.username,
+        msg: text,
+        type: 'text',
+        timestamp: Date.now(),
+        read: false
+      };
+
+      if (replyMsgData) {
+        msgData.replyTo = {
+          id: replyMsgData.id,
+          msg: replyMsgData.msg,
+          type: replyMsgData.type || 'text',
+          sender: replyMsgData.sender,
+          senderName: replyMsgData.sender === currentUser.username ? currentUser.name : (activeFriendData ? activeFriendData.name : activeFriend)
+        };
+        cancelReply();
+      }
+
+      db.ref('chats/' + roomId).push(msgData).then(() => {
+        input.value = '';
+        autoExpandTextarea(input);
+      });
+    }
+
     function handleTyping() {
       if (!activeFriend) return;
       const roomId = getRoomId(currentUser.username, activeFriend);
       db.ref('typing/' + roomId + '/' + currentUser.username).set(true);
-      if (typingTimeout) clearTimeout(typingTimeout);
+
+      clearTimeout(typingTimeout);
       typingTimeout = setTimeout(() => {
-        db.ref('typing/' + roomId + '/' + currentUser.username).set(false);
+        db.ref('typing/' + roomId + '/' + currentUser.username).remove();
       }, 2000);
     }
+
     function listenTypingStatus() {
       if (!activeFriend) return;
       const roomId = getRoomId(currentUser.username, activeFriend);
+      
       if (typingListener) db.ref('typing/' + roomId + '/' + activeFriend).off('value', typingListener);
       typingListener = db.ref('typing/' + roomId + '/' + activeFriend).on('value', snapshot => {
         const isTyping = snapshot.val();
-        let typingBox = document.getElementById('typing-indicator');
+        const targetText = document.getElementById('target-text');
         if (isTyping) {
-          const friendAv = (activeFriendData && activeFriendData.avatar) ? activeFriendData.avatar : DEFAULT_AVATAR;
-          if (!typingBox) {
-            typingBox = document.createElement('div');
-            typingBox.id = 'typing-indicator';
-            typingBox.style.cssText = 'display: flex; align-items:center; gap:8px; padding: 6px 15px; font-size:12px; color: var(--text-sub); opacity:0.8;';
-          }
-          document.getElementById('msg-list').appendChild(typingBox);
-          typingBox.innerHTML = `<img src="${friendAv}" style="width:22px; height: 22px; border-radius: 50%; opacity:0.5;"><span>กำลังพิมพ์...</span>`;
-          const msgList = document.getElementById('msg-list');
-          msgList.scrollTop = msgList.scrollHeight;
-        } else if (typingBox) {
-          typingBox.remove();
+          targetText.innerText = (activeFriendData ? activeFriendData.name : activeFriend) + " (กำลังพิมพ์...)";
+        } else {
+          targetText.innerText = activeFriendData ? activeFriendData.name : activeFriend;
         }
       });
     }
+
+    // --- Search Functionality ---
+    let searchResults = [];
+    let currentSearchIndex = -1;
+
+    function searchChatMessages() {
+      const input = document.getElementById('chatSearchInput').value.toLowerCase().trim();
+      const countElem = document.getElementById('searchResultCount');
+      
+      // ล้างไฮไลต์เดิมทั้งหมด
+      document.querySelectorAll('.chat-highlight').forEach(el => {
+        const parent = el.parentNode;
+        parent.replaceChild(document.createTextNode(el.textContent), el);
+        parent.normalize();
+      });
+
+      searchResults = [];
+      currentSearchIndex = -1;
+
+      if (!input) {
+        countElem.innerText = '';
+        return;
+      }
+
+      const textNodes = [];
+      const walk = document.createTreeWalker(
+        document.getElementById('msg-list'),
+        NodeFilter.SHOW_TEXT,
+        null,
+        false
+      );
+
+      let node;
+      while (node = walk.nextNode()) {
+        if (node.parentElement.classList.contains('msg-text-content')) {
+          textNodes.push(node);
+        }
+      }
+
+      textNodes.forEach(tNode => {
+        const text = tNode.nodeValue;
+        const lowerText = text.toLowerCase();
+        let index = lowerText.indexOf(input);
+
+        if (index !== -1) {
+          const parent = tNode.parentElement;
+          const fragment = document.createDocumentFragment();
+          let lastIdx = 0;
+
+          while (index !== -1) {
+            fragment.appendChild(document.createTextNode(text.substring(lastIdx, index)));
+            
+            const mark = document.createElement('mark');
+            mark.className = 'chat-highlight';
+            mark.textContent = text.substring(index, index + input.length);
+            fragment.appendChild(mark);
+
+            searchResults.push(mark);
+            lastIdx = index + input.length;
+            index = lowerText.indexOf(input, lastIdx);
+          }
+          fragment.appendChild(document.createTextNode(text.substring(lastIdx)));
+          parent.replaceChild(fragment, tNode);
+        }
+      });
+
+      if (searchResults.length > 0) {
+        currentSearchIndex = searchResults.length - 1; // เริ่มจากข้อความล่าสุด
+        updateSearchHighlight();
+      } else {
+        countElem.innerText = '0/0';
+      }
+    }
+
+    function updateSearchHighlight() {
+      searchResults.forEach(el => el.classList.remove('active-search-highlight'));
+      if (currentSearchIndex >= 0 && currentSearchIndex < searchResults.length) {
+        const target = searchResults[currentSearchIndex];
+        target.classList.add('active-search-highlight');
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.getElementById('searchResultCount').innerText = `${currentSearchIndex + 1}/${searchResults.length}`;
+      }
+    }
+
+    function nextSearchResult() {
+      if (searchResults.length === 0) return;
+      currentSearchIndex = (currentSearchIndex + 1) % searchResults.length;
+      updateSearchHighlight();
+    }
+
+    function prevSearchResult() {
+      if (searchResults.length === 0) return;
+      currentSearchIndex = (currentSearchIndex - 1 + searchResults.length) % searchResults.length;
+      updateSearchHighlight();
+    }
+
+    // --- Context Menu & Actions ---
+    function initContextMenu() {
+      document.addEventListener('click', () => {
+        document.getElementById('context-menu').style.display = 'none';
+      });
+    }
+
+    function openContextMenu(e, item, msgId) {
+      selectedMsgData = { ...item, id: msgId };
+      const menu = document.getElementById('context-menu');
+      menu.style.display = 'block';
+      menu.style.left = e.clientX + 'px';
+      menu.style.top = e.clientY + 'px';
+
+      document.getElementById('ctx-delete').style.display = item.sender === currentUser.username ? 'flex' : 'none';
+    }
+
+    function triggerReply() {
+      if (!selectedMsgData) return;
+      replyMsgData = selectedMsgData;
+      
+      const bar = document.getElementById('reply-preview-bar');
+      const targetName = document.getElementById('reply-target-name');
+      const targetText = document.getElementById('reply-target-text');
+
+      targetName.innerText = `ตอบกลับ ${replyMsgData.sender === currentUser.username ? currentUser.name : (activeFriendData ? activeFriendData.name : activeFriend)} :`;
+      targetText.innerText = replyMsgData.type === 'image' ? '📷 [รูปภาพ]' : (replyMsgData.type === 'sticker' ? '🎨 [สติกเกอร์]' : replyMsgData.msg);
+      
+      bar.style.display = 'flex';
+      document.getElementById('msg-input').focus();
+    }
+
+    function cancelReply() {
+      replyMsgData = null;
+      document.getElementById('reply-preview-bar').style.display = 'none';
+    }
+
+    function copyMessageText() {
+      if (selectedMsgData && selectedMsgData.msg) {
+        navigator.clipboard.writeText(selectedMsgData.msg).then(() => {
+          alert('คัดลอกข้อความแล้วค่ะ!');
+        });
+      }
+    }
+
+    function triggerDelete() {
+      if (!selectedMsgData || !activeFriend) return;
+      if (confirm('ต้องการลบข้อความนี้ใช่ไหมคะ?')) {
+        const roomId = getRoomId(currentUser.username, activeFriend);
+        db.ref('chats/' + roomId + '/' + selectedMsgData.id).remove();
+      }
+    }
+
+    // --- Image Handling & Editor ---
+    function sendImage(input) {
+      if (input.files && input.files[0]) {
+        showImagePreview(input.files[0]);
+      }
+    }
+
     function showImagePreview(file) {
-      if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
       pendingImageFile = file;
       const reader = new FileReader();
       reader.onload = function(e) {
@@ -1681,18 +1662,15 @@ body {
       };
       reader.readAsDataURL(file);
     }
+
     function closeImagePreview() {
       pendingImageFile = null;
-      document.getElementById('img-preview-target').src = '';
       document.getElementById('image-preview-modal').style.display = 'none';
     }
+
     function confirmSendImage() {
-      if (!pendingImageFile) return;
-      processAndSendImage(pendingImageFile);
-      closeImagePreview();
-    }
-    function processAndSendImage(file) {
-      if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
+      if (!pendingImageFile || !activeFriend) return;
+      
       const reader = new FileReader();
       reader.onload = function(e) {
         const img = new Image();
@@ -1700,15 +1678,23 @@ body {
         img.onload = function() {
           const canvas = document.createElement('canvas');
           let width = img.width, height = img.height;
-          if (width > 1024) {
-            height = Math.round((height * 1024) / width);
-            width = 1024;
+          const maxDim = 1200;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
           }
           canvas.width = width; canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
-          const resizedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+          
+          const resizedBase64 = canvas.toDataURL('image/jpeg', 0.85);
           const roomId = getRoomId(currentUser.username, activeFriend);
+          
           db.ref('chats/' + roomId).push({
             sender: currentUser.username,
             msg: resizedBase64,
@@ -1716,655 +1702,340 @@ body {
             timestamp: Date.now(),
             read: false
           });
-        };
-      };
-      reader.readAsDataURL(file);
-    }
-    function sendImage(input) {
-      const file = input.files[0];
-      if (file) {
-        showImagePreview(file);
-        input.value = '';
-      }
-    }
-    function sendMsg() {
-      const input = document.getElementById('msg-input');
-      const val = input.value.trim();
-      if (!activeFriend) return alert('เลือกเพื่อนก่อนค่ะ!');
-      if (!val) return;
-      const roomId = getRoomId(currentUser.username, activeFriend);
-      db.ref('typing/' + roomId + '/' + currentUser.username).set(false);
-      const payload = {
-        sender: currentUser.username,
-        msg: val,
-        type: 'text',
-        timestamp: Date.now(),
-        read: false
-      };
-      if (replyMsgData) {
-        payload.replyTo = {
-          sender: replyMsgData.sender === currentUser.username ? 'ตัวเอง' : (activeFriendData ? activeFriendData.name : replyMsgData.sender),
-          msg: replyMsgData.type === 'image' ? 'รูปภาพ' : (replyMsgData.type === 'sticker' ? 'สติกเกอร์' : replyMsgData.msg)
-        };
-      }
-      db.ref('chats/' + roomId).push(payload);
-      input.value = '';
-      autoExpandTextarea(input);
-      cancelReply();
-      document.getElementById('picker-panel').style.display = 'none';
-    }
-    function markMessagesAsRead(roomId) {
-      db.ref('chats/' + roomId).once('value', snapshot => {
-        const data = snapshot.val();
-        if (!data) return;
-        const updates = {};
-        Object.keys(data).forEach(key => {
-          if (data[key].sender === activeFriend && !data[key].read) {
-            updates['chats/' + roomId + '/' + key + '/read'] = true;
-          }
-        });
-        if (Object.keys(updates).length > 0) {
-          db.ref().update(updates);
-        }
-      });
-    }
-    function listenMessages(targetFriend) {
-      const currentChatFriend = targetFriend || activeFriend;
-      if (!currentChatFriend) return;
-      const roomId = getRoomId(currentUser.username, currentChatFriend);
-      if (msgListener) db.ref('chats/' + roomId).off('value', msgListener);
-      const el = document.getElementById('msg-list');
-      markMessagesAsRead(roomId);
-      msgListener = db.ref('chats/' + roomId).on('value', snapshot => {
-        if (activeFriend !== currentChatFriend) return;
-        el.innerHTML = '';
-        const data = snapshot.val();
-        if (!data) {
-          el.innerHTML = '<center style="color:var(--text-sub); margin-top:20px;">ยังไม่มีข้อความ ทักทายเพื่อนเลย!</center>';
-          isFirstLoad = false;
-          return;
-        }
-        const friendAv = (activeFriendData && activeFriendData.avatar) ? activeFriendData.avatar : DEFAULT_AVATAR;
-        const msgKeys = Object.keys(data);
-        const lastKey = msgKeys[msgKeys.length - 1];
-        const lastMsg = data[lastKey];
-        const isNotiEnabled = localStorage.getItem('mj_chat_noti_enabled') === 'true';
 
-        if (!isFirstLoad && lastMsg && lastMsg.sender === activeFriend && isNotiEnabled) {
-          const currentMsgId = lastKey;
-          if (lastNotiId !== currentMsgId) {
-            lastNotiId = currentMsgId;
-            playNotificationSound();
-            triggerVibrate();
-            if ("Notification" in window && Notification.permission === "granted") {
-              const notiText = lastMsg.type === 'image' ? 'ได้ส่งรูปภาพถึงคุณ' : (lastMsg.type === 'sticker' ? 'ส่งสติกเกอร์' : lastMsg.msg);
-              const friendAv = activeFriendData && activeFriendData.avatar ? activeFriendData.avatar : 'https://via.placeholder.com/150';
-              new Notification(activeFriendData ? activeFriendData.name : activeFriend, { 
-                body: notiText, 
-                icon: friendAv 
-              });
-            }
-          }
-        }
-        markMessagesAsRead(roomId);
-        isFirstLoad = false;
-        msgKeys.forEach(key => {
-          const m = data[key];
-          const isMe = m.sender === currentUser.username;
-          const cls = isMe ? 'me' : 'them';
-          const rowCls = isMe ? 'me-row' : '';
-          let replyQuoteHtml = '';
-          if (m.replyTo) {
-            replyQuoteHtml = `<div style="background:rgba(0,0,0,0.1); border-left:3px solid var(--theme-color, #0084ff); padding:3px 8px; border-radius: 4px; font-size:11px; margin-bottom:4px; opacity:0.85;"><strong>${m.replyTo.sender}:</strong> ${m.replyTo.msg}</div>`;
-          }
-          const timeStr = formatTime(m.timestamp);
-          let statusHtml = '';
-          if (isMe) {
-            statusHtml = m.read ? '<span style="color:#0084ff; font-weight:bold;">อ่านแล้ว</span>' : '<span style="opacity:0.6;">ส่งแล้ว</span>';
-          }
-          const metaHtml = `<div class="msg-meta-box"><span>${timeStr}</span>${statusHtml}</div>`;
-          const rowDiv = document.createElement('div');
-          rowDiv.className = `msg-row ${rowCls}`;
-          const avatarHtml = isMe ? "" : `<img class="avatar" src="${friendAv}" style="width: 28px; height: 28px;">`;
-          const msgBox = document.createElement('div');
-          if (m.type === 'sticker') {
-            msgBox.className = `msg ${cls} is-sticker`;
-            msgBox.innerHTML = `${replyQuoteHtml}<img class="sticker-img" src="${m.msg}">${metaHtml}`;
-          } else if (m.type === 'image') {
-            msgBox.className = `msg ${cls} is-image`;
-            msgBox.innerHTML = `${replyQuoteHtml}<img class="chat-img" src="${m.msg}" onclick="openImageEditor(this.src)">${metaHtml}`;
-          } else {
-            msgBox.className = `msg ${cls}`;
-            msgBox.innerHTML = `${replyQuoteHtml}<div>${m.msg}</div>${metaHtml}`;
-          }
-          attachContextMenuToMsg(msgBox, key, m.sender, m.msg, m.type);
-          rowDiv.innerHTML = avatarHtml;
-          rowDiv.appendChild(msgBox);
-          el.appendChild(rowDiv);
-        });
-        el.scrollTop = el.scrollHeight;
-      });
+          closeImagePreview();
+        };
+      };
+      reader.readAsDataURL(pendingImageFile);
     }
-    function attachContextMenuToMsg(el, msgKey, msgSender, msgText, msgType) {
-      el.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-        openContextMenu(e.clientX, e.clientY, msgKey, msgSender, msgText, msgType);
-      });
-      let touchTimer = null;
-      el.addEventListener('touchstart', (e) => {
-        touchTimer = setTimeout(() => {
-          const t = e.touches[0];
-          openContextMenu(t.clientX, t.clientY, msgKey, msgSender, msgText, msgType);
-        }, 450);
-      }, { passive: true });
-      el.addEventListener('touchend', () => clearTimeout(touchTimer));
-      el.addEventListener('touchmove', () => clearTimeout(touchTimer));
-    }
-    function openContextMenu(x, y, msgKey, msgSender, msgText, msgType) {
-      triggerVibrate();
-      selectedMsgData = { key: msgKey, sender: msgSender, msg: msgText, type: msgType };
-      const menu = document.getElementById('context-menu');
-      document.getElementById('ctx-delete').style.display = (msgSender === currentUser.username) ? 'flex' : 'none';
-      document.getElementById('ctx-copy').style.display = (msgType === 'text') ? 'flex' : 'none';
-      const posX = Math.min(x, window.innerWidth - 170);
-      const posY = Math.min(y, window.innerHeight - 130);
-      menu.style.left = posX + 'px';
-      menu.style.top = posY + 'px';
-      menu.style.display = 'block';
-      document.addEventListener('click', function closeMenu(e) {
-        if (menu) menu.style.display = 'none';
-        const picker = document.getElementById('picker-panel');
-        if (picker && picker.style.display === 'flex') {
-          if (!picker.contains(e.target) && !e.target.innerText.includes('😊')) {
-            picker.style.display = 'none';
-          }
-        }
-        document.removeEventListener('click', closeMenu);
-      });
-    }
-    function copyMessageText() {
-      if (!selectedMsgData || selectedMsgData.type !== 'text') return;
-      navigator.clipboard.writeText(selectedMsgData.msg).then(() => alert('คัดลอกข้อความแล้วค่ะ!'));
-    }
-    function triggerReply() {
-      if (!selectedMsgData) return;
-      replyMsgData = selectedMsgData;
-      const senderName = replyMsgData.sender === currentUser.username ? 'ตัวเอง' : (activeFriendData ? activeFriendData.name : replyMsgData.sender);
-      document.getElementById('reply-target-name').innerText = 'ตอบกลับ ' + senderName + ':';
-      document.getElementById('reply-target-text').innerText = replyMsgData.type === 'image' ? 'รูปภาพ' : (replyMsgData.type === 'sticker' ? 'สติกเกอร์' : replyMsgData.msg);
-      document.getElementById('reply-preview-bar').style.display = 'flex';
-      document.getElementById('msg-input').focus();
-    }
-    function cancelReply() {
-      replyMsgData = null;
-      document.getElementById('reply-preview-bar').style.display = 'none';
-    }
-    function triggerDelete() {
-      if (!selectedMsgData) return;
-      if (confirm('ต้องการลบข้อความนี้ใช่ไหมคะ?')) {
-        const roomId = getRoomId(currentUser.username, activeFriend);
-        db.ref('chats/' + roomId + '/' + selectedMsgData.key).remove();
-      }
-    }
-    /* CANVAS IMAGE EDITOR */
+
+    // --- Editor Canvas Logic ---
     let editorCanvas, editorCtx;
-    let originalImage = new Image();
-    let currentEditMode = null; 
+    let editorImage = null;
+    let editHistory = [];
+    let currentEditMode = null; // 'draw' | 'blur'
     let isDrawing = false;
-    let canvasHistory = [];
-    let currentRotation = 0;
-    let isFlipped = false;
-    let currentScale = 1;
 
     function initImageEditorEvents() {
       editorCanvas = document.getElementById('editor-canvas');
       editorCtx = editorCanvas.getContext('2d');
+
       editorCanvas.addEventListener('mousedown', startDrawing);
       editorCanvas.addEventListener('mousemove', draw);
       editorCanvas.addEventListener('mouseup', stopDrawing);
       editorCanvas.addEventListener('mouseleave', stopDrawing);
-      editorCanvas.addEventListener('touchstart', (e) => { 
-        if (currentEditMode) e.preventDefault(); 
-        startDrawing(e.touches[0]); 
-      }, { passive: false });
-      
-      editorCanvas.addEventListener('touchmove', (e) => { 
-        if (currentEditMode) e.preventDefault(); 
-        draw(e.touches[0]); 
-      }, { passive: false });
-      
-      editorCanvas.addEventListener('touchend', stopDrawing);
 
-      const container = document.getElementById('canvas-container');
-      if (container) {
-        container.addEventListener('wheel', (e) => {
-          e.preventDefault();
-          const zoomFactor = e.deltaY < 0 ? 0.1 : -0.1;
-          zoomImage(zoomFactor);
-        }, { passive: false });
-      }
+      editorCanvas.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        const mouseEvent = new MouseEvent('mousedown', { clientX: touch.clientX, clientY: touch.clientY });
+        editorCanvas.dispatchEvent(mouseEvent);
+      });
+      editorCanvas.addEventListener('touchmove', (e) => {
+        const touch = e.touches[0];
+        const mouseEvent = new MouseEvent('mousemove', { clientX: touch.clientX, clientY: touch.clientY });
+        editorCanvas.dispatchEvent(mouseEvent);
+      });
+      editorCanvas.addEventListener('touchend', () => {
+        const mouseEvent = new MouseEvent('mouseup', {});
+        editorCanvas.dispatchEvent(mouseEvent);
+      });
     }
-    function openImageEditor(src) {
+
+    function openImageEditor(imgSrc) {
       const modal = document.getElementById('image-editor-modal');
       modal.style.display = 'flex';
-      originalImage = new Image();
-      originalImage.crossOrigin = 'anonymous';
-      originalImage.src = src;
-      originalImage.onload = function() {
-        currentRotation = 0;
-        isFlipped = false;
-        currentScale = 1;
-        currentEditMode = null;
-        updateToolButtonsUI();
-        canvasHistory = [];
-        document.getElementById('global-blur-slider').value = 0;
-        resetCanvasDimensions();
-        saveCanvasState();
+      
+      editorImage = new Image();
+      editorImage.crossOrigin = 'Anonymous';
+      editorImage.onload = function() {
+        editorCanvas.width = editorImage.width;
+        editorCanvas.height = editorImage.height;
+        editorCtx.drawImage(editorImage, 0, 0);
+        saveEditorState();
       };
+      editorImage.src = imgSrc;
     }
+
     function closeImageEditor() {
       document.getElementById('image-editor-modal').style.display = 'none';
+      editHistory = [];
+      currentEditMode = null;
     }
-    function resetCanvasDimensions() {
-      const maxW = Math.min(window.innerWidth * 0.85, 800);
-      const maxH = Math.min(window.innerHeight * 0.55, 600);
-      let w = originalImage.width;
-      let h = originalImage.height;
-      const ratio = Math.min(maxW / w, maxH / h);
-      editorCanvas.width = w * ratio;
-      editorCanvas.height = h * ratio;
-      redrawCanvas();
+
+    function saveEditorState() {
+      if (editHistory.length > 10) editHistory.shift();
+      editHistory.push(editorCtx.getImageData(0, 0, editorCanvas.width, editorCanvas.height));
     }
-    function saveCanvasState() {
-      if (canvasHistory.length > 10) canvasHistory.shift();
-      canvasHistory.push(editorCtx.getImageData(0, 0, editorCanvas.width, editorCanvas.height));
-    }
+
     function undoEditorStep() {
-      if (canvasHistory.length > 1) {
-        canvasHistory.pop();
-        editorCtx.putImageData(canvasHistory[canvasHistory.length - 1], 0, 0);
+      if (editHistory.length > 1) {
+        editHistory.pop(); // เอาอันปัจจุบันออก
+        const prevState = editHistory[editHistory.length - 1];
+        editorCtx.putImageData(prevState, 0, 0);
       }
     }
-    function redrawCanvas() {
-      editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height);
-      editorCtx.save();
-      editorCtx.translate(editorCanvas.width / 2, editorCanvas.height / 2);
-      editorCtx.rotate((currentRotation * Math.PI) / 180);
-      editorCtx.scale((isFlipped ? -1 : 1) * currentScale, currentScale);
-      editorCtx.drawImage(originalImage, -editorCanvas.width / 2, -editorCanvas.height / 2, editorCanvas.width, editorCanvas.height);
-      editorCtx.restore();
-    }
-    function zoomImage(amount) {
-      currentScale += amount;
-      if (currentScale < 0.5) currentScale = 0.5;
-      if (currentScale > 4) currentScale = 4;
-      redrawCanvas();
-    }
+
     function toggleEditMode(mode) {
+      const btnDraw = document.getElementById('btn-mode-draw');
+      const btnBlur = document.getElementById('btn-mode-blur');
+
       if (currentEditMode === mode) {
         currentEditMode = null;
+        btnDraw.style.background = '#666';
+        btnBlur.style.background = '#666';
       } else {
         currentEditMode = mode;
-      }
-      updateToolButtonsUI();
-    }
-    function updateToolButtonsUI() {
-      const drawBtn = document.getElementById('btn-mode-draw');
-      const blurBtn = document.getElementById('btn-mode-blur');
-      
-      if (drawBtn) drawBtn.style.background = currentEditMode === 'draw' ? '#0084ff' : '#666';
-      if (blurBtn) blurBtn.style.background = currentEditMode === 'blur' ? '#0084ff' : '#666';
-      
-      if (editorCanvas) {
-        editorCanvas.style.cursor = currentEditMode ? 'crosshair' : 'default';
+        btnDraw.style.background = mode === 'draw' ? '#0084ff' : '#666';
+        btnBlur.style.background = mode === 'blur' ? '#0084ff' : '#666';
       }
     }
+
     function getCanvasCoords(e) {
       const rect = editorCanvas.getBoundingClientRect();
+      const scaleX = editorCanvas.width / rect.width;
+      const scaleY = editorCanvas.height / rect.height;
       return {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
       };
     }
+
     function startDrawing(e) {
       if (!currentEditMode) return;
       isDrawing = true;
-      const coords = getCanvasCoords(e);
+      const pos = getCanvasCoords(e);
       editorCtx.beginPath();
-      editorCtx.moveTo(coords.x, coords.y);
+      editorCtx.moveTo(pos.x, pos.y);
+      if (currentEditMode === 'blur') applyLocalBlur(pos.x, pos.y);
     }
+
     function draw(e) {
       if (!isDrawing || !currentEditMode) return;
-      const coords = getCanvasCoords(e);
-      const size = document.getElementById('editor-brush-size').value;
+      const pos = getCanvasCoords(e);
+
       if (currentEditMode === 'draw') {
         const color = document.getElementById('editor-color').value;
+        const size = document.getElementById('editor-brush-size').value;
         editorCtx.strokeStyle = color;
         editorCtx.lineWidth = size;
         editorCtx.lineCap = 'round';
-        editorCtx.lineJoin = 'round';
-        editorCtx.lineTo(coords.x, coords.y);
+        editorCtx.lineTo(pos.x, pos.y);
         editorCtx.stroke();
       } else if (currentEditMode === 'blur') {
-        applyPixelateArea(coords.x, coords.y, size * 2);
+        applyLocalBlur(pos.x, pos.y);
       }
     }
+
     function stopDrawing() {
       if (isDrawing) {
         isDrawing = false;
         editorCtx.closePath();
-        saveCanvasState();
+        saveEditorState();
       }
     }
-    function applyPixelateArea(x, y, size) {
-      const sampleSize = parseInt(document.getElementById('blur-pixel-size').value) || 8;
+
+    function applyLocalBlur(x, y) {
+      const size = parseInt(document.getElementById('blur-pixel-size').value, 10) * 2;
       const startX = Math.max(0, x - size / 2);
       const startY = Math.max(0, y - size / 2);
       const imgData = editorCtx.getImageData(startX, startY, size, size);
-      for (let py = 0; py < size; py += sampleSize) {
-        for (let px = 0; px < size; px += sampleSize) {
+      
+      // พิกเซลเลทเบลอแบบง่าย
+      const pSize = 6;
+      for (let py = 0; py < size; py += pSize) {
+        for (let px = 0; px < size; px += pSize) {
           const i = (py * size + px) * 4;
           const r = imgData.data[i];
           const g = imgData.data[i + 1];
           const b = imgData.data[i + 2];
-          for (let subY = py; subY < py + sampleSize && subY < size; subY++) {
-            for (let subX = px; subX < px + sampleSize && subX < size; subX++) {
-              const subI = (subY * size + subX) * 4;
-              imgData.data[subI] = r;
-              imgData.data[subI + 1] = g;
-              imgData.data[subI + 2] = b;
+          
+          for (let subY = 0; subY < pSize; subY++) {
+            for (let subX = 0; subX < pSize; subX++) {
+              if (px + subX < size && py + subY < size) {
+                const subIdx = ((py + subY) * size + (px + subX)) * 4;
+                imgData.data[subIdx] = r;
+                imgData.data[subIdx + 1] = g;
+                imgData.data[subIdx + 2] = b;
+              }
             }
           }
         }
       }
       editorCtx.putImageData(imgData, startX, startY);
     }
+
     function applyGlobalBlur(val) {
-      redrawCanvas();
-      if (val > 0) {
-        editorCtx.filter = `blur(${val}px)`;
-        editorCtx.drawImage(editorCanvas, 0, 0);
-        editorCtx.filter = 'none';
+      if (!editorImage) return;
+      editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height);
+      editorCtx.filter = `blur(${val}px)`;
+      editorCtx.drawImage(editorImage, 0, 0);
+      editorCtx.filter = 'none';
+      saveEditorState();
+    }
+
+    function zoomImage(step) {
+      const currentWidth = editorCanvas.width;
+      const currentHeight = editorCanvas.height;
+      editorCanvas.width = currentWidth * (1 + step);
+      editorCanvas.height = currentHeight * (1 + step);
+      if (editHistory.length > 0) {
+        const lastState = editHistory[editHistory.length - 1];
+        editorCtx.putImageData(lastState, 0, 0);
       }
     }
+
     function rotateCanvas() {
-      currentRotation = (currentRotation + 90) % 360;
-      redrawCanvas();
-      saveCanvasState();
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = editorCanvas.height;
+      tempCanvas.height = editorCanvas.width;
+      const tempCtx = tempCanvas.getContext('2d');
+
+      tempCtx.translate(tempCanvas.width / 2, tempCanvas.height / 2);
+      tempCtx.rotate((90 * Math.PI) / 180);
+      tempCtx.drawImage(editorCanvas, -editorCanvas.width / 2, -editorCanvas.height / 2);
+
+      editorCanvas.width = tempCanvas.width;
+      editorCanvas.height = tempCanvas.height;
+      editorCtx.drawImage(tempCanvas, 0, 0);
+      saveEditorState();
     }
+
     function flipCanvas() {
-      isFlipped = !isFlipped;
-      redrawCanvas();
-      saveCanvasState();
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = editorCanvas.width;
+      tempCanvas.height = editorCanvas.height;
+      const tempCtx = tempCanvas.getContext('2d');
+
+      tempCtx.translate(tempCanvas.width, 0);
+      tempCtx.scale(-1, 1);
+      tempCtx.drawImage(editorCanvas, 0, 0);
+
+      editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height);
+      editorCtx.drawImage(tempCanvas, 0, 0);
+      saveEditorState();
     }
+
     function resetEditorCanvas() {
-      currentRotation = 0;
-      isFlipped = false;
-      currentScale = 1;
-      currentEditMode = null;
-      updateToolButtonsUI();
-      document.getElementById('global-blur-slider').value = 0;
-      redrawCanvas();
-      saveCanvasState();
+      if (editorImage) {
+        editorCanvas.width = editorImage.width;
+        editorCanvas.height = editorImage.height;
+        editorCtx.drawImage(editorImage, 0, 0);
+        editHistory = [];
+        saveEditorState();
+      }
     }
+
+    function copyEditorImage() {
+      editorCanvas.toBlob(blob => {
+        const item = new ClipboardItem({ 'image/png': blob });
+        navigator.clipboard.write([item]).then(() => {
+          alert('คัดลอกรูปภาพลง Clipboard เรียบร้อยแล้วค่ะ!');
+        });
+      });
+    }
+
     function downloadEditorImage() {
       const link = document.createElement('a');
-      link.download = 'mj-edited-image.jpg';
-      link.href = editorCanvas.toDataURL('image/jpeg', 0.9);
+      link.download = 'edited_image.png';
+      link.href = editorCanvas.toDataURL();
       link.click();
     }
-    async function copyEditorImage() {
-      try {
-        editorCanvas.toBlob(async (blob) => {
-          await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
-          alert('คัดลอกรูปภาพลงคลิปบอร์ดเรียบร้อยแล้วค่ะ!');
-        }, 'image/png');
-      } catch (err) {
-        alert('คัดลอกไม่สำเร็จ (เบราว์เซอร์ไม่รองรับค่ะ)');
+
+    // --- Profile Modal Operations ---
+    function openProfileModal(isSelf = true) {
+      const modal = document.getElementById('profile-modal');
+      modal.style.display = 'flex';
+
+      if (isSelf) {
+        document.getElementById('modal-title').innerText = 'ตั้งค่าโปรไฟล์';
+        document.getElementById('prof-name').value = currentUser.name || '';
+        document.getElementById('prof-bio').value = currentUser.bio || '';
+        document.getElementById('modal-avatar-preview').src = currentUser.avatar || DEFAULT_AVATAR;
+        document.getElementById('prof-theme').value = currentUser.theme || '#0084ff';
+        document.getElementById('bg-opacity-slider').value = currentUser.bgOpacity || 50;
+        document.getElementById('bg-opacity-val').innerText = (currentUser.bgOpacity || 50) + '%';
+        
+        document.getElementById('theme-selector-box').style.display = 'block';
+        document.getElementById('upload-avatar-btn').style.display = 'block';
+        document.getElementById('save-prof-btn').style.display = 'block';
       }
     }
-    // ตัวแปรสำหรับระบบ เลื่อนไปยังข้อความที่ค้นพบ (Scroll to search result)
-let currentHighlightIndex = -1;
-let matchedElements = [];
 
-function searchChatMessages() {
-  const keyword = document.getElementById('chatSearchInput').value;
-  const messages = document.querySelectorAll('.msg:not(.is-sticker):not(.is-image) > div:not(.msg-meta-box)'); 
-  const countDisplay = document.getElementById('searchResultCount');
+    function viewFriendProfile() {
+      if (!activeFriendData) return;
+      const modal = document.getElementById('profile-modal');
+      modal.style.display = 'flex';
 
-  let totalFound = 0;
-  matchedElements = [];
-  currentHighlightIndex = -1;
+      document.getElementById('modal-title').innerText = 'โปรไฟล์เพื่อน';
+      document.getElementById('prof-name').value = activeFriendData.name || activeFriend;
+      document.getElementById('prof-bio').value = activeFriendData.bio || 'ไม่มีคำอธิบาย';
+      document.getElementById('modal-avatar-preview').src = activeFriendData.avatar || DEFAULT_AVATAR;
 
-  messages.forEach(msg => {
-    // 1. ล้างไฮไลต์เก่าออก
-    if (msg.dataset.originalText !== undefined) {
-      msg.innerHTML = msg.dataset.originalText;
-    } else {
-      msg.dataset.originalText = msg.innerHTML;
+      document.getElementById('theme-selector-box').style.display = 'none';
+      document.getElementById('upload-avatar-btn').style.display = 'none';
+      document.getElementById('save-prof-btn').style.display = 'none';
     }
-    // 2. ค้นหาและทำไฮไลต์
-    if (keyword.trim() !== '') {
-      const original = msg.dataset.originalText;
-      if (original.includes(keyword)) {
-        // เปลี่ยนคำที่เจอให้มีคลาสไฮไลต์
-        const highlighted = original.split(keyword).join(`<mark class="chat-highlight">${keyword}</mark>`);
-        msg.innerHTML = highlighted;
 
-        // ดึง element <mark> ทุกตัวในข้อความนี้เก็บไว้ในคลัง
-        const marks = msg.querySelectorAll('.chat-highlight');
-        marks.forEach(mark => matchedElements.push(mark));
-        const matchesCount = original.split(keyword).length - 1;
-        totalFound += matchesCount;
+    function closeProfileModal() {
+      document.getElementById('profile-modal').style.display = 'none';
+      tempAvatarBase64 = null;
+      tempBgBase64 = null;
+      isBgCleared = false;
+    }
+
+    function processAvatarUpload(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          tempAvatarBase64 = e.target.result;
+          document.getElementById('modal-avatar-preview').src = tempAvatarBase64;
+        };
+        reader.readAsDataURL(input.files[0]);
       }
     }
-  });
-  // 3. แสดงจำนวนและโฟกัสไปที่ข้อความแรกทันทีที่เจอ
-  if (keyword.trim() !== '' && totalFound > 0) {
-    currentHighlightIndex = 0;
-    focusHighlightedMessage(currentHighlightIndex);
-    countDisplay.innerText = `${currentHighlightIndex + 1}/${totalFound}`;
-  } else if (keyword.trim() !== '') {
-    countDisplay.innerText = 'ไม่พบ';
-  } else {
-    countDisplay.innerText = '';
-  }
-}
-// ฟังก์ชันเลื่อนหน้าจอไปยังตำแหน่งข้อความที่เลือก
-function focusHighlightedMessage(index) {
-  if (matchedElements.length === 0 || index < 0 || index >= matchedElements.length) return;
-  // เอาเน้นสีส้มออกจากอันเดิมก่อน
-  matchedElements.forEach(el => el.classList.remove('active-search-highlight'));
-  // ไฮไลต์สีส้มให้อันปัจจุบันที่กำลังดูอยู่
-  const activeEl = matchedElements[index];
-  activeEl.classList.add('active-search-highlight');
-  // เลื่อนหน้าจอไปหาข้อความแบบนุ่มนวล (Smooth Scroll)
-  activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  // อัปเดตตัวเลขบอกตำแหน่ง เช่น (1/5)
-  const countDisplay = document.getElementById('searchResultCount');
-  if (countDisplay) {
-    countDisplay.innerText = `${index + 1}/${matchedElements.length}`;
-  }
-}
-// ฟังก์ชันเลื่อนไปข้อความถัดไป (Next)
-function nextSearchResult() {
-  if (matchedElements.length === 0) return;
-  currentHighlightIndex = (currentHighlightIndex + 1) % matchedElements.length;
-  focusHighlightedMessage(currentHighlightIndex);
-}
-// ฟังก์ชันเลื่อนย้อนกลับ (Previous)
-function prevSearchResult() {
-  if (matchedElements.length === 0) return;
-  currentHighlightIndex = (currentHighlightIndex - 1 + matchedElements.length) % matchedElements.length;
-  focusHighlightedMessage(currentHighlightIndex);
-}
-// เพิ่ม Event Listener ให้กด Enter หรือปุ่ม ลูกศรขึ้น-ลง บนคีย์บอร์ดในช่องค้นหาได้
-document.getElementById('chatSearchInput')?.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' || e.key === 'ArrowDown') {
-    e.preventDefault();
-    nextSearchResult(); // กด Enter หรือ ลูกศรลง = ไปข้อความถัดไป
-  } else if (e.key === 'ArrowUp') {
-    e.preventDefault();
-    prevSearchResult(); // กด ลูกศรขึ้น = ย้อนกลับข้อความก่อนหน้า
-  }
-});
-  // ดักจับการคลิกกล่องอ้างอิง/ตอบกลับ เพื่อวาร์ปไปยังข้อความต้นฉบับ
-document.addEventListener('click', function(e) {
-  // หา element กล่องตอบกลับ
-  const replyBox = e.target.closest('.msg-reply, .msg-reply-box, .reply-preview');
-  
-  if (replyBox) {
-    // ดึง ID ข้อความต้นฉบับจาก attribute
-    const targetId = replyBox.getAttribute('data-reply-id') || replyBox.dataset.replyId;
 
-    if (targetId) {
-      // หาตัวกล่องข้อความต้นฉบับในหน้าแชท (ค้นหาจาก id หรือ data-msg-id)
-      const targetMessage = document.getElementById(targetId) || document.querySelector(`[data-msg-id="${targetId}"]`);
-      if (targetMessage) {
-        // เลื่อนจอไปหาข้อความต้นฉบับแบบนุ่มนวล
-        targetMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        // กะพริบเน้นข้อความให้เห็นชัดๆ
-        targetMessage.classList.add('highlight-target-msg');
-        setTimeout(() => {
-          targetMessage.classList.remove('highlight-target-msg');
-        }, 1500);
-      } else {
-        console.log('หาข้อความต้นฉบับไม่เจอ ID:', targetId);
+    function processBgUpload(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          tempBgBase64 = e.target.result;
+          isBgCleared = false;
+          document.getElementById('bg-status-text').innerText = 'เลือกรูปพื้นหลังใหม่แล้ว (กดบันทึกเพื่อใช้งาน)';
+        };
+        reader.readAsDataURL(input.files[0]);
       }
     }
-  }
-});
-document.addEventListener('DOMContentLoaded', () => {
-    const toolDrawBtn = document.getElementById('tool-draw-btn');
-    const toolTransformBtn = document.getElementById('tool-transform-btn');
-    const toolBlurBtn = document.getElementById('tool-blur-btn');
-    
-    const brushPanel = document.getElementById('editor-brush-panel');
-    const transformPanel = document.getElementById('editor-transform-panel');
 
-    function resetTabs() {
-        brushPanel?.classList.add('hidden');
-        transformPanel?.classList.add('hidden');
-        document.querySelectorAll('.editor-tab-btn').forEach(btn => btn.classList.remove('active'));
+    function clearBgImage() {
+      tempBgBase64 = '';
+      isBgCleared = true;
+      document.getElementById('bg-status-text').innerText = 'ลบรูปพื้นหลังแล้ว (กดบันทึกเพื่อใช้งาน)';
     }
 
-    toolDrawBtn?.addEventListener('click', () => {
-        resetTabs();
-        toolDrawBtn.classList.add('active');
-        brushPanel?.classList.remove('hidden');
-        if (typeof currentTool !== 'undefined') currentTool = 'brush';
-    });
+    function saveProfile() {
+      const newName = document.getElementById('prof-name').value.trim();
+      const newBio = document.getElementById('prof-bio').value.trim();
+      const newTheme = document.getElementById('prof-theme').value;
+      const newBgOpacity = document.getElementById('bg-opacity-slider').value;
 
-    toolTransformBtn?.addEventListener('click', () => {
-        resetTabs();
-        toolTransformBtn.classList.add('active');
-        transformPanel?.classList.remove('hidden');
-    });
+      if (!newName) return alert('กรอกชื่อที่แสดงด้วยค่ะ!');
 
-    toolBlurBtn?.addEventListener('click', () => {
-        resetTabs();
-        toolBlurBtn.classList.add('active');
-        brushPanel?.classList.remove('hidden');
-        if (typeof currentTool !== 'undefined') currentTool = 'pixelate';
-    });
-});
-    // ฟังก์ชันสำหรับกดรูปแช็ตแล้วเปิดขึ้นมาแก้ไข
-function openEditorModal(imgSrc) {
-    const modal = document.getElementById('editor-modal');
-    const canvas = document.getElementById('editor-canvas');
-    if (!modal || !canvas) return;
+      const updates = {
+        name: newName,
+        bio: newBio,
+        theme: newTheme,
+        bgOpacity: newBgOpacity
+      };
 
-    const ctx = canvas.getContext('2d');
-    const img = new Image();
-    img.crossOrigin = 'Anonymous'; // กันติดปัญหา CORS
-    img.src = imgSrc;
+      if (tempAvatarBase64) updates.avatar = tempAvatarBase64;
+      if (isBgCleared) updates.bg = '';
+      else if (tempBgBase64) updates.bg = tempBgBase64;
 
-    img.onload = () => {
-        // ตั้งขนาด Canvas ตามขนาดจริงของรูป
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        
-        // วาดรูปลงบน Canvas
-        ctx.drawImage(img, 0, 0);
-        
-        // แสดง Modal แก้ไขรูป
-        modal.classList.remove('hidden');
-        modal.style.display = 'flex';
-        
-        // เรียกฟังก์ชันเตรียมเครื่องมือวาดภาพ (ถ้ามี)
-        if (typeof initImageEditor === 'function') {
-            initImageEditor();
-        }
-    };
-}
-
-// ฟังก์ชันปิด Modal
-document.getElementById('editor-close-btn')?.addEventListener('click', () => {
-    const modal = document.getElementById('editor-modal');
-    if (modal) {
-        modal.classList.add('hidden');
-        modal.style.display = 'none';
+      db.ref('users/' + currentUser.username).update(updates).then(() => {
+        alert('บันทึกข้อมูลโปรไฟล์เรียบร้อยแล้วค่ะ!');
+        closeProfileModal();
+      });
     }
-});
-    // 1. วิ่งไปหาพื้นที่แสดงข้อความแช็ตทั้งหมด (ที่ใช้ ID ว่า msg-list)
-document.getElementById('msg-list')?.addEventListener('click', (e) => {
-    
-    // 2. เช็คว่า จุดที่ผู้ใช้คลิกโดน ใช่รูปภาพแช็ต (คลาส chat-img) หรือเปล่า?
-    if (e.target && e.target.classList.contains('chat-img')) {
-        
-        // 3. ถ้าใช่รูปภาพ! ให้ดึงลิงก์รูปนั้น (e.target.src)
-        // แล้วส่งไปเปิดในหน้าต่างแก้ไขรูปภาพทันที
-        openEditorModal(e.target.src);
-    }
-});
-    <style>
-/* บังคับเปิด/ซ่อน Modal ให้ถูกต้องตรงตาม CSS ของ MJ */
-#image-editor-modal {
-    display: none;
-}
-#image-editor-modal.active {
-    display: flex !important;
-}
-</style>
-
-<script>
-// 1. ดักจับการคลิกที่รูปภาพในช่องแช็ต
-document.addEventListener('click', function(e) {
-    // เช็คว่ากดโดนรูปภาพในแช็ตหรือไม่
-    if (e.target && e.target.classList.contains('chat-img')) {
-        const imgSrc = e.target.src;
-        if (imgSrc) {
-            // เรียกฟังก์ชันเปิด Modal แก้ไขรูปที่มีอยู่แล้วในโค้ดของ MJ
-            openImageEditor(imgSrc);
-        }
-    }
-});
-
-// 2. ปรับแต่งฟังก์ชันเปิดรูปเดิม ให้สั่งเปิด Modal ขึ้นมาแสดง
-const originalOpenImageEditor = window.openImageEditor;
-window.openImageEditor = function(src) {
-    if (typeof originalOpenImageEditor === 'function') {
-        originalOpenImageEditor(src);
-    }
-    const modal = document.getElementById('image-editor-modal');
-    if (modal) {
-        modal.classList.add('active');
-        modal.style.display = 'flex';
-    }
-};
-
-// 3. ปรับแต่งฟังก์ชันปิดรูป ให้สั่งซ่อน Modal
-const originalCloseImageEditor = window.closeImageEditor;
-window.closeImageEditor = function() {
-    if (typeof originalCloseImageEditor === 'function') {
-        originalCloseImageEditor();
-    }
-    const modal = document.getElementById('image-editor-modal');
-    if (modal) {
-        modal.classList.remove('active');
-        modal.style.display = 'none';
-    }
-};
   </script>
 </body>
 </html>
