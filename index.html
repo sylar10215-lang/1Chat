@@ -128,6 +128,180 @@ body {
 #auth-box button:active {
     transform: translateY(0);
 }
+    /* Telegram-Style Image Editor CSS */
+.editor-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+    background-color: rgba(0, 0, 0, 0.92);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    user-select: none;
+}
+
+.editor-modal-overlay.hidden,
+.editor-sub-panel.hidden {
+    display: none !important;
+}
+
+/* Header Bar */
+.editor-header {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    box-sizing: border-box;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+}
+
+.editor-title {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.editor-icon-btn {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+    transition: opacity 0.2s;
+}
+
+.editor-text-btn {
+    background: #2AABEE; /* สีฟ้า Telegram */
+    border: none;
+    color: #ffffff;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.1s, background-color 0.2s;
+}
+
+.editor-text-btn:active {
+    transform: scale(0.95);
+    background: #229ED9;
+}
+
+/* Canvas Workspace */
+.editor-workspace {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+#editor-canvas {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
+    cursor: crosshair;
+}
+
+/* Sub Panels (Floating Toolbar แบบ Telegram) */
+.editor-sub-panel {
+    position: absolute;
+    bottom: 85px;
+    background: rgba(30, 30, 30, 0.85);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 30px;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    z-index: 10001;
+}
+
+/* Color Picker & Sliders */
+.color-picker-wrapper input[type="color"] {
+    -webkit-appearance: none;
+    border: 2px solid #ffffff;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    background: none;
+}
+.color-picker-wrapper input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+.color-picker-wrapper input[type="color"]::-webkit-color-swatch { border: none; border-radius: 50%; }
+
+.slider-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #8e8e93;
+}
+
+.slider-wrapper input[type="range"] {
+    accent-color: #2AABEE;
+    cursor: pointer;
+}
+
+.editor-sub-btn {
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Bottom Bar */
+.editor-bottom-bar {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.editor-tab-btn {
+    background: none;
+    border: none;
+    color: #8e8e93;
+    font-size: 20px;
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.editor-tab-btn:hover,
+.editor-tab-btn.active {
+    color: #2AABEE;
+    transform: scale(1.15);
+}
     html, body {
       margin: 0; 
       padding: 0;
@@ -759,49 +933,48 @@ body {
       </div>
     </div>
   </div>
-  <!-- MODAL : ดูรูป ขยายรูป และเครื่องมือแต่งรูป -->
-  <div id="image-editor-modal" class="modal">
-    <div class="modal-content image-editor-content">
-      <div style="display: flex; justify-content: space-between; align-items:center; margin-bottom: 10px;">
-        <h3 style="margin:0;">ดูรูป/แก้ไขรูป</h3>
-        <button onclick="closeImageEditor()" style="width:auto; padding: 4px 10px; background:#888;">X</button>
-      </div>
-      <div class="canvas-wrapper" id="canvas-container">
-        <canvas id="editor-canvas"></canvas>
-      </div>
-      <div class="editor-toolbar">
-        <div class="toolbar-row">
-          <!-- ปุ่มเปิด/ปิด เครื่องมือ -->
-          <button class="editor-btn" id="btn-mode-draw" onclick="toggleEditMode('draw')" style="background:#666;">✏️วาด</button>
-          <button class="editor-btn" id="btn-mode-blur" onclick="toggleEditMode('blur')" style="background:#666;">💧เบลอจุด</button>
-          <input type="color" id="editor-color" value="#ff0000" title="เลือกสีแปรง">
-          <label style="font-size: 12px;">ขนาดแปรง :
-            <input type="range" id="editor-brush-size" min="2" max="50" value="10" style="width: 70px; vertical-align:middle;">
-          </label>
-          <label style="font-size: 12px; margin-left:5px;">ความเบลอ :
-            <input type="range" id="blur-pixel-size" min="2" max="30" value="8" style="width: 70px; vertical-align:middle;">
-          </label>
-        </div>
-        <div class="toolbar-row">
-          <label style="font-size:12px;">เบลอทั้งรูป :
-            <input type="range" id="global-blur-slider" min="0" max="20" value="0" oninput="applyGlobalBlur(this.value)" style="width:80px; vertical-align:middle;">
-          </label>
-          <!-- เครื่องมือขยายรูป / หมุน / ย้อนกลับ -->
-          <button class="editor-btn" onclick="zoomImage(0.2)" title="ขยายรูป">🔍+</button>
-          <button class="editor-btn" onclick="zoomImage(-0.2)" title="ย่อรูป">🔍-</button>
-          <button class="editor-btn" onclick="rotateCanvas()"> 🔄 </button>
-          <button class="editor-btn" onclick="flipCanvas()"> ↔️ </button>
-          <button class="editor-btn" onclick="undoEditorStep()"> ↩️ </button>
-        </div>
-        <div class="toolbar-row" style="margin-top:8px;">
-          <button class="editor-btn" style="background: #28a745; flex:1;" onclick="copyEditorImage()">คัดลอกรูป</button>
-          <!-- ปุ่มยกเลิกแก้ไข -->
-          <button class="editor-btn" style="background: #e74c3c; flex:1;" onclick="resetEditorCanvas()">ยกเลิกแก้ไข</button>
-          <button class="editor-btn" style="background: #0084ff; flex:1;" onclick="downloadEditorImage()">เซฟลงเครื่อง</button>
-        </div>
-      </div>
+  <!-- Telegram-Style Image Editor Modal -->
+<div id="image-editor-modal" class="editor-modal-overlay hidden">
+    <!-- Top Bar Header -->
+    <div class="editor-header">
+        <button id="editor-close-btn" class="editor-icon-btn" title="ปิด"><i class="fas fa-times"></i></button>
+        <span class="editor-title">แก้ไขรูปภาพ</span>
+        <button id="editor-save-btn" class="editor-text-btn"><i class="fas fa-check"></i> เสร็จสิ้น</button>
     </div>
-  </div>
+
+    <!-- Main Workspace (Canvas Container) -->
+    <div class="editor-workspace">
+        <canvas id="editor-canvas"></canvas>
+    </div>
+
+    <!-- Sub Panels (แถบเครื่องมือย่อยแบบลอย) -->
+    <!-- แถบปรับแปรงวาด/ขนาดเบลอ -->
+    <div id="editor-brush-panel" class="editor-sub-panel">
+        <div class="color-picker-wrapper">
+            <input type="color" id="editor-color-picker" value="#ff0000">
+        </div>
+        <div class="slider-wrapper">
+            <i class="fas fa-circle" style="font-size: 8px;"></i>
+            <input type="range" id="editor-brush-size" min="2" max="50" value="10">
+            <i class="fas fa-circle" style="font-size: 18px;"></i>
+        </div>
+    </div>
+
+    <!-- แถบหมุน / กลับด้าน -->
+    <div id="editor-transform-panel" class="editor-sub-panel hidden">
+        <button id="editor-rotate-btn" class="editor-sub-btn"><i class="fas fa-redo"></i> หมุน 90°</button>
+        <button id="editor-flip-btn" class="editor-sub-btn"><i class="fas fa-exchange-alt"></i> กลับซ้าย-ขวา</button>
+    </div>
+
+    <!-- Bottom Main Navigation Toolbar (สไตล์ Telegram) -->
+    <div class="editor-bottom-bar">
+        <button id="tool-transform-btn" class="editor-tab-btn" title="หมุน/กลับด้าน"><i class="fas fa-crop-alt"></i></button>
+        <button id="tool-draw-btn" class="editor-tab-btn active" title="วาดภาพ"><i class="fas fa-pen"></i></button>
+        <button id="tool-blur-btn" class="editor-tab-btn" title="เบลอภาพ"><i class="fas fa-braille"></i></button>
+        <button id="editor-undo-btn" class="editor-tab-btn" title="ย้อนกลับ"><i class="fas fa-undo"></i></button>
+        <button id="editor-copy-btn" class="editor-tab-btn" title="คัดลอกรูป"><i class="fas fa-copy"></i></button>
+    </div>
+</div>
   <!-- Context Menu -->
   <div id="context-menu" style="display: none; position:fixed; z-index:9999; background: var(--bg-card, #fff); border-radius: 10px; padding:6px 0; min-width:150px; box-shadow:0 4px 16px rgba(0,0,0,0.2); border:1px solid var(--border-color, #eee);">
     <div id="ctx-reply" onclick="triggerReply()" style="padding:10px 16px; cursor:pointer; font-size:14px; display: flex; align-items:center; gap:8px;">ตอบกลับ</div>
@@ -2044,6 +2217,40 @@ document.addEventListener('click', function(e) {
       }
     }
   }
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const toolDrawBtn = document.getElementById('tool-draw-btn');
+    const toolTransformBtn = document.getElementById('tool-transform-btn');
+    const toolBlurBtn = document.getElementById('tool-blur-btn');
+    
+    const brushPanel = document.getElementById('editor-brush-panel');
+    const transformPanel = document.getElementById('editor-transform-panel');
+
+    function resetTabs() {
+        brushPanel?.classList.add('hidden');
+        transformPanel?.classList.add('hidden');
+        document.querySelectorAll('.editor-tab-btn').forEach(btn => btn.classList.remove('active'));
+    }
+
+    toolDrawBtn?.addEventListener('click', () => {
+        resetTabs();
+        toolDrawBtn.classList.add('active');
+        brushPanel?.classList.remove('hidden');
+        if (typeof currentTool !== 'undefined') currentTool = 'brush';
+    });
+
+    toolTransformBtn?.addEventListener('click', () => {
+        resetTabs();
+        toolTransformBtn.classList.add('active');
+        transformPanel?.classList.remove('hidden');
+    });
+
+    toolBlurBtn?.addEventListener('click', () => {
+        resetTabs();
+        toolBlurBtn.classList.add('active');
+        brushPanel?.classList.remove('hidden');
+        if (typeof currentTool !== 'undefined') currentTool = 'pixelate';
+    });
 });
   </script>
 </body>
