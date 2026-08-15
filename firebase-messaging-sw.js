@@ -8,7 +8,6 @@ self.addEventListener('push', function(event) {
       data = { title: '1Chat', body: event.data.text() };
     }
   }
-
   const title = data.title || data.notification?.title || '1Chat';
   const options = {
     body: data.body || data.notification?.body || 'คุณมีข้อความใหม่',
@@ -19,7 +18,6 @@ self.addEventListener('push', function(event) {
       url: self.registration.scope
     }
   };
-
   event.waitUntil(
     self.registration.showNotification(title, options)
   );
